@@ -883,18 +883,16 @@ function handleField() {
   updateSecondField();
   if (frameCount % 60 === 0) {
     depth++;
+    spawnProgression();
     spawnSpearo(0.99);
-
     spawnBurst(0.99);
     spawnGhostyBurst(0.99);
-
-    spawnCreature(100, 0.7);
-
-    spawnRandom(100, 0.99);
-
+    //belowscore
+    spawnWhale(100, 0.99);
+    spawnDoubleTrouble(100, 0.99);
+    spawnRandom(50, 0.99);
+    //depth
     spawnChtullie(200, 0.99);
-
-    spawnProgression();
 
     if (score > 350) {
       totalScore += score + depth;
@@ -1008,6 +1006,7 @@ function endGame() {
   text(`Score ${totalScore + score}`, width / 2, height / 2);
   text(`Total catches ${kills}`, width / 2, (height / 3) * 2);
 }
+// spawns
 function spawnSpearo(chance) {
   if (random() > chance) {
     creature = new Spearo(random(CHARS));
@@ -1016,7 +1015,6 @@ function spawnSpearo(chance) {
 }
 function spawnBurst(chance) {
   if (random() > chance) {
-    score += 10;
     for (let i = 0; i < 5; i++) {
       let creature = getSeaCreature(random(CHARS));
       if (creature.name) {
@@ -1059,13 +1057,26 @@ function spawnCreature(belowScore, chance) {
     }
   }
 }
-function spawnProgression() {
-  if (random() > map(score, 0, 1000, 0.7, 0.99)) {
-    let creature = getSeaCreature(WORDS.pop());
-    if (creature.name) {
-      secondfield.push(creature);
-    } else {
+function spawnWhale(belowScore, chance) {
+  if (score < belowScore && random() > chance) {
+    let creature = getSeaCreature(WORDS.splice(0, 1)[0]);
+    field.push(creature);
+  }
+}
+function spawnDoubleTrouble(belowScore, chance) {
+  if (score < belowScore && random() > chance) {
+    for (let i = 0; i < 2; i++) {
+      let creature = getSeaCreature(WORDS.splice(WORDS.length / 2, 1)[0]);
       field.push(creature);
     }
+  }
+}
+
+function spawnProgression() {
+  let creature = getSeaCreature(WORDS.pop());
+  if (creature.name) {
+    secondfield.push(creature);
+  } else {
+    field.push(creature);
   }
 }

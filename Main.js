@@ -5,6 +5,7 @@ const WORDS = WORDSTRING.split(" ").sort((a, b) => b.length - a.length);
 const NUMBERS = NUMBERSTRING.split(" ");
 
 var paused = false;
+var gameOver = false;
 
 var focus;
 var field = [];
@@ -14,10 +15,6 @@ var secondfield = [];
 var score = 0;
 var level = 1;
 var guyDepth = 0;
-
-var game = document.getElementById("ocean");
-
-var types = ["redSquid", "fish", "octo"];
 
 function preload() {
   guy = loadAnimation(
@@ -480,9 +477,121 @@ function preload() {
     "./assets/sprites/whale/whale (131).gif",
     "./assets/sprites/whale/whale (132).gif"
   );
+  SpearoAnimation = loadAnimation(
+    "./assets/sprites/spearo/spearo (1).png",
+    "./assets/sprites/spearo/spearo (2).png",
+    "./assets/sprites/spearo/spearo (3).png",
+    "./assets/sprites/spearo/spearo (4).png",
+    "./assets/sprites/spearo/spearo (5).png",
+    "./assets/sprites/spearo/spearo (6).png",
+    "./assets/sprites/spearo/spearo (7).png",
+    "./assets/sprites/spearo/spearo (8).png",
+    "./assets/sprites/spearo/spearo (9).png",
+    "./assets/sprites/spearo/spearo (10).png",
+    "./assets/sprites/spearo/spearo (11).png",
+    "./assets/sprites/spearo/spearo (12).png",
+    "./assets/sprites/spearo/spearo (13).png",
+    "./assets/sprites/spearo/spearo (14).png",
+    "./assets/sprites/spearo/spearo (15).png",
+    "./assets/sprites/spearo/spearo (16).png",
+    "./assets/sprites/spearo/spearo (17).png",
+    "./assets/sprites/spearo/spearo (18).png",
+    "./assets/sprites/spearo/spearo (19).png",
+    "./assets/sprites/spearo/spearo (20).png",
+    "./assets/sprites/spearo/spearo (21).png",
+    "./assets/sprites/spearo/spearo (22).png",
+    "./assets/sprites/spearo/spearo (23).png",
+    "./assets/sprites/spearo/spearo (24).png",
+    "./assets/sprites/spearo/spearo (25).png",
+    "./assets/sprites/spearo/spearo (26).png",
+    "./assets/sprites/spearo/spearo (27).png",
+    "./assets/sprites/spearo/spearo (28).png",
+    "./assets/sprites/spearo/spearo (29).png",
+    "./assets/sprites/spearo/spearo (30).png",
+    "./assets/sprites/spearo/spearo (31).png",
+    "./assets/sprites/spearo/spearo (32).png",
+    "./assets/sprites/spearo/spearo (33).png",
+    "./assets/sprites/spearo/spearo (34).png",
+    "./assets/sprites/spearo/spearo (35).png",
+    "./assets/sprites/spearo/spearo (36).png",
+    "./assets/sprites/spearo/spearo (37).png",
+    "./assets/sprites/spearo/spearo (38).png",
+    "./assets/sprites/spearo/spearo (39).png",
+    "./assets/sprites/spearo/spearo (40).png",
+    "./assets/sprites/spearo/spearo (41).png",
+    "./assets/sprites/spearo/spearo (42).png",
+    "./assets/sprites/spearo/spearo (43).png",
+    "./assets/sprites/spearo/spearo (44).png",
+    "./assets/sprites/spearo/spearo (45).png",
+    "./assets/sprites/spearo/spearo (46).png",
+    "./assets/sprites/spearo/spearo (47).png",
+    "./assets/sprites/spearo/spearo (48).png",
+    "./assets/sprites/spearo/spearo (49).png",
+    "./assets/sprites/spearo/spearo (50).png",
+    "./assets/sprites/spearo/spearo (51).png",
+    "./assets/sprites/spearo/spearo (52).png",
+    "./assets/sprites/spearo/spearo (53).png",
+    "./assets/sprites/spearo/spearo (54).png",
+    "./assets/sprites/spearo/spearo (55).png",
+    "./assets/sprites/spearo/spearo (56).png",
+    "./assets/sprites/spearo/spearo (57).png",
+    "./assets/sprites/spearo/spearo (58).png",
+    "./assets/sprites/spearo/spearo (59).png",
+    "./assets/sprites/spearo/spearo (60).png"
+  );
+  ChtullieAnimation = loadAnimation(
+    "./assets/sprites/chtullie/chtullie (1).gif",
+    "./assets/sprites/chtullie/chtullie (2).gif",
+    "./assets/sprites/chtullie/chtullie (3).gif",
+    "./assets/sprites/chtullie/chtullie (4).gif",
+    "./assets/sprites/chtullie/chtullie (5).gif",
+    "./assets/sprites/chtullie/chtullie (6).gif",
+    "./assets/sprites/chtullie/chtullie (7).gif",
+    "./assets/sprites/chtullie/chtullie (8).gif",
+    "./assets/sprites/chtullie/chtullie (9).gif",
+    "./assets/sprites/chtullie/chtullie (10).gif",
+    "./assets/sprites/chtullie/chtullie (11).gif",
+    "./assets/sprites/chtullie/chtullie (12).gif",
+    "./assets/sprites/chtullie/chtullie (13).gif",
+    "./assets/sprites/chtullie/chtullie (14).gif",
+    "./assets/sprites/chtullie/chtullie (15).gif",
+    "./assets/sprites/chtullie/chtullie (16).gif",
+    "./assets/sprites/chtullie/chtullie (17).gif",
+    "./assets/sprites/chtullie/chtullie (18).gif",
+    "./assets/sprites/chtullie/chtullie (19).gif",
+    "./assets/sprites/chtullie/chtullie (20).gif",
+    "./assets/sprites/chtullie/chtullie (21).gif",
+    "./assets/sprites/chtullie/chtullie (22).gif",
+    "./assets/sprites/chtullie/chtullie (23).gif",
+    "./assets/sprites/chtullie/chtullie (24).gif",
+    "./assets/sprites/chtullie/chtullie (25).gif",
+    "./assets/sprites/chtullie/chtullie (26).gif",
+    "./assets/sprites/chtullie/chtullie (27).gif",
+    "./assets/sprites/chtullie/chtullie (28).gif",
+    "./assets/sprites/chtullie/chtullie (29).gif",
+    "./assets/sprites/chtullie/chtullie (30).gif",
+    "./assets/sprites/chtullie/chtullie (31).gif",
+    "./assets/sprites/chtullie/chtullie (32).gif",
+    "./assets/sprites/chtullie/chtullie (33).gif",
+    "./assets/sprites/chtullie/chtullie (34).gif",
+    "./assets/sprites/chtullie/chtullie (35).gif",
+    "./assets/sprites/chtullie/chtullie (36).gif",
+    "./assets/sprites/chtullie/chtullie (37).gif",
+    "./assets/sprites/chtullie/chtullie (38).gif",
+    "./assets/sprites/chtullie/chtullie (39).gif",
+    "./assets/sprites/chtullie/chtullie (40).gif",
+    "./assets/sprites/chtullie/chtullie (41).gif",
+    "./assets/sprites/chtullie/chtullie (42).gif",
+    "./assets/sprites/chtullie/chtullie (43).gif",
+    "./assets/sprites/chtullie/chtullie (44).gif",
+    "./assets/sprites/chtullie/chtullie (45).gif",
+    "./assets/sprites/chtullie/chtullie (46).gif",
+    "./assets/sprites/chtullie/chtullie (47).gif",
+    "./assets/sprites/chtullie/chtullie (48).gif"
+  );
 }
 function mousePressed() {
-  if (paused) {
+  if (paused && !gameOver) {
     loop();
     paused = !paused;
   } else {
@@ -492,12 +601,16 @@ function mousePressed() {
 }
 
 function getSeaCreature(value) {
+  if (value == "chtulululu") {
+    return new Chtullie(value);
+  }
   if (value.length == 1) {
     enemies = [new Shotty(value), new Ghosty(value)];
     return random(enemies);
   }
   if (value.length == 2) {
-    return new Jinxy(value);
+    enemies = [new Jinxy(value)];
+    return random(enemies);
   }
   if (value.length == 3) {
     return new Jinxy(value);
@@ -552,15 +665,21 @@ function handleField() {
       secondfield[i].update();
       if (secondfield[i].intact) {
         secondfield[i].draw();
-      } else {
+      } else if (!secondfield.intact) {
         score += secondfield[i].score;
+        if (secondfield[i].focused) {
+          focus = null;
+        }
         secondfield.splice(i, 1);
-        focus = null;
       }
     }
   }
 
   if (frameCount % 60 === 0) {
+    if (random() > 0.9) {
+      creature = new Spearo(random(CHARS));
+      field.push(creature);
+    }
     if (random() > 0.99) {
       score += 10;
       for (let i = 0; i < 5; i++) {
@@ -592,6 +711,9 @@ function handleField() {
         let creature = new Ghosty(number);
         secondfield.push(creature);
       }
+    }
+    if (score > 300 && random() > 0.99) {
+      field.push(getSeaCreature("chtulululu"));
     }
     if (random() > map(score, 0, 1000, 0.8, 0.01)) {
       let creature = getSeaCreature(WORDS.pop());
@@ -651,11 +773,12 @@ function drawLine() {
 }
 
 function drawScore() {
-  textAlign(RIGHT);
+  textAlign(CENTER);
   textSize(30);
   fill(255);
   text(`Level ${level}`, width / 2, 50);
-  text(score, 102, height / 2 + 145);
+  text(`Click to pause`, 100, 25);
+  text(score, 100, height / 2 + 145);
 }
 
 function drawGuy() {
@@ -667,6 +790,7 @@ function drawGuy() {
 }
 
 function endGame() {
+  gameOver = true;
   noLoop();
   fill(255);
   noStroke();

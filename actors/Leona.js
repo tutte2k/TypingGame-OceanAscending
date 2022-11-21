@@ -9,9 +9,9 @@ function Leona(text) {
 
 Leona.prototype.draw = function () {
   animation(this.animation, this.position.x, this.position.y);
-  noStroke();
   let displayText = this.text;
   displayText = this.text.replace(this.completedText, "");
+  noStroke();
   textAlign(CENTER);
   textSize(25);
   text(displayText.toUpperCase(), this.position.x - 50, this.position.y + 15);

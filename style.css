@@ -14,6 +14,7 @@
   background-size: 1200% 1200%;
   animation: fade 500s ease;
   animation-fill-mode: forwards;
+  overflow: hidden;
 }
 
 @keyframes fade {

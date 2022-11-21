@@ -11,9 +11,9 @@ function Ghosty(text) {
 
 Ghosty.prototype.draw = function () {
   animation(this.animation, this.position.x, this.position.y);
+  let displayText = this.text.replace(this.completedText, "");
+
   noStroke();
-  let displayText = this.text;
-  displayText = this.text.replace(this.completedText, "");
   textAlign(CENTER);
   textSize(25);
   text(displayText.toUpperCase(), this.position.x, this.position.y - 85);
@@ -26,7 +26,9 @@ Ghosty.prototype.update = function () {
   if (this.position.y < 0) {
     this.score = 0;
     this.intact = false;
-    focus = null;
+    if (this.focused === true) {
+      focus = null;
+    }
   }
 };
 Ghosty.prototype.erode = function (keyCode) {

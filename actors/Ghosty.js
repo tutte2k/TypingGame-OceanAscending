@@ -1,5 +1,5 @@
 function Ghosty(text) {
-  this.name = "Ghosty";
+  this.name = "Harmless";
   this.position = createVector(random(100, width - 100), height + 100);
   this.text = text;
   this.completedText = "";
@@ -8,7 +8,6 @@ function Ghosty(text) {
   this.animation = GhostyAnimation;
   this.score = 10;
 }
-
 Ghosty.prototype.draw = function () {
   animation(this.animation, this.position.x, this.position.y);
   let displayText = this.text.replace(this.completedText, "");

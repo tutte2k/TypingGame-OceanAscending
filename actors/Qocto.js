@@ -6,7 +6,6 @@ function Qocto(text) {
   this.intact = true;
   this.animation = QoctoAnimation;
 }
-
 Qocto.prototype.draw = function () {
   animation(this.animation, this.position.x, this.position.y);
   let displayText = this.text;

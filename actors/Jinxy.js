@@ -6,7 +6,6 @@ function Jinxy(text) {
   this.intact = true;
   this.animation = JinxyAnimation;
 }
-
 Jinxy.prototype.draw = function () {
   animation(this.animation, this.position.x, this.position.y);
   let displayText = this.text;
@@ -16,7 +15,6 @@ Jinxy.prototype.draw = function () {
   textSize(25);
   text(displayText.toUpperCase(), this.position.x - 35, this.position.y - 10);
 };
-
 Jinxy.prototype.update = function () {
   this.position.x -= map(score, 0, 1000, 1, 15);
   if (this.focused) {
@@ -26,7 +24,6 @@ Jinxy.prototype.update = function () {
     endGame();
   }
 };
-
 Jinxy.prototype.erode = function (keyCode) {
   var inputChar = String.fromCharCode(keyCode).toLowerCase(); // keyCode to char
   var length = this.completedText.length + 1;

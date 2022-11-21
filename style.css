@@ -4,6 +4,8 @@
   height: 100%;
   background: linear-gradient(
     181deg,
+    #6ab7ff,
+    #5ca2e4,
     #518cc4,
     #3d6c99,
     #254767,
@@ -11,8 +13,8 @@
     #09121c,
     #000000
   );
-  background-size: 1200% 1200%;
-  animation: fade 500s ease;
+  background-size: 1600% 1600%;
+  animation: fade 1000s ease;
   animation-fill-mode: forwards;
   overflow: hidden;
 }

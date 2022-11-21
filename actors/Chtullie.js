@@ -6,7 +6,6 @@ function Chtullie(text) {
   this.intact = true;
   this.animation = ChtullieAnimation;
 }
-
 Chtullie.prototype.draw = function () {
   animation(this.animation, this.position.x, this.position.y);
   let displayText = this.text;

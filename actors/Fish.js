@@ -6,7 +6,6 @@ function Fish(text) {
   this.intact = true;
   this.animation = FishAnimation;
 }
-
 Fish.prototype.draw = function () {
   animation(this.animation, this.position.x, this.position.y);
   let displayText = this.text;

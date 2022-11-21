@@ -6,7 +6,6 @@ function Leona(text) {
   this.intact = true;
   this.animation = LeonaAnimation;
 }
-
 Leona.prototype.draw = function () {
   animation(this.animation, this.position.x, this.position.y);
   let displayText = this.text;

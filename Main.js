@@ -8,12 +8,15 @@ var paused = false;
 var gameOver = false;
 
 var focus;
-var field = [];
 
+var field = [];
 var secondfield = [];
 
+var totalScore = 0;
 var score = 0;
+var kills = 0;
 var level = 1;
+var depth = 0;
 var guyDepth = 0;
 
 function preload() {
@@ -579,15 +582,235 @@ function preload() {
     "./assets/sprites/chtullie/chtullie (37).gif",
     "./assets/sprites/chtullie/chtullie (38).gif",
     "./assets/sprites/chtullie/chtullie (39).gif",
-    "./assets/sprites/chtullie/chtullie (40).gif",
-    "./assets/sprites/chtullie/chtullie (41).gif",
-    "./assets/sprites/chtullie/chtullie (42).gif",
-    "./assets/sprites/chtullie/chtullie (43).gif",
-    "./assets/sprites/chtullie/chtullie (44).gif",
-    "./assets/sprites/chtullie/chtullie (45).gif",
-    "./assets/sprites/chtullie/chtullie (46).gif",
-    "./assets/sprites/chtullie/chtullie (47).gif",
-    "./assets/sprites/chtullie/chtullie (48).gif"
+    "./assets/sprites/chtullie/chtullie (40).gif"
+  );
+  PufferAnimation = loadAnimation(
+    "./assets/sprites/puffer/puffer (1).png",
+    "./assets/sprites/puffer/puffer (2).png",
+    "./assets/sprites/puffer/puffer (3).png",
+    "./assets/sprites/puffer/puffer (4).png",
+    "./assets/sprites/puffer/puffer (5).png",
+    "./assets/sprites/puffer/puffer (6).png",
+    "./assets/sprites/puffer/puffer (7).png",
+    "./assets/sprites/puffer/puffer (8).png",
+    "./assets/sprites/puffer/puffer (9).png",
+    "./assets/sprites/puffer/puffer (10).png",
+    "./assets/sprites/puffer/puffer (11).png",
+    "./assets/sprites/puffer/puffer (12).png",
+    "./assets/sprites/puffer/puffer (13).png",
+    "./assets/sprites/puffer/puffer (14).png",
+    "./assets/sprites/puffer/puffer (15).png",
+    "./assets/sprites/puffer/puffer (16).png",
+    "./assets/sprites/puffer/puffer (17).png",
+    "./assets/sprites/puffer/puffer (18).png",
+    "./assets/sprites/puffer/puffer (19).png",
+    "./assets/sprites/puffer/puffer (20).png",
+    "./assets/sprites/puffer/puffer (21).png",
+    "./assets/sprites/puffer/puffer (22).png",
+    "./assets/sprites/puffer/puffer (23).png",
+    "./assets/sprites/puffer/puffer (24).png",
+    "./assets/sprites/puffer/puffer (25).png",
+    "./assets/sprites/puffer/puffer (26).png",
+    "./assets/sprites/puffer/puffer (27).png",
+    "./assets/sprites/puffer/puffer (28).png",
+    "./assets/sprites/puffer/puffer (29).png",
+    "./assets/sprites/puffer/puffer (30).png",
+    "./assets/sprites/puffer/puffer (31).png",
+    "./assets/sprites/puffer/puffer (32).png",
+    "./assets/sprites/puffer/puffer (33).png",
+    "./assets/sprites/puffer/puffer (34).png",
+    "./assets/sprites/puffer/puffer (35).png",
+    "./assets/sprites/puffer/puffer (36).png",
+    "./assets/sprites/puffer/puffer (37).png",
+    "./assets/sprites/puffer/puffer (38).png",
+    "./assets/sprites/puffer/puffer (39).png",
+    "./assets/sprites/puffer/puffer (40).png"
+  );
+  InkyAnimation = loadAnimation(
+    "./assets/sprites/inky/inky (1).png",
+    "./assets/sprites/inky/inky (2).png",
+    "./assets/sprites/inky/inky (3).png",
+    "./assets/sprites/inky/inky (4).png",
+    "./assets/sprites/inky/inky (5).png",
+    "./assets/sprites/inky/inky (6).png",
+    "./assets/sprites/inky/inky (7).png",
+    "./assets/sprites/inky/inky (8).png",
+    "./assets/sprites/inky/inky (9).png",
+    "./assets/sprites/inky/inky (10).png",
+    "./assets/sprites/inky/inky (11).png",
+    "./assets/sprites/inky/inky (12).png",
+    "./assets/sprites/inky/inky (13).png",
+    "./assets/sprites/inky/inky (14).png",
+    "./assets/sprites/inky/inky (15).png",
+    "./assets/sprites/inky/inky (16).png",
+    "./assets/sprites/inky/inky (17).png",
+    "./assets/sprites/inky/inky (18).png",
+    "./assets/sprites/inky/inky (19).png",
+    "./assets/sprites/inky/inky (20).png",
+    "./assets/sprites/inky/inky (21).png",
+    "./assets/sprites/inky/inky (22).png",
+    "./assets/sprites/inky/inky (23).png",
+    "./assets/sprites/inky/inky (24).png",
+    "./assets/sprites/inky/inky (25).png",
+    "./assets/sprites/inky/inky (26).png",
+    "./assets/sprites/inky/inky (27).png",
+    "./assets/sprites/inky/inky (28).png",
+    "./assets/sprites/inky/inky (29).png",
+    "./assets/sprites/inky/inky (30).png",
+    "./assets/sprites/inky/inky (31).png",
+    "./assets/sprites/inky/inky (32).png",
+    "./assets/sprites/inky/inky (33).png",
+    "./assets/sprites/inky/inky (34).png",
+    "./assets/sprites/inky/inky (35).png",
+    "./assets/sprites/inky/inky (36).png",
+    "./assets/sprites/inky/inky (37).png",
+    "./assets/sprites/inky/inky (38).png",
+    "./assets/sprites/inky/inky (39).png",
+    "./assets/sprites/inky/inky (40).png",
+    "./assets/sprites/inky/inky (41).png",
+    "./assets/sprites/inky/inky (42).png",
+    "./assets/sprites/inky/inky (43).png",
+    "./assets/sprites/inky/inky (44).png",
+    "./assets/sprites/inky/inky (45).png",
+    "./assets/sprites/inky/inky (46).png",
+    "./assets/sprites/inky/inky (47).png",
+    "./assets/sprites/inky/inky (48).png",
+    "./assets/sprites/inky/inky (49).png",
+    "./assets/sprites/inky/inky (50).png",
+    "./assets/sprites/inky/inky (51).png",
+    "./assets/sprites/inky/inky (52).png",
+    "./assets/sprites/inky/inky (53).png",
+    "./assets/sprites/inky/inky (54).png",
+    "./assets/sprites/inky/inky (55).png",
+    "./assets/sprites/inky/inky (56).png",
+    "./assets/sprites/inky/inky (57).png",
+    "./assets/sprites/inky/inky (58).png",
+    "./assets/sprites/inky/inky (59).png",
+    "./assets/sprites/inky/inky (60).png",
+    "./assets/sprites/inky/inky (61).png",
+    "./assets/sprites/inky/inky (62).png",
+    "./assets/sprites/inky/inky (63).png",
+    "./assets/sprites/inky/inky (64).png",
+    "./assets/sprites/inky/inky (65).png",
+    "./assets/sprites/inky/inky (66).png",
+    "./assets/sprites/inky/inky (67).png",
+    "./assets/sprites/inky/inky (68).png",
+    "./assets/sprites/inky/inky (69).png",
+    "./assets/sprites/inky/inky (70).png",
+    "./assets/sprites/inky/inky (71).png",
+    "./assets/sprites/inky/inky (72).png",
+    "./assets/sprites/inky/inky (73).png",
+    "./assets/sprites/inky/inky (74).png",
+    "./assets/sprites/inky/inky (75).png",
+    "./assets/sprites/inky/inky (76).png",
+    "./assets/sprites/inky/inky (77).png",
+    "./assets/sprites/inky/inky (78).png",
+    "./assets/sprites/inky/inky (79).png",
+    "./assets/sprites/inky/inky (80).png",
+    "./assets/sprites/inky/inky (81).png",
+    "./assets/sprites/inky/inky (82).png",
+    "./assets/sprites/inky/inky (83).png",
+    "./assets/sprites/inky/inky (84).png",
+    "./assets/sprites/inky/inky (85).png",
+    "./assets/sprites/inky/inky (86).png",
+    "./assets/sprites/inky/inky (87).png",
+    "./assets/sprites/inky/inky (88).png",
+    "./assets/sprites/inky/inky (89).png",
+    "./assets/sprites/inky/inky (90).png",
+    "./assets/sprites/inky/inky (91).png"
+  );
+  InkerAnimation = loadAnimation(
+    "./assets/sprites/inker/inker (1).png",
+    "./assets/sprites/inker/inker (2).png",
+    "./assets/sprites/inker/inker (3).png",
+    "./assets/sprites/inker/inker (4).png",
+    "./assets/sprites/inker/inker (5).png",
+    "./assets/sprites/inker/inker (6).png",
+    "./assets/sprites/inker/inker (7).png",
+    "./assets/sprites/inker/inker (8).png",
+    "./assets/sprites/inker/inker (9).png",
+    "./assets/sprites/inker/inker (10).png",
+    "./assets/sprites/inker/inker (11).png",
+    "./assets/sprites/inker/inker (12).png",
+    "./assets/sprites/inker/inker (13).png",
+    "./assets/sprites/inker/inker (14).png",
+    "./assets/sprites/inker/inker (15).png",
+    "./assets/sprites/inker/inker (16).png",
+    "./assets/sprites/inker/inker (17).png",
+    "./assets/sprites/inker/inker (18).png",
+    "./assets/sprites/inker/inker (19).png",
+    "./assets/sprites/inker/inker (20).png",
+    "./assets/sprites/inker/inker (21).png",
+    "./assets/sprites/inker/inker (22).png",
+    "./assets/sprites/inker/inker (23).png",
+    "./assets/sprites/inker/inker (24).png",
+    "./assets/sprites/inker/inker (25).png",
+    "./assets/sprites/inker/inker (26).png",
+    "./assets/sprites/inker/inker (27).png",
+    "./assets/sprites/inker/inker (28).png",
+    "./assets/sprites/inker/inker (29).png",
+    "./assets/sprites/inker/inker (30).png",
+    "./assets/sprites/inker/inker (31).png",
+    "./assets/sprites/inker/inker (32).png",
+    "./assets/sprites/inker/inker (33).png",
+    "./assets/sprites/inker/inker (34).png",
+    "./assets/sprites/inker/inker (35).png",
+    "./assets/sprites/inker/inker (36).png",
+    "./assets/sprites/inker/inker (37).png",
+    "./assets/sprites/inker/inker (38).png",
+    "./assets/sprites/inker/inker (39).png",
+    "./assets/sprites/inker/inker (40).png",
+    "./assets/sprites/inker/inker (41).png",
+    "./assets/sprites/inker/inker (42).png",
+    "./assets/sprites/inker/inker (43).png",
+    "./assets/sprites/inker/inker (44).png",
+    "./assets/sprites/inker/inker (45).png",
+    "./assets/sprites/inker/inker (46).png",
+    "./assets/sprites/inker/inker (47).png",
+    "./assets/sprites/inker/inker (48).png",
+    "./assets/sprites/inker/inker (49).png",
+    "./assets/sprites/inker/inker (50).png",
+    "./assets/sprites/inker/inker (51).png",
+    "./assets/sprites/inker/inker (52).png",
+    "./assets/sprites/inker/inker (53).png",
+    "./assets/sprites/inker/inker (54).png",
+    "./assets/sprites/inker/inker (55).png",
+    "./assets/sprites/inker/inker (56).png",
+    "./assets/sprites/inker/inker (57).png",
+    "./assets/sprites/inker/inker (58).png",
+    "./assets/sprites/inker/inker (59).png",
+    "./assets/sprites/inker/inker (60).png",
+    "./assets/sprites/inker/inker (61).png",
+    "./assets/sprites/inker/inker (62).png",
+    "./assets/sprites/inker/inker (63).png",
+    "./assets/sprites/inker/inker (64).png",
+    "./assets/sprites/inker/inker (65).png",
+    "./assets/sprites/inker/inker (66).png",
+    "./assets/sprites/inker/inker (67).png",
+    "./assets/sprites/inker/inker (68).png",
+    "./assets/sprites/inker/inker (69).png",
+    "./assets/sprites/inker/inker (70).png",
+    "./assets/sprites/inker/inker (71).png",
+    "./assets/sprites/inker/inker (72).png",
+    "./assets/sprites/inker/inker (73).png",
+    "./assets/sprites/inker/inker (74).png",
+    "./assets/sprites/inker/inker (75).png",
+    "./assets/sprites/inker/inker (76).png",
+    "./assets/sprites/inker/inker (77).png",
+    "./assets/sprites/inker/inker (78).png",
+    "./assets/sprites/inker/inker (79).png",
+    "./assets/sprites/inker/inker (80).png",
+    "./assets/sprites/inker/inker (81).png",
+    "./assets/sprites/inker/inker (82).png",
+    "./assets/sprites/inker/inker (83).png",
+    "./assets/sprites/inker/inker (84).png",
+    "./assets/sprites/inker/inker (85).png",
+    "./assets/sprites/inker/inker (86).png",
+    "./assets/sprites/inker/inker (87).png",
+    "./assets/sprites/inker/inker (88).png",
+    "./assets/sprites/inker/inker (89).png",
+    "./assets/sprites/inker/inker (90).png",
+    "./assets/sprites/inker/inker (91).png"
   );
 }
 function mousePressed() {
@@ -599,21 +822,32 @@ function mousePressed() {
     paused = !paused;
   }
 }
-
 function getSeaCreature(value) {
-  if (value == "chtulululu") {
+  if (value == "chtululu") {
     return new Chtullie(value);
   }
   if (value.length == 1) {
-    enemies = [new Shotty(value), new Ghosty(value)];
+    enemies = [
+      new Shotty(value),
+      new Ghosty(value),
+      new Puffer(value),
+      new Inker(value),
+      new Inky(value),
+    ];
     return random(enemies);
   }
   if (value.length == 2) {
-    enemies = [new Jinxy(value)];
+    enemies = [
+      new Jinxy(value),
+      new Puffer(value),
+      new Inker(value),
+      new Inky(value),
+    ];
     return random(enemies);
   }
   if (value.length == 3) {
-    return new Jinxy(value);
+    enemies = [new Jinxy(value), new Fish(value)];
+    return random(enemies);
   }
   if (value.length == 4) {
     return new Fish(value);
@@ -628,7 +862,6 @@ function getSeaCreature(value) {
     return new Whale(value);
   }
 }
-
 function setup() {
   var canvas = createCanvas(windowWidth, windowHeight);
   canvas.parent("ocean");
@@ -645,8 +878,32 @@ function draw() {
   handleField();
   drawGuy();
 }
-
 function handleField() {
+  updateField();
+  updateSecondField();
+  if (frameCount % 60 === 0) {
+    depth++;
+    spawnSpearo(0.99);
+
+    spawnBurst(0.99);
+    spawnGhostyBurst(0.99);
+
+    spawnCreature(100, 0.7);
+
+    spawnRandom(100, 0.99);
+
+    spawnChtullie(200, 0.99);
+
+    spawnProgression();
+
+    if (score > 350) {
+      totalScore += score + depth;
+      score = 0;
+      level++;
+    }
+  }
+}
+function updateField() {
   for (var i = field.length - 1; i >= 0; i--) {
     if (field[i]) {
       field[i].update();
@@ -654,12 +911,14 @@ function handleField() {
         field[i].draw();
       } else {
         score += field[i].text.length;
+        kills++;
         field.splice(i, 1);
         focus = null;
       }
     }
   }
-
+}
+function updateSecondField() {
   for (var i = secondfield.length - 1; i >= 0; i--) {
     if (secondfield[i]) {
       secondfield[i].update();
@@ -667,6 +926,9 @@ function handleField() {
         secondfield[i].draw();
       } else if (!secondfield.intact) {
         score += secondfield[i].score;
+        if (secondfield[i].score > 0) {
+          kills++;
+        }
         if (secondfield[i].focused) {
           focus = null;
         }
@@ -674,62 +936,12 @@ function handleField() {
       }
     }
   }
-
-  if (frameCount % 60 === 0) {
-    if (random() > 0.9) {
-      creature = new Spearo(random(CHARS));
-      field.push(creature);
-    }
-    if (random() > 0.99) {
-      score += 10;
-      for (let i = 0; i < 5; i++) {
-        let creature = getSeaCreature(random(CHARS));
-        if (creature.name) {
-          secondfield.push(creature);
-        } else {
-          field.push(creature);
-        }
-      }
-    }
-    if (score < 100 && random() > 0.7) {
-      let creature = getSeaCreature(WORDS.pop());
-      if (creature.name) {
-        secondfield.push(creature);
-      } else {
-        field.push(creature);
-      }
-    }
-    if (score < 200 && random() > 0.95) {
-      let creature = getSeaCreature(
-        WORDS.splice(random(0, WORDS.length - 100), 1)[0]
-      );
-      field.push(creature);
-    }
-    if (random() > 0.99) {
-      for (let i = 0; i < 3; i++) {
-        let number = random(NUMBERS) + random(NUMBERS) + random(NUMBERS);
-        let creature = new Ghosty(number);
-        secondfield.push(creature);
-      }
-    }
-    if (score > 300 && random() > 0.99) {
-      field.push(getSeaCreature("chtulululu"));
-    }
-    if (random() > map(score, 0, 1000, 0.8, 0.01)) {
-      let creature = getSeaCreature(WORDS.pop());
-      if (creature.name) {
-        secondfield.push(creature);
-      } else {
-        field.push(creature);
-      }
-    }
-    if (score > 350) {
-      score = 0;
-      level++;
-    }
-  }
 }
 function keyPressed() {
+  if (paused && !gameOver) {
+    loop();
+    paused = !paused;
+  }
   if (focus) {
     focus.erode(keyCode);
   } else {
@@ -739,7 +951,6 @@ function keyPressed() {
     }
   }
 }
-
 function findFocus(code, field, secondfield) {
   var char = String.fromCharCode(code).toLowerCase();
 
@@ -762,25 +973,23 @@ function findFocus(code, field, secondfield) {
   }
   return null;
 }
-
 function drawLine() {
   if (!focus) return;
-  stroke(0);
+  stroke(1);
   line(90, guyDepth, focus.position.x, focus.position.y);
   textAlign(CENTER);
   textSize(100);
   text(focus.completedText, width / 2, height - 50);
 }
-
 function drawScore() {
   textAlign(CENTER);
   textSize(30);
   fill(255);
-  text(`Level ${level}`, width / 2, 50);
-  text(`Click to pause`, 100, 25);
-  text(score, 100, height / 2 + 145);
+  text(`Click to pause`, 100, 30);
+  text(`Level ${level} (${Math.round((score / 350) * 100)}%)`, width / 2, 30);
+  text(`Depth ${depth}m`, 100, height / 2 + 145);
+  text(`Catches ${kills}`, 100, height - 10);
 }
-
 function drawGuy() {
   standardPosition = height / 2;
   if (guyDepth < standardPosition) {
@@ -788,7 +997,6 @@ function drawGuy() {
   }
   animation(guy, 90, guyDepth);
 }
-
 function endGame() {
   gameOver = true;
   noLoop();
@@ -796,5 +1004,68 @@ function endGame() {
   noStroke();
   textAlign(CENTER);
   textSize(80);
-  text("Game Over!", width / 2, height / 2);
+  text("Game Over!", width / 2, height / 3);
+  text(`Score ${totalScore + score}`, width / 2, height / 2);
+  text(`Total catches ${kills}`, width / 2, (height / 3) * 2);
+}
+function spawnSpearo(chance) {
+  if (random() > chance) {
+    creature = new Spearo(random(CHARS));
+    field.push(creature);
+  }
+}
+function spawnBurst(chance) {
+  if (random() > chance) {
+    score += 10;
+    for (let i = 0; i < 5; i++) {
+      let creature = getSeaCreature(random(CHARS));
+      if (creature.name) {
+        secondfield.push(creature);
+      } else {
+        field.push(creature);
+      }
+    }
+  }
+}
+function spawnGhostyBurst(chance) {
+  if (random() > chance) {
+    for (let i = 0; i < 3; i++) {
+      let number = random(NUMBERS) + random(NUMBERS) + random(NUMBERS);
+      let creature = new Ghosty(number);
+      secondfield.push(creature);
+    }
+  }
+}
+function spawnChtullie(chtullieDepth, chance) {
+  if (depth > chtullieDepth && random() > chance) {
+    field.push(getSeaCreature("chtululu"));
+  }
+}
+function spawnRandom(belowScore, chance) {
+  if (score < belowScore && random() > chance) {
+    let creature = getSeaCreature(
+      WORDS.splice(random(0, WORDS.length - 100), 1)[0]
+    );
+    field.push(creature);
+  }
+}
+function spawnCreature(belowScore, chance) {
+  if (score < belowScore && random() > chance) {
+    let creature = getSeaCreature(WORDS.pop());
+    if (creature.name) {
+      secondfield.push(creature);
+    } else {
+      field.push(creature);
+    }
+  }
+}
+function spawnProgression() {
+  if (random() > map(score, 0, 1000, 0.7, 0.99)) {
+    let creature = getSeaCreature(WORDS.pop());
+    if (creature.name) {
+      secondfield.push(creature);
+    } else {
+      field.push(creature);
+    }
+  }
 }

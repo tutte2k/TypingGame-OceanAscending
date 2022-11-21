@@ -537,8 +537,11 @@ function handleField() {
         field.push(getSeaCreature(random(CHARS)));
       }
     }
-    if (score < 100 && random() > 0.5) {
-      // field.push(getSeaCreature(WORDS.pop()));
+    if (score < 100 && random() > 0.8) {
+      field.push(getSeaCreature(WORDS.pop()));
+    }
+    if (score < 100 && random() > 0.95) {
+      field.push(getSeaCreature(random(WORDS)));
     }
     if (random() > 0.99) {
       for (let i = 0; i < 3; i++) {

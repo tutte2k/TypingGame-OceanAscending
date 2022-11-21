@@ -4,10 +4,15 @@ const CHARS = CHARSTRING.split(" ");
 const WORDS = WORDSTRING.split(" ").sort((a, b) => b.length - a.length);
 const NUMBERS = NUMBERSTRING.split(" ");
 
+var paused = false;
+
 var focus;
 var field = [];
 
+var secondfield = [];
+
 var score = 0;
+var level = 1;
 var guyDepth = 0;
 
 var game = document.getElementById("ocean");
@@ -476,6 +481,15 @@ function preload() {
     "./assets/sprites/whale/whale (132).gif"
   );
 }
+function mousePressed() {
+  if (paused) {
+    loop();
+    paused = !paused;
+  } else {
+    noLoop();
+    paused = !paused;
+  }
+}
 
 function getSeaCreature(value) {
   if (value.length == 1) {
@@ -494,7 +508,10 @@ function getSeaCreature(value) {
   if (value.length == 5) {
     return new Qocto(value);
   }
-  if (value.length > 5) {
+  if (value.length < 7) {
+    return new Leona(value);
+  }
+  if (value.length > 7) {
     return new Whale(value);
   }
 }
@@ -518,54 +535,110 @@ function draw() {
 
 function handleField() {
   for (var i = field.length - 1; i >= 0; i--) {
-    if (field[i] === undefined) {
-      continue;
-    }
-    field[i].update();
-    if (field[i].intact) {
-      field[i].draw();
-    } else {
-      score += field[i].text.length;
-      field.splice(i, 1);
-      focus = null;
+    if (field[i]) {
+      field[i].update();
+      if (field[i].intact) {
+        field[i].draw();
+      } else {
+        score += field[i].text.length;
+        field.splice(i, 1);
+        focus = null;
+      }
     }
   }
+
+  for (var i = secondfield.length - 1; i >= 0; i--) {
+    if (secondfield[i]) {
+      secondfield[i].update();
+      if (secondfield[i].intact) {
+        secondfield[i].draw();
+      } else {
+        score += secondfield[i].score;
+        secondfield.splice(i, 1);
+        focus = null;
+      }
+    }
+  }
+
   if (frameCount % 60 === 0) {
     if (random() > 0.99) {
       score += 10;
       for (let i = 0; i < 5; i++) {
-        field.push(getSeaCreature(random(CHARS)));
+        let creature = getSeaCreature(random(CHARS));
+        if (creature.name) {
+          secondfield.push(creature);
+        } else {
+          field.push(creature);
+        }
       }
     }
     if (score < 100 && random() > 0.7) {
-      field.push(getSeaCreature(WORDS.pop()));
+      let creature = getSeaCreature(WORDS.pop());
+      if (creature.name) {
+        secondfield.push(creature);
+      } else {
+        field.push(creature);
+      }
     }
     if (score < 200 && random() > 0.95) {
-      field.push(
-        getSeaCreature(WORDS.splice(random(0, WORDS.length - 100), 1)[0])
+      let creature = getSeaCreature(
+        WORDS.splice(random(0, WORDS.length - 100), 1)[0]
       );
+      field.push(creature);
     }
     if (random() > 0.99) {
       for (let i = 0; i < 3; i++) {
         let number = random(NUMBERS) + random(NUMBERS) + random(NUMBERS);
-        field.push(new Ghosty(number));
+        let creature = new Ghosty(number);
+        secondfield.push(creature);
       }
     }
     if (random() > map(score, 0, 1000, 0.8, 0.01)) {
-      field.push(getSeaCreature(WORDS.pop()));
+      let creature = getSeaCreature(WORDS.pop());
+      if (creature.name) {
+        secondfield.push(creature);
+      } else {
+        field.push(creature);
+      }
+    }
+    if (score > 350) {
+      score = 0;
+      level++;
     }
   }
 }
-
 function keyPressed() {
   if (focus) {
     focus.erode(keyCode);
   } else {
-    focus = findFocus(keyCode, field);
+    focus = findFocus(keyCode, field, secondfield);
     if (focus) {
       focus.erode(keyCode);
     }
   }
+}
+
+function findFocus(code, field, secondfield) {
+  var char = String.fromCharCode(code).toLowerCase();
+
+  for (var i = 0; i < field.length; i++) {
+    if (field[i]) {
+      if (field[i].text.startsWith(char)) {
+        field[i].focused = true;
+        return field[i];
+      }
+    }
+  }
+
+  for (var i = 0; i < secondfield.length; i++) {
+    if (secondfield[i]) {
+      if (secondfield[i].text.startsWith(char)) {
+        secondfield[i].focused = true;
+        return secondfield[i];
+      }
+    }
+  }
+  return null;
 }
 
 function drawLine() {
@@ -581,6 +654,7 @@ function drawScore() {
   textAlign(RIGHT);
   textSize(30);
   fill(255);
+  text(`Level ${level}`, width / 2, 50);
   text(score, 102, height / 2 + 145);
 }
 
@@ -599,15 +673,4 @@ function endGame() {
   textAlign(CENTER);
   textSize(80);
   text("Game Over!", width / 2, height / 2);
-}
-
-function findFocus(code, field) {
-  var char = String.fromCharCode(code).toLowerCase();
-  for (var i = 0; i < field.length; i++) {
-    if (field[i].text.startsWith(char)) {
-      field[i].focused = true;
-      return field[i];
-    }
-  }
-  return null;
 }

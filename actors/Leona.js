@@ -1,35 +1,31 @@
-function Ghosty(text) {
-  this.name = "Ghosty";
-  this.position = createVector(random(100, width - 100), height + 100);
+function Leona(text) {
+  this.position = createVector(width, random(100, height - 100));
   this.text = text;
   this.completedText = "";
   this.focused = false;
   this.intact = true;
-  this.animation = GhostyAnimation;
-  this.score = 10;
+  this.animation = LeonaAnimation;
 }
 
-Ghosty.prototype.draw = function () {
+Leona.prototype.draw = function () {
   animation(this.animation, this.position.x, this.position.y);
   noStroke();
   let displayText = this.text;
   displayText = this.text.replace(this.completedText, "");
   textAlign(CENTER);
   textSize(25);
-  text(displayText.toUpperCase(), this.position.x, this.position.y - 85);
+  text(displayText.toUpperCase(), this.position.x - 50, this.position.y + 15);
 };
-Ghosty.prototype.update = function () {
-  this.position.y -= map(score, 0, 1000, 1, 15);
+Leona.prototype.update = function () {
+  this.position.x -= map(score, 0, 1000, 1, 15);
   if (this.focused) {
     this.position.x++;
   }
-  if (this.position.y < 0) {
-    this.score = 0;
-    this.intact = false;
-    focus = null;
+  if (this.position.x < 0) {
+    endGame();
   }
 };
-Ghosty.prototype.erode = function (keyCode) {
+Leona.prototype.erode = function (keyCode) {
   var inputChar = String.fromCharCode(keyCode).toLowerCase(); // keyCode to char
   var length = this.completedText.length + 1;
   if (this.text.substring(0, length) === this.completedText + inputChar)

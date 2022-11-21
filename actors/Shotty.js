@@ -14,7 +14,7 @@ Shotty.prototype.draw = function () {
   noStroke();
   textAlign(CENTER);
   textSize(25);
-  text(displayText.toUpperCase(), this.position.x - 65, this.position.y);
+  text(displayText.toUpperCase(), this.position.x - 30, this.position.y);
 };
 Shotty.prototype.update = function () {
   this.position.x -= map(score, 0, 1000, 1, 15);

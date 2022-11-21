@@ -537,11 +537,13 @@ function handleField() {
         field.push(getSeaCreature(random(CHARS)));
       }
     }
-    if (score < 100 && random() > 0.8) {
+    if (score < 100 && random() > 0.7) {
       field.push(getSeaCreature(WORDS.pop()));
     }
-    if (score < 100 && random() > 0.95) {
-      field.push(getSeaCreature(random(WORDS)));
+    if (score < 200 && random() > 0.95) {
+      field.push(
+        getSeaCreature(WORDS.splice(random(0, WORDS.length - 100), 1)[0])
+      );
     }
     if (random() > 0.99) {
       for (let i = 0; i < 3; i++) {

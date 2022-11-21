@@ -505,7 +505,9 @@ function setup() {
   focus = null;
   textFont("Helvetica");
 }
-
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
 function draw() {
   clear();
   drawLine();

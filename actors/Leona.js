@@ -21,7 +21,7 @@ Leona.prototype.update = function () {
     this.position.x++;
   }
   if (this.position.x < 0) {
-    endGame();
+    endGame(this);
   }
 };
 Leona.prototype.erode = function (keyCode) {

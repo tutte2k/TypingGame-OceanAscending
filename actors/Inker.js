@@ -21,7 +21,7 @@ Inker.prototype.update = function () {
     this.position.x++;
   }
   if (this.position.x < 0) {
-    endGame();
+    endGame(this);
   }
 };
 Inker.prototype.erode = function (keyCode) {

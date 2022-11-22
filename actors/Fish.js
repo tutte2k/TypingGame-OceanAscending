@@ -21,7 +21,7 @@ Fish.prototype.update = function () {
     this.position.x++;
   }
   if (this.position.x < 0) {
-    endGame();
+    endGame(this);
   }
 };
 Fish.prototype.erode = function (keyCode) {

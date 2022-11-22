@@ -21,7 +21,7 @@ Qocto.prototype.update = function () {
     this.position.x++;
   }
   if (this.position.x < 0) {
-    endGame();
+    endGame(this);
   }
 };
 Qocto.prototype.erode = function (keyCode) {

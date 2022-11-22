@@ -21,7 +21,7 @@ Jinxy.prototype.update = function () {
     this.position.x++;
   }
   if (this.position.x < 0) {
-    endGame();
+    endGame(this);
   }
 };
 Jinxy.prototype.erode = function (keyCode) {

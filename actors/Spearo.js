@@ -23,7 +23,7 @@ Spearo.prototype.update = function () {
     this.position.y++;
   }
   if (this.position.x < 0) {
-    endGame();
+    endGame(this);
   }
 };
 Spearo.prototype.erode = function (keyCode) {

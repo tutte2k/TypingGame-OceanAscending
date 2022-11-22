@@ -20,10 +20,17 @@ var kills = 0;
 var level = 1;
 var depth = 0;
 var guyDepth = 0;
+var health = 3;
+
+var difficulty = {
+  kids: 0.1,
+  easy: 0.5,
+  normal: 0,
+};
 
 var zapperAvailable = false;
-
 function preload() {
+  font = loadFont("./assets/RifficFree-Bold.ttf");
   guy = loadAnimation(
     "./assets/sprites/guy/guy (1).png",
     "./assets/sprites/guy/guy (2).png",
@@ -108,7 +115,57 @@ function preload() {
     "./assets/sprites/bolt/bolt (38).png",
     "./assets/sprites/bolt/bolt (39).png",
     "./assets/sprites/bolt/bolt (40).png",
-    "./assets/sprites/bolt/bolt (41).png"
+    "./assets/sprites/bolt/bolt (41).png",
+    "./assets/sprites/bolt/bolt (42).png",
+    "./assets/sprites/bolt/bolt (43).png",
+    "./assets/sprites/bolt/bolt (44).png",
+    "./assets/sprites/bolt/bolt (45).png",
+    "./assets/sprites/bolt/bolt (46).png",
+    "./assets/sprites/bolt/bolt (47).png",
+    "./assets/sprites/bolt/bolt (48).png",
+    "./assets/sprites/bolt/bolt (49).png",
+    "./assets/sprites/bolt/bolt (50).png",
+    "./assets/sprites/bolt/bolt (51).png",
+    "./assets/sprites/bolt/bolt (52).png",
+    "./assets/sprites/bolt/bolt (53).png",
+    "./assets/sprites/bolt/bolt (54).png",
+    "./assets/sprites/bolt/bolt (55).png",
+    "./assets/sprites/bolt/bolt (56).png",
+    "./assets/sprites/bolt/bolt (57).png",
+    "./assets/sprites/bolt/bolt (58).png",
+    "./assets/sprites/bolt/bolt (59).png",
+    "./assets/sprites/bolt/bolt (60).png",
+    "./assets/sprites/bolt/bolt (61).png",
+    "./assets/sprites/bolt/bolt (62).png",
+    "./assets/sprites/bolt/bolt (63).png",
+    "./assets/sprites/bolt/bolt (64).png",
+    "./assets/sprites/bolt/bolt (65).png",
+    "./assets/sprites/bolt/bolt (66).png",
+    "./assets/sprites/bolt/bolt (67).png",
+    "./assets/sprites/bolt/bolt (68).png",
+    "./assets/sprites/bolt/bolt (69).png",
+    "./assets/sprites/bolt/bolt (70).png",
+    "./assets/sprites/bolt/bolt (71).png",
+    "./assets/sprites/bolt/bolt (72).png",
+    "./assets/sprites/bolt/bolt (73).png",
+    "./assets/sprites/bolt/bolt (74).png",
+    "./assets/sprites/bolt/bolt (75).png",
+    "./assets/sprites/bolt/bolt (76).png",
+    "./assets/sprites/bolt/bolt (77).png",
+    "./assets/sprites/bolt/bolt (78).png",
+    "./assets/sprites/bolt/bolt (79).png",
+    "./assets/sprites/bolt/bolt (80).png",
+    "./assets/sprites/bolt/bolt (81).png",
+    "./assets/sprites/bolt/bolt (82).png",
+    "./assets/sprites/bolt/bolt (83).png",
+    "./assets/sprites/bolt/bolt (84).png",
+    "./assets/sprites/bolt/bolt (85).png",
+    "./assets/sprites/bolt/bolt (86).png",
+    "./assets/sprites/bolt/bolt (87).png",
+    "./assets/sprites/bolt/bolt (88).png",
+    "./assets/sprites/bolt/bolt (89).png",
+    "./assets/sprites/bolt/bolt (90).png",
+    "./assets/sprites/bolt/bolt (91).png"
   );
   JinxyAnimation = loadAnimation(
     "./assets/sprites/reddsquid/reddsquid (1).gif",
@@ -952,8 +1009,94 @@ function preload() {
     "./assets/sprites/zapper/zapper (90).png",
     "./assets/sprites/zapper/zapper (91).png"
   );
+  HealthAnimation = loadAnimation(
+    "./assets/sprites/health/health (1).gif",
+    "./assets/sprites/health/health (2).gif",
+    "./assets/sprites/health/health (3).gif",
+    "./assets/sprites/health/health (4).gif",
+    "./assets/sprites/health/health (5).gif",
+    "./assets/sprites/health/health (6).gif",
+    "./assets/sprites/health/health (7).gif",
+    "./assets/sprites/health/health (8).gif",
+    "./assets/sprites/health/health (9).gif",
+    "./assets/sprites/health/health (10).gif",
+    "./assets/sprites/health/health (11).gif",
+    "./assets/sprites/health/health (12).gif",
+    "./assets/sprites/health/health (13).gif",
+    "./assets/sprites/health/health (14).gif",
+    "./assets/sprites/health/health (15).gif",
+    "./assets/sprites/health/health (16).gif",
+    "./assets/sprites/health/health (17).gif",
+    "./assets/sprites/health/health (18).gif",
+    "./assets/sprites/health/health (19).gif",
+    "./assets/sprites/health/health (20).gif",
+    "./assets/sprites/health/health (21).gif",
+    "./assets/sprites/health/health (22).gif",
+    "./assets/sprites/health/health (23).gif",
+    "./assets/sprites/health/health (24).gif",
+    "./assets/sprites/health/health (25).gif",
+    "./assets/sprites/health/health (26).gif",
+    "./assets/sprites/health/health (27).gif",
+    "./assets/sprites/health/health (28).gif",
+    "./assets/sprites/health/health (29).gif",
+    "./assets/sprites/health/health (30).gif",
+    "./assets/sprites/health/health (31).gif"
+  );
+  LivingDeadAnimation = loadAnimation(
+    "./assets/sprites/livingdead/livingdead (1).gif",
+    "./assets/sprites/livingdead/livingdead (2).gif",
+    "./assets/sprites/livingdead/livingdead (3).gif",
+    "./assets/sprites/livingdead/livingdead (4).gif",
+    "./assets/sprites/livingdead/livingdead (5).gif",
+    "./assets/sprites/livingdead/livingdead (6).gif",
+    "./assets/sprites/livingdead/livingdead (7).gif",
+    "./assets/sprites/livingdead/livingdead (8).gif",
+    "./assets/sprites/livingdead/livingdead (9).gif",
+    "./assets/sprites/livingdead/livingdead (10).gif",
+    "./assets/sprites/livingdead/livingdead (11).gif",
+    "./assets/sprites/livingdead/livingdead (12).gif",
+    "./assets/sprites/livingdead/livingdead (13).gif",
+    "./assets/sprites/livingdead/livingdead (14).gif",
+    "./assets/sprites/livingdead/livingdead (15).gif",
+    "./assets/sprites/livingdead/livingdead (16).gif",
+    "./assets/sprites/livingdead/livingdead (17).gif",
+    "./assets/sprites/livingdead/livingdead (18).gif",
+    "./assets/sprites/livingdead/livingdead (19).gif",
+    "./assets/sprites/livingdead/livingdead (20).gif",
+    "./assets/sprites/livingdead/livingdead (21).gif",
+    "./assets/sprites/livingdead/livingdead (22).gif",
+    "./assets/sprites/livingdead/livingdead (23).gif",
+    "./assets/sprites/livingdead/livingdead (24).gif",
+    "./assets/sprites/livingdead/livingdead (25).gif",
+    "./assets/sprites/livingdead/livingdead (26).gif",
+    "./assets/sprites/livingdead/livingdead (27).gif",
+    "./assets/sprites/livingdead/livingdead (28).gif",
+    "./assets/sprites/livingdead/livingdead (29).gif",
+    "./assets/sprites/livingdead/livingdead (30).gif",
+    "./assets/sprites/livingdead/livingdead (31).gif",
+    "./assets/sprites/livingdead/livingdead (32).gif",
+    "./assets/sprites/livingdead/livingdead (33).gif",
+    "./assets/sprites/livingdead/livingdead (34).gif",
+    "./assets/sprites/livingdead/livingdead (35).gif",
+    "./assets/sprites/livingdead/livingdead (36).gif",
+    "./assets/sprites/livingdead/livingdead (37).gif",
+    "./assets/sprites/livingdead/livingdead (38).gif",
+    "./assets/sprites/livingdead/livingdead (39).gif",
+    "./assets/sprites/livingdead/livingdead (40).gif",
+    "./assets/sprites/livingdead/livingdead (41).gif",
+    "./assets/sprites/livingdead/livingdead (42).gif",
+    "./assets/sprites/livingdead/livingdead (43).gif",
+    "./assets/sprites/livingdead/livingdead (44).gif",
+    "./assets/sprites/livingdead/livingdead (45).gif",
+    "./assets/sprites/livingdead/livingdead (46).gif",
+    "./assets/sprites/livingdead/livingdead (47).gif",
+    "./assets/sprites/livingdead/livingdead (48).gif",
+    "./assets/sprites/livingdead/livingdead (49).gif",
+    "./assets/sprites/livingdead/livingdead (50).gif",
+    "./assets/sprites/livingdead/livingdead (51).gif"
+  );
 }
-function mousePressed() {
+function togglePause() {
   if (paused && !gameOver) {
     loop();
     paused = !paused;
@@ -1004,9 +1147,13 @@ function getSeaCreature(value) {
 }
 function setup() {
   var canvas = createCanvas(windowWidth, windowHeight);
+  var radio = createRadio();
+  button = createButton("Pause");
+  button.position(80, height / 2 + 165);
+  button.mousePressed(togglePause);
   canvas.parent("ocean");
   focus = null;
-  textFont("Helvetica");
+  textFont(font);
 }
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
@@ -1019,6 +1166,7 @@ function draw() {
   drawGuy();
 }
 function handleField() {
+  updateItemField();
   updateField();
   updateSecondField();
   updateEnvironmentField();
@@ -1026,22 +1174,26 @@ function handleField() {
     depth++;
     CURRENT_DEPTH++;
 
-    if (!zapperAvailable) {
-      if (random() > 0.99) {
-        environmentfield.push(new Bolt());
-        zapperAvailable = true;
-      }
-    }
     spawnProgression();
     spawnSpearo(0.99);
     spawnBurst(0.99);
     spawnGhostyBurst(0.99);
     //belowscore
+    spawnDoubleTrouble(50, 0.99);
     spawnWhale(100, 0.99);
-    spawnDoubleTrouble(100, 0.99);
-    spawnRandom(50, 0.99);
+    spawnRandom(150, 0.99);
     //depth
-    spawnChtullie(200, 0.99);
+    spawnChtullie(300, 0.99);
+    //items
+    if (random() > 0.99 && health < 3) {
+      itemfield.push(new Health(random(NUMBERS)));
+    }
+    if (random() > 0.99 && health > 1) {
+      itemfield.push(new LivingDead(random(NUMBERS)));
+    }
+    if (random() > 0.99) {
+      itemfield.push(new Bolt(random(NUMBERS)));
+    }
 
     if (score > 350) {
       totalScore += score + depth;
@@ -1082,6 +1234,21 @@ function updateSecondField() {
           focus = null;
         }
         secondfield.splice(i, 1);
+      }
+    }
+  }
+}
+function updateItemField() {
+  for (var i = itemfield.length - 1; i >= 0; i--) {
+    if (itemfield[i]) {
+      itemfield[i].update();
+      if (itemfield[i].intact) {
+        itemfield[i].draw();
+      } else if (!itemfield.intact) {
+        if (itemfield[i].focused) {
+          focus = null;
+        }
+        itemfield.splice(i, 1);
       }
     }
   }
@@ -1134,6 +1301,14 @@ function keyPressed() {
 function findFocus(code, field, secondfield) {
   var char = String.fromCharCode(code).toLowerCase();
 
+  for (var i = 0; i < itemfield.length; i++) {
+    if (itemfield[i]) {
+      if (itemfield[i].text.startsWith(char)) {
+        itemfield[i].focused = true;
+        return itemfield[i];
+      }
+    }
+  }
   for (var i = 0; i < field.length; i++) {
     if (field[i]) {
       if (field[i].text.startsWith(char)) {
@@ -1159,16 +1334,20 @@ function drawLine() {
   line(90, guyDepth, focus.position.x, focus.position.y);
   textAlign(CENTER);
   textSize(100);
-  text(focus.completedText, width / 2, height - 50);
+  text(focus.completedText.toUpperCase(), width / 2, height - 50);
 }
 function drawScore() {
   textAlign(CENTER);
   textSize(30);
   fill(255);
-  text(`Click to pause`, 100, 30);
   text(`Level ${level} (${Math.round((score / 350) * 100)}%)`, width / 2, 30);
   text(`Depth ${depth}m`, 100, height / 2 + 145);
   text(`Catches ${kills}`, 100, height - 10);
+  textFont("Helvetica");
+  for (let i = 0; i < health; i++) {
+    text(`❤️`, width / 2 - 40 + i * 40, height - 10);
+  }
+  textFont(font);
 }
 function drawGuy() {
   standardPosition = height / 2;
@@ -1177,16 +1356,35 @@ function drawGuy() {
   }
   animation(guy, 90, guyDepth);
 }
-function endGame() {
-  gameOver = true;
-  noLoop();
-  fill(255);
-  noStroke();
-  textAlign(CENTER);
-  textSize(80);
-  text("Game Over!", width / 2, height / 3);
-  text(`Score ${totalScore + score}`, width / 2, height / 2);
-  text(`Total catches ${kills}`, width / 2, (height / 3) * 2);
+function endGame(enemy) {
+  if (enemy.name) {
+    if (enemy.name === "LivingDead") {
+      for (let i = field.length; i > -1; i--) {
+        score += 3;
+        field.splice(i, 1);
+        kills++;
+      }
+      for (let i = secondfield.length; i > -1; i--) {
+        score += 3;
+        kills++;
+        secondfield.splice(i, 1);
+      }
+    }
+  }
+  if (health === 0) {
+    gameOver = true;
+    noLoop();
+    fill(255);
+    noStroke();
+    textAlign(CENTER);
+    textSize(80);
+    text("Game Over!", width / 2, height / 3);
+    text(`Score ${totalScore + score}`, width / 2, height / 2);
+    text(`Total catches ${kills}`, width / 2, (height / 3) * 2);
+  } else {
+    enemy.intact = false;
+    health--;
+  }
 }
 // spawns
 function spawnSpearo(chance) {

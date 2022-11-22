@@ -13,3 +13,14 @@ Zapper.prototype.update = function () {
   }
 };
 Zapper.prototype.erode = function (keyCode) {};
+
+function BoltIcon() {
+  this.position = createVector(width / 2, height - 100);
+  this.intact = true;
+  this.animation = BoltAnimation;
+}
+BoltIcon.prototype.draw = function () {
+  animation(this.animation, this.position.x, this.position.y);
+};
+BoltIcon.prototype.update = function () {};
+BoltIcon.prototype.erode = function (keyCode) {};

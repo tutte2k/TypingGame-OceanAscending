@@ -21,7 +21,7 @@ Shotty.prototype.update = function () {
     this.position.x++;
   }
   if (this.position.x < 0) {
-    endGame();
+    endGame(this);
   }
 };
 Shotty.prototype.erode = function (keyCode) {

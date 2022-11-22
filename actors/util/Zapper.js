@@ -15,7 +15,7 @@ Zapper.prototype.update = function () {
 Zapper.prototype.erode = function (keyCode) {};
 
 function BoltIcon() {
-  this.position = createVector(width / 2, height - 100);
+  this.position = createVector(40, height / 2);
   this.intact = true;
   this.animation = BoltAnimation;
 }

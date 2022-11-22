@@ -1147,7 +1147,6 @@ function getSeaCreature(value) {
 }
 function setup() {
   var canvas = createCanvas(windowWidth, windowHeight);
-  var radio = createRadio();
   button = createButton("Pause");
   button.position(80, height / 2 + 165);
   button.mousePressed(togglePause);

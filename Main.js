@@ -3,7 +3,7 @@ const NUMBERSTRING = "1 2 3 4 5 6 7 8 9 0";
 const CHARS = CHARSTRING.split(" ");
 const WORDS = WORDSTRING.split(" ").sort((a, b) => b.length - a.length);
 const NUMBERS = NUMBERSTRING.split(" ");
-
+var CURRENT_DEPTH = 0;
 var paused = false;
 var gameOver = false;
 
@@ -11,6 +11,8 @@ var focus;
 
 var field = [];
 var secondfield = [];
+var itemfield = [];
+var environmentfield = [];
 
 var totalScore = 0;
 var score = 0;
@@ -18,6 +20,8 @@ var kills = 0;
 var level = 1;
 var depth = 0;
 var guyDepth = 0;
+
+var zapperAvailable = false;
 
 function preload() {
   guy = loadAnimation(
@@ -62,6 +66,49 @@ function preload() {
     "./assets/sprites/guy/guy (39).png",
     "./assets/sprites/guy/guy (40).png",
     "./assets/sprites/guy/guy (41).png"
+  );
+  BoltAnimation = loadAnimation(
+    "./assets/sprites/bolt/bolt (1).png",
+    "./assets/sprites/bolt/bolt (2).png",
+    "./assets/sprites/bolt/bolt (3).png",
+    "./assets/sprites/bolt/bolt (4).png",
+    "./assets/sprites/bolt/bolt (5).png",
+    "./assets/sprites/bolt/bolt (6).png",
+    "./assets/sprites/bolt/bolt (7).png",
+    "./assets/sprites/bolt/bolt (8).png",
+    "./assets/sprites/bolt/bolt (9).png",
+    "./assets/sprites/bolt/bolt (10).png",
+    "./assets/sprites/bolt/bolt (11).png",
+    "./assets/sprites/bolt/bolt (12).png",
+    "./assets/sprites/bolt/bolt (13).png",
+    "./assets/sprites/bolt/bolt (14).png",
+    "./assets/sprites/bolt/bolt (15).png",
+    "./assets/sprites/bolt/bolt (16).png",
+    "./assets/sprites/bolt/bolt (17).png",
+    "./assets/sprites/bolt/bolt (18).png",
+    "./assets/sprites/bolt/bolt (19).png",
+    "./assets/sprites/bolt/bolt (20).png",
+    "./assets/sprites/bolt/bolt (21).png",
+    "./assets/sprites/bolt/bolt (22).png",
+    "./assets/sprites/bolt/bolt (23).png",
+    "./assets/sprites/bolt/bolt (24).png",
+    "./assets/sprites/bolt/bolt (25).png",
+    "./assets/sprites/bolt/bolt (26).png",
+    "./assets/sprites/bolt/bolt (27).png",
+    "./assets/sprites/bolt/bolt (28).png",
+    "./assets/sprites/bolt/bolt (29).png",
+    "./assets/sprites/bolt/bolt (30).png",
+    "./assets/sprites/bolt/bolt (31).png",
+    "./assets/sprites/bolt/bolt (32).png",
+    "./assets/sprites/bolt/bolt (33).png",
+    "./assets/sprites/bolt/bolt (34).png",
+    "./assets/sprites/bolt/bolt (35).png",
+    "./assets/sprites/bolt/bolt (36).png",
+    "./assets/sprites/bolt/bolt (37).png",
+    "./assets/sprites/bolt/bolt (38).png",
+    "./assets/sprites/bolt/bolt (39).png",
+    "./assets/sprites/bolt/bolt (40).png",
+    "./assets/sprites/bolt/bolt (41).png"
   );
   JinxyAnimation = loadAnimation(
     "./assets/sprites/reddsquid/reddsquid (1).gif",
@@ -812,6 +859,99 @@ function preload() {
     "./assets/sprites/inker/inker (90).png",
     "./assets/sprites/inker/inker (91).png"
   );
+  ZapperAnimation = loadAnimation(
+    "./assets/sprites/zapper/zapper (1).png",
+    "./assets/sprites/zapper/zapper (2).png",
+    "./assets/sprites/zapper/zapper (3).png",
+    "./assets/sprites/zapper/zapper (4).png",
+    "./assets/sprites/zapper/zapper (5).png",
+    "./assets/sprites/zapper/zapper (6).png",
+    "./assets/sprites/zapper/zapper (7).png",
+    "./assets/sprites/zapper/zapper (8).png",
+    "./assets/sprites/zapper/zapper (9).png",
+    "./assets/sprites/zapper/zapper (10).png",
+    "./assets/sprites/zapper/zapper (11).png",
+    "./assets/sprites/zapper/zapper (12).png",
+    "./assets/sprites/zapper/zapper (13).png",
+    "./assets/sprites/zapper/zapper (14).png",
+    "./assets/sprites/zapper/zapper (15).png",
+    "./assets/sprites/zapper/zapper (16).png",
+    "./assets/sprites/zapper/zapper (17).png",
+    "./assets/sprites/zapper/zapper (18).png",
+    "./assets/sprites/zapper/zapper (19).png",
+    "./assets/sprites/zapper/zapper (20).png",
+    "./assets/sprites/zapper/zapper (21).png",
+    "./assets/sprites/zapper/zapper (22).png",
+    "./assets/sprites/zapper/zapper (23).png",
+    "./assets/sprites/zapper/zapper (24).png",
+    "./assets/sprites/zapper/zapper (25).png",
+    "./assets/sprites/zapper/zapper (26).png",
+    "./assets/sprites/zapper/zapper (27).png",
+    "./assets/sprites/zapper/zapper (28).png",
+    "./assets/sprites/zapper/zapper (29).png",
+    "./assets/sprites/zapper/zapper (30).png",
+    "./assets/sprites/zapper/zapper (31).png",
+    "./assets/sprites/zapper/zapper (32).png",
+    "./assets/sprites/zapper/zapper (33).png",
+    "./assets/sprites/zapper/zapper (34).png",
+    "./assets/sprites/zapper/zapper (35).png",
+    "./assets/sprites/zapper/zapper (36).png",
+    "./assets/sprites/zapper/zapper (37).png",
+    "./assets/sprites/zapper/zapper (38).png",
+    "./assets/sprites/zapper/zapper (39).png",
+    "./assets/sprites/zapper/zapper (40).png",
+    "./assets/sprites/zapper/zapper (41).png",
+    "./assets/sprites/zapper/zapper (42).png",
+    "./assets/sprites/zapper/zapper (43).png",
+    "./assets/sprites/zapper/zapper (44).png",
+    "./assets/sprites/zapper/zapper (45).png",
+    "./assets/sprites/zapper/zapper (46).png",
+    "./assets/sprites/zapper/zapper (47).png",
+    "./assets/sprites/zapper/zapper (48).png",
+    "./assets/sprites/zapper/zapper (49).png",
+    "./assets/sprites/zapper/zapper (50).png",
+    "./assets/sprites/zapper/zapper (51).png",
+    "./assets/sprites/zapper/zapper (52).png",
+    "./assets/sprites/zapper/zapper (53).png",
+    "./assets/sprites/zapper/zapper (54).png",
+    "./assets/sprites/zapper/zapper (55).png",
+    "./assets/sprites/zapper/zapper (56).png",
+    "./assets/sprites/zapper/zapper (57).png",
+    "./assets/sprites/zapper/zapper (58).png",
+    "./assets/sprites/zapper/zapper (59).png",
+    "./assets/sprites/zapper/zapper (60).png",
+    "./assets/sprites/zapper/zapper (61).png",
+    "./assets/sprites/zapper/zapper (62).png",
+    "./assets/sprites/zapper/zapper (63).png",
+    "./assets/sprites/zapper/zapper (64).png",
+    "./assets/sprites/zapper/zapper (65).png",
+    "./assets/sprites/zapper/zapper (66).png",
+    "./assets/sprites/zapper/zapper (67).png",
+    "./assets/sprites/zapper/zapper (68).png",
+    "./assets/sprites/zapper/zapper (69).png",
+    "./assets/sprites/zapper/zapper (70).png",
+    "./assets/sprites/zapper/zapper (71).png",
+    "./assets/sprites/zapper/zapper (72).png",
+    "./assets/sprites/zapper/zapper (73).png",
+    "./assets/sprites/zapper/zapper (74).png",
+    "./assets/sprites/zapper/zapper (75).png",
+    "./assets/sprites/zapper/zapper (76).png",
+    "./assets/sprites/zapper/zapper (77).png",
+    "./assets/sprites/zapper/zapper (78).png",
+    "./assets/sprites/zapper/zapper (79).png",
+    "./assets/sprites/zapper/zapper (80).png",
+    "./assets/sprites/zapper/zapper (81).png",
+    "./assets/sprites/zapper/zapper (82).png",
+    "./assets/sprites/zapper/zapper (83).png",
+    "./assets/sprites/zapper/zapper (84).png",
+    "./assets/sprites/zapper/zapper (85).png",
+    "./assets/sprites/zapper/zapper (86).png",
+    "./assets/sprites/zapper/zapper (87).png",
+    "./assets/sprites/zapper/zapper (88).png",
+    "./assets/sprites/zapper/zapper (89).png",
+    "./assets/sprites/zapper/zapper (90).png",
+    "./assets/sprites/zapper/zapper (91).png"
+  );
 }
 function mousePressed() {
   if (paused && !gameOver) {
@@ -881,8 +1021,17 @@ function draw() {
 function handleField() {
   updateField();
   updateSecondField();
+  updateEnvironmentField();
   if (frameCount % 60 === 0) {
     depth++;
+    CURRENT_DEPTH++;
+
+    if (!zapperAvailable) {
+      if (random() > 0.99) {
+        environmentfield.push(new Bolt());
+        zapperAvailable = true;
+      }
+    }
     spawnProgression();
     spawnSpearo(0.99);
     spawnBurst(0.99);
@@ -908,10 +1057,12 @@ function updateField() {
       if (field[i].intact) {
         field[i].draw();
       } else {
-        score += field[i].text.length;
-        kills++;
-        field.splice(i, 1);
-        focus = null;
+        if (field[i].text) {
+          score += field[i].text.length;
+          kills++;
+          field.splice(i, 1);
+          focus = null;
+        }
       }
     }
   }
@@ -935,7 +1086,37 @@ function updateSecondField() {
     }
   }
 }
+function updateEnvironmentField() {
+  for (var i = environmentfield.length - 1; i >= 0; i--) {
+    if (environmentfield[i]) {
+      environmentfield[i].update();
+      if (environmentfield[i].intact) {
+        environmentfield[i].draw();
+      } else if (!environmentfield.intact) {
+        if (environmentfield[i].focused) {
+          focus = null;
+        }
+        environmentfield.splice(i, 1);
+      }
+    }
+  }
+}
 function keyPressed() {
+  if (keyCode == 13 && zapperAvailable === true) {
+    for (let i = field.length; i > -1; i--) {
+      score += 3;
+      field.splice(i, 1);
+      kills++;
+    }
+    for (let i = secondfield.length; i > -1; i--) {
+      score += 3;
+      kills++;
+      secondfield.splice(i, 1);
+    }
+    environmentfield = [];
+    zapperAvailable = false;
+    environmentfield.push(new Zapper(CURRENT_DEPTH));
+  }
   if (paused && !gameOver) {
     loop();
     paused = !paused;
@@ -1071,7 +1252,6 @@ function spawnDoubleTrouble(belowScore, chance) {
     }
   }
 }
-
 function spawnProgression() {
   let creature = getSeaCreature(WORDS.pop());
   if (creature.name) {

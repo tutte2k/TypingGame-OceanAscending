@@ -1,3 +1,4 @@
+# always ctrl + f5 if you want latest version 
 # TypingGame-OceanAscending made with p5js
 https://tutte2k.github.io/TypingGame-OceanAscending/
 

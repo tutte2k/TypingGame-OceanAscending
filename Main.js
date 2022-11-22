@@ -1116,6 +1116,7 @@ function keyPressed() {
     environmentfield = [];
     zapperAvailable = false;
     environmentfield.push(new Zapper(CURRENT_DEPTH));
+    focus = null;
   }
   if (paused && !gameOver) {
     loop();

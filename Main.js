@@ -3,19 +3,25 @@ const NUMBERSTRING = "1 2 3 4 5 6 7 8 9 0";
 const CHARS = CHARSTRING.split(" ");
 const WORDS = WORDSTRING.split(" ").sort((a, b) => b.length - a.length);
 const NUMBERS = NUMBERSTRING.split(" ");
-var CURRENT_DEPTH = 0;
+
 var paused = false;
 var gameOver = false;
-
 var focus;
-var data = [];
+var radio;
+var postBtn;
+
+var data;
+var kidsdata;
+var easydata;
+var normaldata;
+let inputContents;
+
 var field = [];
 var secondfield = [];
 var itemfield = [];
 var environmentfield = [];
 
-var misses = 0;
-
+var CURRENT_DEPTH = 0;
 var totalScore = 0;
 var score = 0;
 var kills = 0;
@@ -24,13 +30,8 @@ var depth = 0;
 var guyDepth = 0;
 var health = 3;
 var zapperAvailable = false;
+var misses = 0;
 
-var difficulty = {
-  kids: 0.1,
-  easy: 0.5,
-  normal: 0,
-};
-let inputContents;
 function preload() {
   font = loadFont("./assets/RifficFree-Bold.ttf");
   guy = loadAnimation(
@@ -1145,10 +1146,20 @@ function preload() {
     "./assets/sprites/snail/snail (45).png",
     "./assets/sprites/snail/snail (46).png"
   );
-  const apiUrl =
+  const kidsApiUrl =
+    "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/7872d5c0-aac9-4ace-9624-96215c65d527";
+  httpGet(kidsApiUrl, "json", false, function (response) {
+    kidsdata = response;
+  });
+  const easyApiUrl =
+    "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/2bf39cf4-8b8c-40da-b4b6-328ce40363ca";
+  httpGet(easyApiUrl, "json", false, function (response) {
+    easydata = response;
+  });
+  const normalApiUrl =
     "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/0d51decd-56ba-45d1-ace6-eec4ddb43bec";
-  httpGet(apiUrl, "json", false, function (response) {
-    data = response;
+  httpGet(normalApiUrl, "json", false, function (response) {
+    normaldata = response;
   });
 }
 function togglePause() {
@@ -1206,6 +1217,16 @@ function setup() {
   button.position(80, height / 2 + 165);
   button.mousePressed(togglePause);
   canvas.parent("ocean");
+  radio = createRadio();
+
+  radio.option("kids");
+  radio.option("easy");
+  var normalOptions = radio.option("normal");
+  normalOptions.checked = true;
+
+  radio.style("width", "10px");
+  radio.position(10, 10);
+  radio.mouseClicked(resetGame);
 
   focus = null;
   textFont(font);
@@ -1220,6 +1241,18 @@ function draw() {
   handleField();
   drawGuy();
 }
+function resetGame() {
+  depth = 0;
+  score = 0;
+  level = 1;
+  health = 3;
+  guyDepth = 0;
+  zapperAvailable = false;
+  field = [];
+  secondfield = [];
+  itemfield = [];
+  environmentfield = [];
+}
 function handleField() {
   updateItemField();
   updateField();
@@ -1228,18 +1261,10 @@ function handleField() {
   if (frameCount % 60 === 0) {
     depth++;
     CURRENT_DEPTH++;
+    var kidsMode = radio.value() == "kids";
+    var easyMode = radio.value() == "easy";
+    var normalMode = radio.value() == "normal";
 
-    spawnProgression();
-    spawnSpearo(0.99);
-    spawnBurst(0.99);
-    spawnGhostyBurst(0.99);
-    //belowscore
-    spawnDoubleTrouble(50, 0.99);
-    spawnWhale(100, 0.99);
-    spawnRandom(150, 0.99);
-    //depth
-    spawnChtullie(300, 0.99);
-    //items
     if (random() > 0.99 && health < 3) {
       itemfield.push(new Health(random(NUMBERS)));
     }
@@ -1249,14 +1274,35 @@ function handleField() {
     if (random() > 0.99) {
       itemfield.push(new Bolt(random(NUMBERS)));
     }
-
-    if (score > 350) {
-      totalScore += score + depth;
-      score = 0;
-      level++;
+    if (kidsMode) {
+      spawnProgression(0.1);
+    } else if (easyMode) {
+      spawnProgression(0.5);
+      spawnSpearo(0.99);
+      spawnGhostyBurst(0.99);
+      spawnRandom(50, 0.99);
+      spawnChtullie(300, 0.99);
+    } else if (normalMode) {
+      spawnProgression(1);
+      spawnSpearo(0.99);
+      spawnBurst(0.99);
+      spawnGhostyBurst(0.99);
+      //belowscore
+      spawnDoubleTrouble(50, 0.99);
+      spawnWhale(100, 0.99);
+      spawnRandom(150, 0.99);
+      //depth
+      spawnChtullie(300, 0.99);
     }
   }
+
+  if (score > 350) {
+    totalScore += score + depth;
+    score = 0;
+    level++;
+  }
 }
+
 function updateField() {
   for (var i = field.length - 1; i >= 0; i--) {
     if (field[i]) {
@@ -1434,11 +1480,19 @@ function endGame(enemy) {
     }
   }
   if (health === 0) {
+    radio.elt.hidden = true;
     gameOver = true;
     noLoop();
     fill(255);
     noStroke();
     textAlign(LEFT);
+    if (radio.value() == "kids") {
+      data = kidsdata;
+    } else if (radio.value() == "easy") {
+      data = easydata;
+    } else if (radio.value() == "normal") {
+      data = normaldata;
+    }
     if (data) {
       let sortable = [];
       for (var entry in data) {
@@ -1448,9 +1502,9 @@ function endGame(enemy) {
         return b[1] - a[1];
       });
       const top10 = sortable.slice(0, 9);
-      text(`Highscores`, 30, 30);
+      text(`${radio.value()}Highscores`, 70, 30);
       for (let i = 0; i < top10.length; i++) {
-        text(`#${i + 1} ${top10[i][0]} : ${top10[i][1]}`, 30, 70 + i * 40);
+        text(`#${i + 1} ${top10[i][0]} : ${top10[i][1]}`, 70, 70 + i * 40);
       }
     }
     textAlign(CENTER);
@@ -1476,11 +1530,19 @@ function onInput() {
   inputContents = this.value();
 }
 function postRequest() {
-  let api_url =
-    "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/0d51decd-56ba-45d1-ace6-eec4ddb43bec?apiKey=74595edf-2138-43c5-aee8-0b94a8c76fac";
-  console.log(usernameInput.value);
+  let api_url;
+  if (radio.value() == "kids") {
+    api_url =
+      "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/7872d5c0-aac9-4ace-9624-96215c65d527?apiKey=74595edf-2138-43c5-aee8-0b94a8c76fac";
+  } else if (radio.value() == "easy") {
+    api_url =
+      "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/2bf39cf4-8b8c-40da-b4b6-328ce40363ca?apiKey=74595edf-2138-43c5-aee8-0b94a8c76fac";
+  } else if (radio.value() == "normal") {
+    api_url =
+      "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/0d51decd-56ba-45d1-ace6-eec4ddb43bec?apiKey=74595edf-2138-43c5-aee8-0b94a8c76fac";
+  }
   data[inputContents] = totalScore + score;
-
+  postBtn.elt.hidden = true;
   fetch(api_url, {
     method: "PUT",
     headers: {
@@ -1554,11 +1616,13 @@ function spawnDoubleTrouble(belowScore, chance) {
     }
   }
 }
-function spawnProgression() {
-  let creature = getSeaCreature(WORDS.pop());
-  if (creature.name) {
-    secondfield.push(creature);
-  } else {
-    field.push(creature);
+function spawnProgression(chance) {
+  if (random() < chance) {
+    let creature = getSeaCreature(WORDS.pop());
+    if (creature.name) {
+      secondfield.push(creature);
+    } else {
+      field.push(creature);
+    }
   }
 }

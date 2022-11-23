@@ -1382,6 +1382,9 @@ function endGame(enemy) {
     text(`Total catches ${kills}`, width / 2, (height / 3) * 2);
   } else {
     enemy.intact = false;
+    if (enemy.focused === true) {
+      focus = null;
+    }
     health--;
   }
 }

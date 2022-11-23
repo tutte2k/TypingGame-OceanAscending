@@ -9,6 +9,7 @@ var gameOver = false;
 var focus;
 var radio;
 var postBtn;
+var playAgain;
 
 var data;
 var kidsdata;
@@ -1252,6 +1253,8 @@ function resetGame() {
   secondfield = [];
   itemfield = [];
   environmentfield = [];
+  radio.elt.hidden = false;
+  loop();
 }
 function handleField() {
   updateItemField();
@@ -1515,6 +1518,13 @@ function endGame(enemy) {
     postBtn = createButton("Submit Score");
     postBtn.position((width / 4) * 2 + 100, (height / 4) * 2 + 300);
     postBtn.mouseClicked(postRequest);
+
+    playAgain = createButton("Play Again");
+    playAgain.position(width / 2, 200);
+    playAgain.mouseClicked(goPlayAgain);
+
+    console.log(playAgain);
+
     text("Game Over!", width / 2, height / 3);
     text(`Score ${totalScore + score}`, width / 2, height / 2);
     text(`Total catches ${kills}`, width / 2, (height / 3) * 2);
@@ -1525,6 +1535,12 @@ function endGame(enemy) {
     }
     health--;
   }
+}
+function goPlayAgain() {
+  playAgain.remove();
+  postBtn.remove();
+  usernameInput.remove();
+  resetGame();
 }
 function onInput() {
   inputContents = this.value();

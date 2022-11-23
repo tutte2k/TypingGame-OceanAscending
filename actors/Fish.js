@@ -13,7 +13,7 @@ Fish.prototype.draw = function () {
   noStroke();
   textAlign(CENTER);
   textSize(25);
-  text(displayText.toUpperCase(), this.position.x + 12, this.position.y + 7);
+  text(displayText.toUpperCase(), this.position.x - 25, this.position.y + 20);
 };
 Fish.prototype.update = function () {
   this.position.x -= map(score, 0, 1000, 1, 15);

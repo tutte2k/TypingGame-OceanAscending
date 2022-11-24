@@ -1248,11 +1248,13 @@ function resetGame() {
   level = 1;
   health = 3;
   guyDepth = 0;
+  kills = 0;
   zapperAvailable = false;
   field = [];
   secondfield = [];
   itemfield = [];
   environmentfield = [];
+  focus = null;
   radio.elt.hidden = false;
   loop();
 }
@@ -1373,32 +1375,34 @@ function updateEnvironmentField() {
   }
 }
 function keyPressed() {
-  if (keyCode == 13 && zapperAvailable === true) {
-    for (let i = field.length; i > -1; i--) {
-      score += 3;
-      field.splice(i, 1);
-      kills++;
+  if (!paused) {
+    if (keyCode == 13 && zapperAvailable === true) {
+      for (let i = field.length; i > -1; i--) {
+        score += 3;
+        field.splice(i, 1);
+        kills++;
+      }
+      for (let i = secondfield.length; i > -1; i--) {
+        score += 3;
+        kills++;
+        secondfield.splice(i, 1);
+      }
+      environmentfield = [];
+      zapperAvailable = false;
+      environmentfield.push(new Zapper(CURRENT_DEPTH));
+      focus = null;
     }
-    for (let i = secondfield.length; i > -1; i--) {
-      score += 3;
-      kills++;
-      secondfield.splice(i, 1);
+    if (paused && !gameOver) {
+      loop();
+      paused = !paused;
     }
-    environmentfield = [];
-    zapperAvailable = false;
-    environmentfield.push(new Zapper(CURRENT_DEPTH));
-    focus = null;
-  }
-  if (paused && !gameOver) {
-    loop();
-    paused = !paused;
-  }
-  if (focus) {
-    focus.erode(keyCode);
-  } else {
-    focus = findFocus(keyCode, field, secondfield);
     if (focus) {
       focus.erode(keyCode);
+    } else {
+      focus = findFocus(keyCode, field, secondfield);
+      if (focus) {
+        focus.erode(keyCode);
+      }
     }
   }
 }

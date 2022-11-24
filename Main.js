@@ -1148,6 +1148,131 @@ function preload() {
     "./assets/sprites/snail/snail (45).png",
     "./assets/sprites/snail/snail (46).png"
   );
+  ShellieAnimation = loadAnimation(
+    "./assets/sprites/shellie/shellie (1).png",
+    "./assets/sprites/shellie/shellie (2).png",
+    "./assets/sprites/shellie/shellie (3).png",
+    "./assets/sprites/shellie/shellie (4).png",
+    "./assets/sprites/shellie/shellie (5).png",
+    "./assets/sprites/shellie/shellie (6).png",
+    "./assets/sprites/shellie/shellie (7).png",
+    "./assets/sprites/shellie/shellie (8).png",
+    "./assets/sprites/shellie/shellie (9).png",
+    "./assets/sprites/shellie/shellie (10).png",
+    "./assets/sprites/shellie/shellie (11).png",
+    "./assets/sprites/shellie/shellie (12).png",
+    "./assets/sprites/shellie/shellie (13).png",
+    "./assets/sprites/shellie/shellie (14).png",
+    "./assets/sprites/shellie/shellie (15).png",
+    "./assets/sprites/shellie/shellie (16).png",
+    "./assets/sprites/shellie/shellie (17).png",
+    "./assets/sprites/shellie/shellie (18).png",
+    "./assets/sprites/shellie/shellie (19).png",
+    "./assets/sprites/shellie/shellie (20).png",
+    "./assets/sprites/shellie/shellie (21).png",
+    "./assets/sprites/shellie/shellie (22).png",
+    "./assets/sprites/shellie/shellie (23).png",
+    "./assets/sprites/shellie/shellie (24).png",
+    "./assets/sprites/shellie/shellie (25).png",
+    "./assets/sprites/shellie/shellie (26).png",
+    "./assets/sprites/shellie/shellie (27).png",
+    "./assets/sprites/shellie/shellie (28).png",
+    "./assets/sprites/shellie/shellie (29).png",
+    "./assets/sprites/shellie/shellie (30).png",
+    "./assets/sprites/shellie/shellie (31).png",
+    "./assets/sprites/shellie/shellie (32).png",
+    "./assets/sprites/shellie/shellie (33).png",
+    "./assets/sprites/shellie/shellie (34).png",
+    "./assets/sprites/shellie/shellie (35).png",
+    "./assets/sprites/shellie/shellie (36).png",
+    "./assets/sprites/shellie/shellie (37).png",
+    "./assets/sprites/shellie/shellie (38).png",
+    "./assets/sprites/shellie/shellie (39).png",
+    "./assets/sprites/shellie/shellie (40).png",
+    "./assets/sprites/shellie/shellie (41).png",
+    "./assets/sprites/shellie/shellie (42).png",
+    "./assets/sprites/shellie/shellie (43).png",
+    "./assets/sprites/shellie/shellie (44).png",
+    "./assets/sprites/shellie/shellie (45).png",
+    "./assets/sprites/shellie/shellie (46).png",
+    "./assets/sprites/shellie/shellie (47).png",
+    "./assets/sprites/shellie/shellie (48).png",
+    "./assets/sprites/shellie/shellie (49).png",
+    "./assets/sprites/shellie/shellie (50).png",
+    "./assets/sprites/shellie/shellie (51).png",
+    "./assets/sprites/shellie/shellie (52).png",
+    "./assets/sprites/shellie/shellie (53).png",
+    "./assets/sprites/shellie/shellie (54).png",
+    "./assets/sprites/shellie/shellie (55).png",
+    "./assets/sprites/shellie/shellie (56).png",
+    "./assets/sprites/shellie/shellie (57).png",
+    "./assets/sprites/shellie/shellie (58).png",
+    "./assets/sprites/shellie/shellie (59).png",
+    "./assets/sprites/shellie/shellie (60).png"
+  );
+  TeethyAnimation = loadAnimation(
+    "./assets/sprites/teethy/teethy (1).png",
+    "./assets/sprites/teethy/teethy (2).png",
+    "./assets/sprites/teethy/teethy (3).png",
+    "./assets/sprites/teethy/teethy (4).png",
+    "./assets/sprites/teethy/teethy (5).png",
+    "./assets/sprites/teethy/teethy (6).png",
+    "./assets/sprites/teethy/teethy (7).png",
+    "./assets/sprites/teethy/teethy (8).png",
+    "./assets/sprites/teethy/teethy (9).png",
+    "./assets/sprites/teethy/teethy (10).png",
+    "./assets/sprites/teethy/teethy (11).png",
+    "./assets/sprites/teethy/teethy (12).png",
+    "./assets/sprites/teethy/teethy (13).png",
+    "./assets/sprites/teethy/teethy (14).png",
+    "./assets/sprites/teethy/teethy (15).png",
+    "./assets/sprites/teethy/teethy (16).png",
+    "./assets/sprites/teethy/teethy (17).png",
+    "./assets/sprites/teethy/teethy (18).png",
+    "./assets/sprites/teethy/teethy (19).png",
+    "./assets/sprites/teethy/teethy (20).png",
+    "./assets/sprites/teethy/teethy (21).png",
+    "./assets/sprites/teethy/teethy (22).png",
+    "./assets/sprites/teethy/teethy (23).png",
+    "./assets/sprites/teethy/teethy (24).png",
+    "./assets/sprites/teethy/teethy (25).png",
+    "./assets/sprites/teethy/teethy (26).png",
+    "./assets/sprites/teethy/teethy (27).png",
+    "./assets/sprites/teethy/teethy (28).png",
+    "./assets/sprites/teethy/teethy (29).png",
+    "./assets/sprites/teethy/teethy (30).png",
+    "./assets/sprites/teethy/teethy (31).png",
+    "./assets/sprites/teethy/teethy (32).png",
+    "./assets/sprites/teethy/teethy (33).png",
+    "./assets/sprites/teethy/teethy (34).png",
+    "./assets/sprites/teethy/teethy (35).png",
+    "./assets/sprites/teethy/teethy (36).png",
+    "./assets/sprites/teethy/teethy (37).png",
+    "./assets/sprites/teethy/teethy (38).png",
+    "./assets/sprites/teethy/teethy (39).png",
+    "./assets/sprites/teethy/teethy (40).png",
+    "./assets/sprites/teethy/teethy (41).png",
+    "./assets/sprites/teethy/teethy (42).png",
+    "./assets/sprites/teethy/teethy (43).png",
+    "./assets/sprites/teethy/teethy (44).png",
+    "./assets/sprites/teethy/teethy (45).png",
+    "./assets/sprites/teethy/teethy (46).png",
+    "./assets/sprites/teethy/teethy (47).png",
+    "./assets/sprites/teethy/teethy (48).png",
+    "./assets/sprites/teethy/teethy (49).png",
+    "./assets/sprites/teethy/teethy (50).png",
+    "./assets/sprites/teethy/teethy (51).png",
+    "./assets/sprites/teethy/teethy (52).png",
+    "./assets/sprites/teethy/teethy (53).png",
+    "./assets/sprites/teethy/teethy (54).png",
+    "./assets/sprites/teethy/teethy (55).png",
+    "./assets/sprites/teethy/teethy (56).png",
+    "./assets/sprites/teethy/teethy (57).png",
+    "./assets/sprites/teethy/teethy (58).png",
+    "./assets/sprites/teethy/teethy (59).png",
+    "./assets/sprites/teethy/teethy (60).png",
+    "./assets/sprites/teethy/teethy (61).png"
+  );
   const kidsApiUrl =
     "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/7872d5c0-aac9-4ace-9624-96215c65d527";
   httpGet(kidsApiUrl, "json", false, function (response) {
@@ -1197,11 +1322,12 @@ function getSeaCreature(value) {
     return random(enemies);
   }
   if (value.length == 3) {
-    enemies = [new Jinxy(value), new Fish(value)];
+    enemies = [new Jinxy(value), new Fish(value), new Teethy(value)];
     return random(enemies);
   }
   if (value.length == 4) {
-    return new Fish(value);
+    enemies = [new Fish(value), new Teethy(value)];
+    return random(enemies);
   }
   if (value.length == 5) {
     return new Qocto(value);
@@ -1303,18 +1429,31 @@ function handleField() {
       totalScore += score + depth;
       score = 0;
       level++;
+      field.push(new Shellie(WORDS.pop(), height / 3));
+      field.push(new Shellie(WORDS.pop(), height / 2));
+      field.push(new Shellie(WORDS.pop(), (height / 3) * 2));
     }
   } else if (easyMode) {
     if (score > 200) {
       totalScore += score + depth;
       score = 0;
       level++;
+      field.push(new Shellie(WORDS.splice(WORDS.length / 3, 1)[0], height / 3));
+      field.push(new Shellie(WORDS.splice(WORDS.length / 3, 1)[0], height / 2));
+      field.push(
+        new Shellie(WORDS.splice(WORDS.length / 3, 1)[0], (height / 3) * 2)
+      );
     }
   } else {
-    if (score > 300) {
+    if (score > 330) {
       totalScore += score + depth;
       score = 0;
       level++;
+      field.push(new Shellie(WORDS.splice(WORDS.length / 2, 1)[0], height / 3));
+      field.push(new Shellie(WORDS.splice(WORDS.length / 2, 1)[0], height / 2));
+      field.push(
+        new Shellie(WORDS.splice(WORDS.length / 2, 1)[0], (height / 3) * 2)
+      );
     }
   }
 }

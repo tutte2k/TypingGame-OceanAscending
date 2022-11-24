@@ -11,6 +11,7 @@ var radio;
 var postBtn;
 var playAgain;
 
+var newData;
 var data;
 var kidsdata;
 var easydata;
@@ -1558,27 +1559,48 @@ function onInput() {
   inputContents = this.value();
 }
 function postRequest() {
-  let api_url;
+  let get_api_url;
+  let post_api_url;
   if (radio.value() == "kids") {
-    api_url =
+    get_api_url =
+      "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/7872d5c0-aac9-4ace-9624-96215c65d527";
+    post_api_url =
       "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/7872d5c0-aac9-4ace-9624-96215c65d527?apiKey=74595edf-2138-43c5-aee8-0b94a8c76fac";
   } else if (radio.value() == "easy") {
-    api_url =
+    get_api_url =
+      "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/2bf39cf4-8b8c-40da-b4b6-328ce40363ca";
+    post_api_url =
       "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/2bf39cf4-8b8c-40da-b4b6-328ce40363ca?apiKey=74595edf-2138-43c5-aee8-0b94a8c76fac";
   } else if (radio.value() == "normal") {
-    api_url =
+    get_api_url =
+      "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/0d51decd-56ba-45d1-ace6-eec4ddb43bec";
+    post_api_url =
       "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/0d51decd-56ba-45d1-ace6-eec4ddb43bec?apiKey=74595edf-2138-43c5-aee8-0b94a8c76fac";
   }
-  data[inputContents] = totalScore + score;
   postBtn.elt.hidden = true;
-  fetch(api_url, {
-    method: "PUT",
+  let responseData;
+  fetch(get_api_url, {
+    method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(data),
-  });
+  })
+    .then(async (response) => {
+      console.log("response", response);
+      responseData = await response.json();
+    })
+    .then(async () => {
+      responseData[inputContents] = totalScore + score;
+      fetch(post_api_url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(responseData),
+      });
+    });
 }
+
 // spawns
 function spawnSpearo(chance) {
   if (random() > chance) {

@@ -1219,16 +1219,13 @@ function setup() {
   button.mousePressed(togglePause);
   canvas.parent("ocean");
   radio = createRadio();
-
   radio.option("kids");
   radio.option("easy");
   var normalOptions = radio.option("normal");
   normalOptions.checked = true;
-
   radio.style("width", "10px");
   radio.position(10, 10);
   radio.mouseClicked(resetGame);
-
   focus = null;
   textFont(font);
 }
@@ -1539,8 +1536,6 @@ function endGame(enemy) {
     playAgain = createButton("Play Again");
     playAgain.position(width / 2, 200);
     playAgain.mouseClicked(goPlayAgain);
-
-    console.log(playAgain);
 
     text("Game Over!", width / 2, height / 3);
     text(`Score ${totalScore + score}`, width / 2, height / 2);

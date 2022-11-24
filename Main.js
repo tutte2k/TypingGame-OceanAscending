@@ -1300,11 +1300,24 @@ function handleField() {
       spawnChtullie(300, 0.99);
     }
   }
-
-  if (score > 350) {
-    totalScore += score + depth;
-    score = 0;
-    level++;
+  if (kidsMode) {
+    if (score > 100) {
+      totalScore += score + depth;
+      score = 0;
+      level++;
+    }
+  } else if (easyMode) {
+    if (score > 200) {
+      totalScore += score + depth;
+      score = 0;
+      level++;
+    }
+  } else {
+    if (score > 300) {
+      totalScore += score + depth;
+      score = 0;
+      level++;
+    }
   }
 }
 

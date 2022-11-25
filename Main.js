@@ -1422,7 +1422,7 @@ function togglePause() {
   }
 }
 function getSeaCreature(value) {
-  if (value == "chtululu") {
+  if (value.includes("lulu")) {
     return new Chtullie(value);
   }
   if (value.length == 1) {
@@ -1533,12 +1533,14 @@ function handleField() {
     }
     if (kidsMode) {
       spawnProgression(0.1);
+      spawnGhostyBurst(0.99);
+      spawnChtullie(300, 0.99, "lulu");
     } else if (easyMode) {
       spawnProgression(0.5);
       spawnSpearo(0.99);
       spawnGhostyBurst(0.99);
       spawnRandom(50, 0.99);
-      spawnChtullie(300, 0.99);
+      spawnChtullie(300, 0.99, "chtulu");
     } else if (normalMode) {
       spawnProgression(1);
       spawnSpearo(0.99);
@@ -1549,7 +1551,7 @@ function handleField() {
       spawnWhale(100, 0.99);
       spawnRandom(150, 0.99);
       //depth
-      spawnChtullie(300, 0.99);
+      spawnChtullie(300, 0.99, "chtululu");
     }
   }
   if (kidsMode) {
@@ -1894,9 +1896,9 @@ function spawnGhostyBurst(chance) {
     }
   }
 }
-function spawnChtullie(chtullieDepth, chance) {
+function spawnChtullie(chtullieDepth, chance, value) {
   if (depth > chtullieDepth && random() > chance) {
-    field.push(getSeaCreature("chtululu"));
+    field.push(getSeaCreature(value));
   }
 }
 function spawnRandom(belowScore, chance) {

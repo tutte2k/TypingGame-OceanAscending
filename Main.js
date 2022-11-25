@@ -1445,16 +1445,11 @@ function getSeaCreature(value) {
     return random(enemies);
   }
   if (value.length == 3) {
-    enemies = [
-      new Jinxy(value),
-      new Fish(value),
-      new Teethy(value),
-      new Croccy(value),
-    ];
+    enemies = [new Jinxy(value), new Fish(value), new Teethy(value)];
     return random(enemies);
   }
   if (value.length == 4) {
-    enemies = [new Fish(value), new Teethy(value), new Croccy(value)];
+    enemies = [new Fish(value), new Teethy(value)];
     return random(enemies);
   }
   if (value.length == 5) {
@@ -1532,22 +1527,27 @@ function handleField() {
       itemfield.push(new Bolt(random(NUMBERS)));
     }
     if (kidsMode) {
-      spawnProgression(0.1);
+      spawnProgression(0.15);
       spawnGhostyBurst(0.99);
-      spawnChtullie(300, 0.99, "lulu");
+      spawnCroccy(0.9);
+      spawnRandom(10, 0.99);
+      spawnChtullie(100, 0.99, "lulu");
     } else if (easyMode) {
       spawnProgression(0.5);
       spawnSpearo(0.99);
+      spawnCroccy(0.95);
       spawnGhostyBurst(0.99);
       spawnRandom(50, 0.99);
-      spawnChtullie(300, 0.99, "chtulu");
+      spawnChtullie(200, 0.99, "chtulu");
     } else if (normalMode) {
       spawnProgression(1);
       spawnSpearo(0.99);
+      spawnCroccy(0.95);
       spawnBurst(0.99);
       spawnGhostyBurst(0.99);
       //belowscore
       spawnDoubleTrouble(50, 0.99);
+      spawnTrippleNipple(10, 0.99);
       spawnWhale(100, 0.99);
       spawnRandom(150, 0.99);
       //depth
@@ -1877,6 +1877,12 @@ function spawnSpearo(chance) {
     field.push(creature);
   }
 }
+function spawnCroccy(chance) {
+  if (random() > chance) {
+    creature = new Croccy(WORDS.pop());
+    secondfield.push(creature);
+  }
+}
 function spawnBurst(chance) {
   if (random() > chance) {
     for (let i = 0; i < 5; i++) {
@@ -1931,6 +1937,14 @@ function spawnDoubleTrouble(belowScore, chance) {
   if (score < belowScore && random() > chance) {
     for (let i = 0; i < 2; i++) {
       let creature = getSeaCreature(WORDS.splice(WORDS.length / 2, 1)[0]);
+      field.push(creature);
+    }
+  }
+}
+function spawnTrippleNipple(belowScore, chance) {
+  if (score < belowScore && random() > chance) {
+    for (let i = 0; i < 2; i++) {
+      let creature = getSeaCreature(WORDS.splice(WORDS.length / 3, 1)[0]);
       field.push(creature);
     }
   }

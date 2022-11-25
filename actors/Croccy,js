@@ -11,15 +11,14 @@ function Croccy(text) {
 Croccy.prototype.draw = function () {
   animation(this.animation, this.position.x, this.position.y);
   let displayText = this.text.replace(this.completedText, "");
-
   noStroke();
   textAlign(CENTER);
   textSize(25);
   text(displayText.toUpperCase(), this.position.x + 70, this.position.y);
 };
 Croccy.prototype.update = function () {
-  this.position.y -= 2;
-  this.position.x += map(score, 0, 1000, 1, 15);
+  this.position.y -= 3;
+  this.position.x += 4;
   if (this.focused) {
     this.position.x++;
   }
@@ -32,9 +31,9 @@ Croccy.prototype.update = function () {
   }
 };
 Croccy.prototype.erode = function (keyCode) {
-  var inputChar = String.fromCharCode(keyCode).toLowerCase(); // keyCode to char
+  var inputChar = String.fromCharCode(keyCode).toLowerCase();
   var length = this.completedText.length + 1;
   if (this.text.substring(0, length) === this.completedText + inputChar)
     this.completedText += inputChar;
-  this.intact = this.completedText !== this.text; // update intact
+  this.intact = this.completedText !== this.text;
 };

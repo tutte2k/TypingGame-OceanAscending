@@ -31,9 +31,9 @@ Ghosty.prototype.update = function () {
   }
 };
 Ghosty.prototype.erode = function (keyCode) {
-  var inputChar = String.fromCharCode(keyCode).toLowerCase(); // keyCode to char
+  var inputChar = String.fromCharCode(keyCode).toLowerCase();
   var length = this.completedText.length + 1;
   if (this.text.substring(0, length) === this.completedText + inputChar)
     this.completedText += inputChar;
-  this.intact = this.completedText !== this.text; // update intact
+  this.intact = this.completedText !== this.text;
 };

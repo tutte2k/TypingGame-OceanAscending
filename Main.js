@@ -1787,23 +1787,23 @@ function endGame(enemy) {
       sortable.sort(function (a, b) {
         return b[1] - a[1];
       });
-      const top10 = sortable.slice(0, 9);
-      text(`${radio.value()}Highscores`, 70, 30);
+      const top10 = sortable.slice(0, 10);
+      text(`${radio.value()}Highscores`, 30, 30);
       for (let i = 0; i < top10.length; i++) {
-        text(`#${i + 1} ${top10[i][0]} : ${top10[i][1]}`, 70, 70 + i * 40);
+        text(`#${i + 1} ${top10[i][0]} : ${top10[i][1]}`, 30, 70 + i * 40);
       }
     }
     textAlign(CENTER);
     textSize(80);
     usernameInput = createInput("Name", "text");
-    usernameInput.position((width / 4) * 2 - 200, (height / 4) * 2 + 300);
+    usernameInput.position(30, height / 2);
     usernameInput.input(onInput);
     postBtn = createButton("Submit Score");
-    postBtn.position((width / 4) * 2 + 100, (height / 4) * 2 + 300);
+    postBtn.position(30, height / 2 + 30);
     postBtn.mouseClicked(postRequest);
 
     playAgain = createButton("Play Again");
-    playAgain.position(width / 2, 200);
+    playAgain.position(30, height / 2 + 60);
     playAgain.mouseClicked(goPlayAgain);
 
     text("Game Over!", width / 2, height / 3);
@@ -1827,46 +1827,48 @@ function onInput() {
   inputContents = this.value();
 }
 function postRequest() {
-  let get_api_url;
-  let post_api_url;
-  if (radio.value() == "kids") {
-    get_api_url =
-      "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/7872d5c0-aac9-4ace-9624-96215c65d527";
-    post_api_url =
-      "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/7872d5c0-aac9-4ace-9624-96215c65d527?apiKey=74595edf-2138-43c5-aee8-0b94a8c76fac";
-  } else if (radio.value() == "easy") {
-    get_api_url =
-      "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/2bf39cf4-8b8c-40da-b4b6-328ce40363ca";
-    post_api_url =
-      "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/2bf39cf4-8b8c-40da-b4b6-328ce40363ca?apiKey=74595edf-2138-43c5-aee8-0b94a8c76fac";
-  } else if (radio.value() == "normal") {
-    get_api_url =
-      "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/0d51decd-56ba-45d1-ace6-eec4ddb43bec";
-    post_api_url =
-      "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/0d51decd-56ba-45d1-ace6-eec4ddb43bec?apiKey=74595edf-2138-43c5-aee8-0b94a8c76fac";
-  }
-  postBtn.elt.hidden = true;
-  let responseData;
-  fetch(get_api_url, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then(async (response) => {
-      console.log("response", response);
-      responseData = await response.json();
+  if (inputContents) {
+    let get_api_url;
+    let post_api_url;
+    if (radio.value() == "kids") {
+      get_api_url =
+        "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/7872d5c0-aac9-4ace-9624-96215c65d527";
+      post_api_url =
+        "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/7872d5c0-aac9-4ace-9624-96215c65d527?apiKey=74595edf-2138-43c5-aee8-0b94a8c76fac";
+    } else if (radio.value() == "easy") {
+      get_api_url =
+        "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/2bf39cf4-8b8c-40da-b4b6-328ce40363ca";
+      post_api_url =
+        "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/2bf39cf4-8b8c-40da-b4b6-328ce40363ca?apiKey=74595edf-2138-43c5-aee8-0b94a8c76fac";
+    } else if (radio.value() == "normal") {
+      get_api_url =
+        "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/0d51decd-56ba-45d1-ace6-eec4ddb43bec";
+      post_api_url =
+        "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/0d51decd-56ba-45d1-ace6-eec4ddb43bec?apiKey=74595edf-2138-43c5-aee8-0b94a8c76fac";
+    }
+    postBtn.elt.hidden = true;
+    let responseData;
+    fetch(get_api_url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
     })
-    .then(async () => {
-      responseData[inputContents] = totalScore + score;
-      fetch(post_api_url, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(responseData),
+      .then(async (response) => {
+        console.log("response", response);
+        responseData = await response.json();
+      })
+      .then(async () => {
+        responseData[inputContents] = totalScore + score;
+        fetch(post_api_url, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(responseData),
+        });
       });
-    });
+  }
 }
 // spawns
 function spawnSpearo(chance) {

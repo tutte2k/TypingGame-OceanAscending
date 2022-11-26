@@ -1,0 +1,73 @@
+class Ghosty extends Neutral {
+  static Animation = null;
+
+  constructor(text) {
+    super(text, Ghosty.Animation, createVector(0, -85));
+  }
+  static loadAnimationFiles() {
+    Ghosty.Animation = loadAnimation(...Ghosty.Sprites);
+  }
+
+  static Sprites = [
+    "./assets/sprites/jellyfish/jellyfish (1).png",
+    "./assets/sprites/jellyfish/jellyfish (2).png",
+    "./assets/sprites/jellyfish/jellyfish (3).png",
+    "./assets/sprites/jellyfish/jellyfish (4).png",
+    "./assets/sprites/jellyfish/jellyfish (5).png",
+    "./assets/sprites/jellyfish/jellyfish (6).png",
+    "./assets/sprites/jellyfish/jellyfish (7).png",
+    "./assets/sprites/jellyfish/jellyfish (8).png",
+    "./assets/sprites/jellyfish/jellyfish (9).png",
+    "./assets/sprites/jellyfish/jellyfish (10).png",
+    "./assets/sprites/jellyfish/jellyfish (11).png",
+    "./assets/sprites/jellyfish/jellyfish (12).png",
+    "./assets/sprites/jellyfish/jellyfish (13).png",
+    "./assets/sprites/jellyfish/jellyfish (14).png",
+    "./assets/sprites/jellyfish/jellyfish (15).png",
+    "./assets/sprites/jellyfish/jellyfish (16).png",
+    "./assets/sprites/jellyfish/jellyfish (17).png",
+    "./assets/sprites/jellyfish/jellyfish (18).png",
+    "./assets/sprites/jellyfish/jellyfish (19).png",
+    "./assets/sprites/jellyfish/jellyfish (20).png",
+    "./assets/sprites/jellyfish/jellyfish (21).png",
+    "./assets/sprites/jellyfish/jellyfish (22).png",
+    "./assets/sprites/jellyfish/jellyfish (23).png",
+    "./assets/sprites/jellyfish/jellyfish (24).png",
+    "./assets/sprites/jellyfish/jellyfish (25).png",
+    "./assets/sprites/jellyfish/jellyfish (26).png",
+    "./assets/sprites/jellyfish/jellyfish (27).png",
+    "./assets/sprites/jellyfish/jellyfish (28).png",
+    "./assets/sprites/jellyfish/jellyfish (29).png",
+    "./assets/sprites/jellyfish/jellyfish (30).png",
+    "./assets/sprites/jellyfish/jellyfish (31).png",
+    "./assets/sprites/jellyfish/jellyfish (32).png",
+    "./assets/sprites/jellyfish/jellyfish (33).png",
+    "./assets/sprites/jellyfish/jellyfish (34).png",
+    "./assets/sprites/jellyfish/jellyfish (35).png",
+    "./assets/sprites/jellyfish/jellyfish (36).png",
+    "./assets/sprites/jellyfish/jellyfish (37).png",
+    "./assets/sprites/jellyfish/jellyfish (38).png",
+    "./assets/sprites/jellyfish/jellyfish (39).png",
+    "./assets/sprites/jellyfish/jellyfish (40).png",
+    "./assets/sprites/jellyfish/jellyfish (41).png",
+    "./assets/sprites/jellyfish/jellyfish (42).png",
+    "./assets/sprites/jellyfish/jellyfish (43).png",
+    "./assets/sprites/jellyfish/jellyfish (44).png",
+    "./assets/sprites/jellyfish/jellyfish (45).png",
+    "./assets/sprites/jellyfish/jellyfish (46).png",
+    "./assets/sprites/jellyfish/jellyfish (47).png",
+    "./assets/sprites/jellyfish/jellyfish (48).png",
+    "./assets/sprites/jellyfish/jellyfish (49).png",
+    "./assets/sprites/jellyfish/jellyfish (50).png",
+    "./assets/sprites/jellyfish/jellyfish (51).png",
+    "./assets/sprites/jellyfish/jellyfish (52).png",
+    "./assets/sprites/jellyfish/jellyfish (53).png",
+    "./assets/sprites/jellyfish/jellyfish (54).png",
+    "./assets/sprites/jellyfish/jellyfish (55).png",
+    "./assets/sprites/jellyfish/jellyfish (56).png",
+    "./assets/sprites/jellyfish/jellyfish (57).png",
+    "./assets/sprites/jellyfish/jellyfish (58).png",
+    "./assets/sprites/jellyfish/jellyfish (59).png",
+    "./assets/sprites/jellyfish/jellyfish (60).png",
+  ];
+}

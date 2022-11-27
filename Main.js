@@ -132,7 +132,7 @@ function togglePause() {
   }
 }
 function getSeaCreature(value) {
-  if (value.includes("lulu")) {
+  if (value == "lulu" || value == "chtulu" || value == "chtululu") {
     return new Chtullie(value);
   }
   if (value.length == 1) {
@@ -238,7 +238,11 @@ function handleField() {
       itemfield.push(new Bolt(random(NUMBERS)));
     }
     if (kidsMode) {
-      spawnProgression(0.15);
+      if (field.length == 0 && secondfield.length == 0) {
+        spawnOne();
+      } else {
+        spawnProgression(0.15);
+      }
       spawnCroccy(0.9);
       spawnChtullie(100, 0.99, "lulu");
     } else if (easyMode) {
@@ -249,7 +253,12 @@ function handleField() {
       spawnRandom(50, 0.99);
       spawnChtullie(200, 0.99, "chtulu");
     } else if (normalMode) {
-      spawnProgression(1);
+      if (field.length == 0 && secondfield.length == 0) {
+        spawnOne();
+      } else {
+        spawnProgression(1);
+      }
+
       spawnSpearo(0.99);
       spawnCroccy(0.95);
       spawnBurst(0.99);
@@ -661,5 +670,13 @@ function spawnProgression(chance) {
     } else {
       field.push(creature);
     }
+  }
+}
+function spawnOne() {
+  let creature = getSeaCreature(WORDS.pop());
+  if (creature.name) {
+    secondfield.push(creature);
+  } else {
+    field.push(creature);
   }
 }

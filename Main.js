@@ -240,7 +240,6 @@ function handleField() {
     if (kidsMode) {
       spawnProgression(0.15);
       spawnCroccy(0.9);
-      spawnRandom(10, 0.99);
       spawnChtullie(100, 0.99, "lulu");
     } else if (easyMode) {
       spawnProgression(0.5);

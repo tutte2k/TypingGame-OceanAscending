@@ -133,6 +133,7 @@ function togglePause() {
 }
 function getSeaCreature(value) {
   if (value == "lulu" || value == "chtulu" || value == "chtululu") {
+    x;
     return new Chtullie(value);
   }
   if (value.length == 1) {
@@ -246,7 +247,12 @@ function handleField() {
       spawnCroccy(0.9);
       spawnChtullie(100, 0.99, "lulu");
     } else if (easyMode) {
-      spawnProgression(0.5);
+      if (field.length == 0 && secondfield.length == 0) {
+        spawnOne();
+      } else {
+        spawnProgression(0.5);
+      }
+
       spawnSpearo(0.99);
       spawnCroccy(0.95);
       spawnGhostyBurst(0.99);

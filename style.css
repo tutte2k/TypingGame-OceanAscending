@@ -159,17 +159,15 @@
   opacity: 0.3;
 }
 
-.focused {
-  opacity: 0.5;
-}
-
 .column {
   float: left;
   width: 25%;
 }
 
 .row:after {
-  content: "";
   display: table;
   clear: both;
+}
+.qr {
+  padding-top: 10px;
 }

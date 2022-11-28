@@ -2,6 +2,15 @@
 <html>
 
 <head>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-49RFXQ5BXY"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+    </script>
     <title>Ocean Ascending</title>
     <link rel="icon" type="image/x-icon" href="./favicon.ico">
 
@@ -84,11 +93,11 @@
     </div>
     <div class="column">
 
-        <img style="max-width: 257px;" src="./assets/swish.png">
+        <img class="qr" style="max-width: 257px;" src="./assets/swish.png">
 
     </div>
     <div class="column">
-        <img style="max-width: 257px;" src="./assets/btc.png">
+        <img class="qr" style="max-width: 257px;" src="./assets/btc.png">
         <br>
         <p>34AMBpWTvdPurMiKJAJaFS19qumN6uyaPu</p>
     </div>
@@ -109,6 +118,7 @@
 </div>
 <div id="p5_loading" class="loadingclass">
     <h3>Loading... Try refreshing the page if it is taking too long...</h3>
+    <p id="prompt"></p>
 </div>
 
 </html>

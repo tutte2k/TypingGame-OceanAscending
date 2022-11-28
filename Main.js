@@ -1,3 +1,32 @@
+var loadedItems = 0;
+self.addEventListener("fetch", (event) => {
+  event.respondWith(
+    caches.match(event.request).then((response) => {
+      if (response) {
+        console.log("Found response in cache:", response);
+
+        return response;
+      }
+      console.log("No response found in cache. About to fetch from network…");
+
+      return fetch(event.request)
+        .then((response) => {
+          console.log("Response from network is:", response);
+
+          return response;
+        })
+        .catch((error) => {
+          console.error("Fetching failed:", error);
+
+          throw error;
+        });
+    })
+  );
+
+  // loadedItems++;
+  // document.getElementById("prompt").innerHTML = loadedItems.toString();
+});
+
 const CHARSTRING = "a b c d e f g h i j k l m n o p q r s t u v x y z";
 const NUMBERSTRING = "1 2 3 4 5 6 7 8 9 0";
 const CHARS = CHARSTRING.split(" ");
@@ -40,6 +69,8 @@ var health = 3;
 var zapperAvailable = false;
 
 var misses = 0;
+
+var totalNoOfResrouces = window.performance.getEntriesByType("resource").length;
 
 function preload() {
   font = loadFont("./assets/RifficFree-Bold.ttf");
@@ -112,6 +143,7 @@ function preload() {
   );
 
   getHighscores(kidsApiUrl, easyApiUrl, normalApiUrl);
+  loaded = true;
 }
 function getHighscores(kidsApiUrl, easyApiUrl, normalApiUrl) {
   httpGet(kidsApiUrl, "json", false, function (response) {

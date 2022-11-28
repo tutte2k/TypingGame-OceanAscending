@@ -1,3 +1,10 @@
+window.onerror = function (e) {
+  document.getElementById("prompt").innerHTML =
+    "please refresh the page to continue loading";
+};
+
+var totalSprites = 0;
+
 const CHARSTRING = "a b c d e f g h i j k l m n o p q r s t u v x y z";
 const NUMBERSTRING = "1 2 3 4 5 6 7 8 9 0";
 const CHARS = CHARSTRING.split(" ");

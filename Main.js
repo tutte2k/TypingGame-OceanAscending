@@ -1,7 +1,4 @@
-window.onerror = function (e) {
-  document.getElementById("prompt").innerHTML =
-    "please refresh the page to continue loading";
-};
+window.onerror = function (e) {};
 
 var totalSprites = 0;
 
@@ -49,74 +46,79 @@ var zapperAvailable = false;
 var misses = 0;
 
 function preload() {
-  font = loadFont("./assets/RifficFree-Bold.ttf");
+  try {
+    font = loadFont("./assets/RifficFree-Bold.ttf");
+    Whale.loadAnimationFiles();
+    Teethy.loadAnimationFiles();
+    Qocto.loadAnimationFiles();
+    Shotty.loadAnimationFiles();
+    Shellie.loadAnimationFiles();
+    Leona.loadAnimationFiles();
+    Jinxy.loadAnimationFiles();
+    Inker.loadAnimationFiles();
+    Fish.loadAnimationFiles();
+    Chtullie.loadAnimationFiles();
+    Puffer.loadAnimationFiles();
+    Spearo.loadAnimationFiles();
 
-  Whale.loadAnimationFiles();
-  Teethy.loadAnimationFiles();
-  Qocto.loadAnimationFiles();
-  Shotty.loadAnimationFiles();
-  Shellie.loadAnimationFiles();
-  Leona.loadAnimationFiles();
-  Jinxy.loadAnimationFiles();
-  Inker.loadAnimationFiles();
-  Fish.loadAnimationFiles();
-  Chtullie.loadAnimationFiles();
-  Puffer.loadAnimationFiles();
-  Spearo.loadAnimationFiles();
-  Snail.loadAnimationFiles();
+    Ghosty.loadAnimationFiles();
+    Inky.loadAnimationFiles();
+    Croccy.loadAnimationFiles();
 
-  Ghosty.loadAnimationFiles();
-  Inky.loadAnimationFiles();
-  Croccy.loadAnimationFiles();
+    Bolt.loadAnimationFiles();
+    Health.loadAnimationFiles();
+    LivingDead.loadAnimationFiles();
 
-  Bolt.loadAnimationFiles();
-  Health.loadAnimationFiles();
-  LivingDead.loadAnimationFiles();
-  Zapper.loadAnimationFiles();
+    Zapper.loadAnimationFiles();
 
-  guy = loadAnimation(
-    "./assets/sprites/guy/guy (1).png",
-    "./assets/sprites/guy/guy (2).png",
-    "./assets/sprites/guy/guy (3).png",
-    "./assets/sprites/guy/guy (4).png",
-    "./assets/sprites/guy/guy (5).png",
-    "./assets/sprites/guy/guy (6).png",
-    "./assets/sprites/guy/guy (7).png",
-    "./assets/sprites/guy/guy (8).png",
-    "./assets/sprites/guy/guy (9).png",
-    "./assets/sprites/guy/guy (10).png",
-    "./assets/sprites/guy/guy (11).png",
-    "./assets/sprites/guy/guy (12).png",
-    "./assets/sprites/guy/guy (13).png",
-    "./assets/sprites/guy/guy (14).png",
-    "./assets/sprites/guy/guy (15).png",
-    "./assets/sprites/guy/guy (16).png",
-    "./assets/sprites/guy/guy (17).png",
-    "./assets/sprites/guy/guy (18).png",
-    "./assets/sprites/guy/guy (19).png",
-    "./assets/sprites/guy/guy (20).png",
-    "./assets/sprites/guy/guy (21).png",
-    "./assets/sprites/guy/guy (22).png",
-    "./assets/sprites/guy/guy (23).png",
-    "./assets/sprites/guy/guy (24).png",
-    "./assets/sprites/guy/guy (25).png",
-    "./assets/sprites/guy/guy (26).png",
-    "./assets/sprites/guy/guy (27).png",
-    "./assets/sprites/guy/guy (28).png",
-    "./assets/sprites/guy/guy (29).png",
-    "./assets/sprites/guy/guy (30).png",
-    "./assets/sprites/guy/guy (31).png",
-    "./assets/sprites/guy/guy (32).png",
-    "./assets/sprites/guy/guy (33).png",
-    "./assets/sprites/guy/guy (34).png",
-    "./assets/sprites/guy/guy (35).png",
-    "./assets/sprites/guy/guy (36).png",
-    "./assets/sprites/guy/guy (37).png",
-    "./assets/sprites/guy/guy (38).png",
-    "./assets/sprites/guy/guy (39).png",
-    "./assets/sprites/guy/guy (40).png",
-    "./assets/sprites/guy/guy (41).png"
-  );
+    Snail.loadAnimationFiles();
+    guy = loadAnimation(
+      "./assets/sprites/guy/guy (1).png",
+      "./assets/sprites/guy/guy (2).png",
+      "./assets/sprites/guy/guy (3).png",
+      "./assets/sprites/guy/guy (4).png",
+      "./assets/sprites/guy/guy (5).png",
+      "./assets/sprites/guy/guy (6).png",
+      "./assets/sprites/guy/guy (7).png",
+      "./assets/sprites/guy/guy (8).png",
+      "./assets/sprites/guy/guy (9).png",
+      "./assets/sprites/guy/guy (10).png",
+      "./assets/sprites/guy/guy (11).png",
+      "./assets/sprites/guy/guy (12).png",
+      "./assets/sprites/guy/guy (13).png",
+      "./assets/sprites/guy/guy (14).png",
+      "./assets/sprites/guy/guy (15).png",
+      "./assets/sprites/guy/guy (16).png",
+      "./assets/sprites/guy/guy (17).png",
+      "./assets/sprites/guy/guy (18).png",
+      "./assets/sprites/guy/guy (19).png",
+      "./assets/sprites/guy/guy (20).png",
+      "./assets/sprites/guy/guy (21).png",
+      "./assets/sprites/guy/guy (22).png",
+      "./assets/sprites/guy/guy (23).png",
+      "./assets/sprites/guy/guy (24).png",
+      "./assets/sprites/guy/guy (25).png",
+      "./assets/sprites/guy/guy (26).png",
+      "./assets/sprites/guy/guy (27).png",
+      "./assets/sprites/guy/guy (28).png",
+      "./assets/sprites/guy/guy (29).png",
+      "./assets/sprites/guy/guy (30).png",
+      "./assets/sprites/guy/guy (31).png",
+      "./assets/sprites/guy/guy (32).png",
+      "./assets/sprites/guy/guy (33).png",
+      "./assets/sprites/guy/guy (34).png",
+      "./assets/sprites/guy/guy (35).png",
+      "./assets/sprites/guy/guy (36).png",
+      "./assets/sprites/guy/guy (37).png",
+      "./assets/sprites/guy/guy (38).png",
+      "./assets/sprites/guy/guy (39).png",
+      "./assets/sprites/guy/guy (40).png",
+      "./assets/sprites/guy/guy (41).png"
+    );
+  } catch (error) {
+    document.getElementById("prompt").innerHTML =
+      "Try refreshing the page.." + "\n" + error;
+  }
 
   getHighscores(kidsApiUrl, easyApiUrl, normalApiUrl);
 }

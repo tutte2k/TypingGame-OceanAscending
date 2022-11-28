@@ -2,7 +2,7 @@ class Bolt extends Item {
   static Animation = null;
 
   constructor(text) {
-    super(text, Bolt.Animation, createVector(0, 6));
+    super(text, Bolt.Animation, createVector(-10, 40));
   }
   static loadAnimationFiles() {
     Bolt.Animation = loadAnimation(...Bolt.Sprites);

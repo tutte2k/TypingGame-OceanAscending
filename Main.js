@@ -4,10 +4,16 @@ const CHARS = CHARSTRING.split(" ");
 const WORDS = WORDSTRING.split(" ").sort((a, b) => b.length - a.length);
 const NUMBERS = NUMBERSTRING.split(" ");
 
+const kidsApiUrl =
+  "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/7872d5c0-aac9-4ace-9624-96215c65d527";
+const easyApiUrl =
+  "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/2bf39cf4-8b8c-40da-b4b6-328ce40363ca";
+const normalApiUrl =
+  "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/0d51decd-56ba-45d1-ace6-eec4ddb43bec";
+
 var paused = false;
 var gameOver = false;
 
-var focus;
 var radio;
 var postBtn;
 var playAgain;
@@ -18,19 +24,18 @@ var easydata;
 var normaldata;
 let inputContents;
 
+var focus;
 var field = [];
 var secondfield = [];
 var itemfield = [];
 var environmentfield = [];
 var guyDepth = 0;
 
-var CURRENT_DEPTH = 0;
 var totalScore = 0;
 var score = 0;
 var kills = 0;
 var level = 1;
 var depth = 0;
-
 var health = 3;
 var zapperAvailable = false;
 
@@ -106,22 +111,20 @@ function preload() {
     "./assets/sprites/guy/guy (41).png"
   );
 
-  const kidsApiUrl =
-    "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/7872d5c0-aac9-4ace-9624-96215c65d527";
+  getHighscores(kidsApiUrl, easyApiUrl, normalApiUrl);
+}
+function getHighscores(kidsApiUrl, easyApiUrl, normalApiUrl) {
   httpGet(kidsApiUrl, "json", false, function (response) {
     kidsdata = response;
   });
-  const easyApiUrl =
-    "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/2bf39cf4-8b8c-40da-b4b6-328ce40363ca";
   httpGet(easyApiUrl, "json", false, function (response) {
     easydata = response;
   });
-  const normalApiUrl =
-    "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/0d51decd-56ba-45d1-ace6-eec4ddb43bec";
   httpGet(normalApiUrl, "json", false, function (response) {
     normaldata = response;
   });
 }
+
 function togglePause() {
   if (paused && !gameOver) {
     loop();
@@ -131,48 +134,7 @@ function togglePause() {
     paused = !paused;
   }
 }
-function getSeaCreature(value) {
-  if (value == "lulu" || value == "chtulu" || value == "chtululu") {
-    x;
-    return new Chtullie(value);
-  }
-  if (value.length == 1) {
-    enemies = [
-      new Shotty(value),
-      new Ghosty(value),
-      new Puffer(value),
-      new Inker(value),
-      new Inky(value),
-    ];
-    return random(enemies);
-  }
-  if (value.length == 2) {
-    enemies = [
-      new Jinxy(value),
-      new Puffer(value),
-      new Inker(value),
-      new Inky(value),
-    ];
-    return random(enemies);
-  }
-  if (value.length == 3) {
-    enemies = [new Jinxy(value), new Fish(value), new Teethy(value)];
-    return random(enemies);
-  }
-  if (value.length == 4) {
-    enemies = [new Fish(value), new Teethy(value)];
-    return random(enemies);
-  }
-  if (value.length == 5) {
-    return new Qocto(value);
-  }
-  if (value.length < 7) {
-    return new Leona(value);
-  }
-  if (value.length > 7) {
-    return new Whale(value);
-  }
-}
+
 function setup() {
   var canvas = createCanvas(windowWidth, windowHeight);
   button = createButton("Pause");
@@ -201,6 +163,7 @@ function draw() {
   drawGuy();
 }
 function resetGame() {
+  gameOver = false;
   depth = 0;
   score = 0;
   level = 1;
@@ -224,7 +187,6 @@ function handleField() {
 
   if (frameCount % 60 === 0) {
     depth++;
-    CURRENT_DEPTH++;
     var kidsMode = radio.value() == "kids";
     var easyMode = radio.value() == "easy";
     var normalMode = radio.value() == "normal";
@@ -242,9 +204,8 @@ function handleField() {
       if (field.length == 0 && secondfield.length == 0) {
         spawnOne();
       } else {
-        spawnProgression(0.15);
+        spawnProgression(0.1);
       }
-      spawnCroccy(0.9);
       spawnChtullie(100, 0.99, "lulu");
     } else if (easyMode) {
       if (field.length == 0 && secondfield.length == 0) {
@@ -252,9 +213,7 @@ function handleField() {
       } else {
         spawnProgression(0.5);
       }
-
       spawnSpearo(0.99);
-      spawnCroccy(0.95);
       spawnGhostyBurst(0.99);
       spawnRandom(50, 0.99);
       spawnChtullie(200, 0.99, "chtulu");
@@ -266,7 +225,6 @@ function handleField() {
       }
 
       spawnSpearo(0.99);
-      spawnCroccy(0.95);
       spawnBurst(0.99);
       spawnGhostyBurst(0.99);
       //belowscore
@@ -388,7 +346,7 @@ function keyPressed() {
       }
       environmentfield = [];
       zapperAvailable = false;
-      environmentfield.push(new Zapper(CURRENT_DEPTH));
+      environmentfield.push(new Zapper(depth));
       focus = null;
     }
     if (paused && !gameOver) {
@@ -447,7 +405,8 @@ function drawLine() {
   line(90, guyDepth, focus.position.x, focus.position.y);
   textAlign(CENTER);
   textSize(100);
-  text(focus.completedText.toUpperCase(), width / 2, height - 50);
+
+  text(focus.displayText.toUpperCase(), width / 2, height - 50);
 }
 function drawScore() {
   textAlign(CENTER);
@@ -467,8 +426,9 @@ function drawGuy() {
   if (guyDepth < standardPosition) {
     guyDepth++;
   }
-
-  animation(guy, 90, guyDepth);
+  if (!gameOver) {
+    animation(guy, 90, guyDepth);
+  }
 }
 function endGame(enemy) {
   if (enemy.name) {
@@ -490,7 +450,8 @@ function endGame(enemy) {
     gameOver = true;
     noLoop();
     fill(255);
-    noStroke();
+    strokeWeight(5);
+    stroke(0);
     textAlign(LEFT);
     if (radio.value() == "kids") {
       data = kidsdata;
@@ -515,7 +476,7 @@ function endGame(enemy) {
     }
     textAlign(CENTER);
     textSize(80);
-    usernameInput = createInput("Name", "text");
+    usernameInput = createInput("", "text");
     usernameInput.position(30, height / 2);
     usernameInput.input(onInput);
     postBtn = createButton("Submit Score");
@@ -527,8 +488,8 @@ function endGame(enemy) {
     playAgain.mouseClicked(goPlayAgain);
 
     text("Game Over!", width / 2, height / 3);
-    text(`Score ${totalScore + score}`, width / 2, height / 2);
-    text(`Total catches ${kills}`, width / 2, (height / 3) * 2);
+    text(`Score: ${totalScore + score}`, width / 2, height / 2);
+    text(`Total catches: ${kills}`, width / 2, (height / 3) * 2);
   } else {
     enemy.intact = false;
     if (enemy.focused === true) {
@@ -594,12 +555,6 @@ function spawnSpearo(chance) {
   if (random() > chance) {
     creature = new Spearo(random(CHARS));
     field.push(creature);
-  }
-}
-function spawnCroccy(chance) {
-  if (random() > chance) {
-    creature = new Croccy(WORDS.pop());
-    secondfield.push(creature);
   }
 }
 function spawnBurst(chance) {
@@ -684,5 +639,53 @@ function spawnOne() {
     secondfield.push(creature);
   } else {
     field.push(creature);
+  }
+}
+function getSeaCreature(value) {
+  if (value == "lulu" || value == "chtulu" || value == "chtululu") {
+    return new Chtullie(value);
+  }
+  if (value.length == 1) {
+    enemies = [
+      new Shotty(value),
+      new Ghosty(value),
+      new Puffer(value),
+      new Inker(value),
+      new Inky(value),
+      new Croccy(value),
+    ];
+    return random(enemies);
+  }
+  if (value.length == 2) {
+    enemies = [
+      new Jinxy(value),
+      new Puffer(value),
+      new Inker(value),
+      new Inky(value),
+      new Croccy(value),
+    ];
+    return random(enemies);
+  }
+  if (value.length == 3) {
+    enemies = [
+      new Jinxy(value),
+      new Fish(value),
+      new Teethy(value),
+      new Ghosty(value),
+    ];
+    return random(enemies);
+  }
+  if (value.length == 4) {
+    enemies = [new Fish(value), new Teethy(value)];
+    return random(enemies);
+  }
+  if (value.length == 5) {
+    return new Qocto(value);
+  }
+  if (value.length < 7) {
+    return new Leona(value);
+  }
+  if (value.length > 7) {
+    return new Whale(value);
   }
 }

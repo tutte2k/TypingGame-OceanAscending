@@ -7,17 +7,17 @@ class Actor {
     this.intact = true;
     this.animation = animation;
     this.textPositionOffset = textPositionOffset;
+    this.displayText = text;
   }
 
   draw() {
     animation(this.animation, this.position.x, this.position.y);
-    let displayText = this.text;
-    displayText = this.text.replace(this.completedText, "");
+    this.displayText = this.text.replace(this.completedText, "");
     noStroke();
     textAlign(CENTER);
     textSize(25);
     text(
-      displayText.toUpperCase(),
+      this.displayText.toUpperCase(),
       this.position.x + this.textPositionOffset.x,
       this.position.y + this.textPositionOffset.y
     );

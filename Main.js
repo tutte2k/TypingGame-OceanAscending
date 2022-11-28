@@ -1,44 +1,26 @@
-var loadedItems = 0;
-self.addEventListener("fetch", (event) => {
-  event.respondWith(
-    caches.match(event.request).then((response) => {
-      if (response) {
-        console.log("Found response in cache:", response);
-
-        return response;
-      }
-      console.log("No response found in cache. About to fetch from network…");
-
-      return fetch(event.request)
-        .then((response) => {
-          console.log("Response from network is:", response);
-
-          return response;
-        })
-        .catch((error) => {
-          console.error("Fetching failed:", error);
-
-          throw error;
-        });
-    })
-  );
-
-  // loadedItems++;
-  // document.getElementById("prompt").innerHTML = loadedItems.toString();
-});
-
 const CHARSTRING = "a b c d e f g h i j k l m n o p q r s t u v x y z";
 const NUMBERSTRING = "1 2 3 4 5 6 7 8 9 0";
 const CHARS = CHARSTRING.split(" ");
 const NUMBERS = NUMBERSTRING.split(" ");
-const WORDS = WORDSTRING.split(" ").sort((a, b) => b.length - a.length);
 
-const kidsApiUrl =
-  "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/7872d5c0-aac9-4ace-9624-96215c65d527";
-const easyApiUrl =
-  "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/2bf39cf4-8b8c-40da-b4b6-328ce40363ca";
-const normalApiUrl =
-  "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/0d51decd-56ba-45d1-ace6-eec4ddb43bec";
+let WORDS;
+
+let word;
+
+const url = {
+  kids: {
+    get: "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/7872d5c0-aac9-4ace-9624-96215c65d527",
+    put: "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/7872d5c0-aac9-4ace-9624-96215c65d527?apiKey=74595edf-2138-43c5-aee8-0b94a8c76fac",
+  },
+  easy: {
+    get: "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/2bf39cf4-8b8c-40da-b4b6-328ce40363ca",
+    put: "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/2bf39cf4-8b8c-40da-b4b6-328ce40363ca?apiKey=74595edf-2138-43c5-aee8-0b94a8c76fac",
+  },
+  normal: {
+    get: "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/0d51decd-56ba-45d1-ace6-eec4ddb43bec",
+    put: "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/0d51decd-56ba-45d1-ace6-eec4ddb43bec?apiKey=74595edf-2138-43c5-aee8-0b94a8c76fac",
+  },
+};
 
 var paused = false;
 var gameOver = false;
@@ -70,14 +52,14 @@ var zapperAvailable = false;
 
 var misses = 0;
 
-var totalNoOfResrouces = window.performance.getEntriesByType("resource").length;
-
 function preload() {
+  WORDS = WORDSTRING.split(" ").sort((a, b) => b.length - a.length);
   font = loadFont("./assets/RifficFree-Bold.ttf");
   Whale.loadAnimationFiles();
   Teethy.loadAnimationFiles();
   Qocto.loadAnimationFiles();
   Shotty.loadAnimationFiles();
+
   Shellie.loadAnimationFiles();
   Leona.loadAnimationFiles();
   Jinxy.loadAnimationFiles();
@@ -85,6 +67,7 @@ function preload() {
   Fish.loadAnimationFiles();
   Chtullie.loadAnimationFiles();
   Puffer.loadAnimationFiles();
+
   Spearo.loadAnimationFiles();
   Snail.loadAnimationFiles();
 
@@ -142,8 +125,7 @@ function preload() {
     "./assets/sprites/guy/guy (41).png"
   );
 
-  getHighscores(kidsApiUrl, easyApiUrl, normalApiUrl);
-  loaded = true;
+  getHighscores(url.kids.get, url.easy.get, url.normal.get);
 }
 function getHighscores(kidsApiUrl, easyApiUrl, normalApiUrl) {
   httpGet(kidsApiUrl, "json", false, function (response) {
@@ -245,8 +227,6 @@ function handleField() {
       } else {
         spawnProgression(0.5);
       }
-      spawnSpearo(0.99);
-      spawnGhostyBurst(0.99);
       spawnRandom(50, 0.99);
       spawnChtullie(200, 0.99, "chtulu");
     } else if (normalMode) {
@@ -256,12 +236,9 @@ function handleField() {
         spawnProgression(1);
       }
 
-      spawnSpearo(0.99);
-      spawnBurst(0.99);
-      spawnGhostyBurst(0.99);
       //belowscore
       spawnDoubleTrouble(50, 0.99);
-      spawnTrippleNipple(10, 0.99);
+      spawnTrippleNipple(50, 0.99);
       spawnWhale(100, 0.99);
       spawnRandom(150, 0.99);
       //depth
@@ -274,7 +251,9 @@ function handleField() {
       score = 0;
       level++;
       for (let i = 0; i < 3; i++) {
-        field.push(new Shellie(WORDS.pop()));
+        const indexOfLastWord = WORDS.length - 1;
+        const word = getNextWord(indexOfLastWord);
+        field.push(new Shellie(word));
       }
     }
   } else if (easyMode) {
@@ -283,7 +262,9 @@ function handleField() {
       score = 0;
       level++;
       for (let i = 0; i < 3; i++) {
-        field.push(new Shellie(WORDS.splice(WORDS.length / 3, 1)[0]));
+        const indexOfMediumWord = Math.round(WORDS.length / 4);
+        const word = getNextWord(indexOfMediumWord);
+        field.push(new Shellie(word));
       }
     }
   } else {
@@ -292,7 +273,9 @@ function handleField() {
       score = 0;
       level++;
       for (let i = 0; i < 3; i++) {
-        field.push(new Shellie(WORDS.splice(WORDS.length / 2, 1)[0]));
+        const indexOfSemiBigWord = Math.round(WORDS.length / 3);
+        const word = getNextWord(indexOfSemiBigWord);
+        field.push(new Shellie(word));
       }
     }
   }
@@ -505,15 +488,18 @@ function endGame(enemy) {
       for (let i = 0; i < top10.length; i++) {
         text(`#${i + 1} ${top10[i][0]} : ${top10[i][1]}`, 30, 70 + i * 40);
       }
+      usernameInput = createInput("", "text");
+      usernameInput.position(30, height / 2);
+      usernameInput.input(onInput);
+      postBtn = createButton("Submit Score");
+      postBtn.position(30, height / 2 + 30);
+      postBtn.mouseClicked(postRequest);
+    } else {
+      text(`Highscores:`, 30, 30);
+      text(`Max 500 requests/day`, 30, 70);
     }
     textAlign(CENTER);
     textSize(80);
-    usernameInput = createInput("", "text");
-    usernameInput.position(30, height / 2);
-    usernameInput.input(onInput);
-    postBtn = createButton("Submit Score");
-    postBtn.position(30, height / 2 + 30);
-    postBtn.mouseClicked(postRequest);
 
     playAgain = createButton("Play Again");
     playAgain.position(30, height / 2 + 60);
@@ -582,34 +568,7 @@ function postRequest() {
       });
   }
 }
-// spawns
-function spawnSpearo(chance) {
-  if (random() > chance) {
-    creature = new Spearo(random(CHARS));
-    field.push(creature);
-  }
-}
-function spawnBurst(chance) {
-  if (random() > chance) {
-    for (let i = 0; i < 5; i++) {
-      let creature = getSeaCreature(random(CHARS));
-      if (creature.name) {
-        secondfield.push(creature);
-      } else {
-        field.push(creature);
-      }
-    }
-  }
-}
-function spawnGhostyBurst(chance) {
-  if (random() > chance) {
-    for (let i = 0; i < 3; i++) {
-      let number = random(NUMBERS) + random(NUMBERS) + random(NUMBERS);
-      let creature = new Ghosty(number);
-      secondfield.push(creature);
-    }
-  }
-}
+
 function spawnChtullie(chtullieDepth, chance, value) {
   if (depth > chtullieDepth && random() > chance) {
     field.push(getSeaCreature(value));
@@ -617,47 +576,47 @@ function spawnChtullie(chtullieDepth, chance, value) {
 }
 function spawnRandom(belowScore, chance) {
   if (score < belowScore && random() > chance) {
-    let creature = getSeaCreature(
-      WORDS.splice(random(0, WORDS.length - 100), 1)[0]
-    );
+    const indexOfLastWord = WORDS.length - 1;
+    const randomIndex = Math.round(random(0, indexOfLastWord));
+    const word = getNextWord(randomIndex);
+    const creature = getSeaCreature(word);
     field.push(creature);
   }
 }
-function spawnCreature(belowScore, chance) {
-  if (score < belowScore && random() > chance) {
-    let creature = getSeaCreature(WORDS.pop());
-    if (creature.name) {
-      secondfield.push(creature);
-    } else {
-      field.push(creature);
-    }
-  }
-}
+
 function spawnWhale(belowScore, chance) {
   if (score < belowScore && random() > chance) {
-    let creature = getSeaCreature(WORDS.splice(0, 1)[0]);
+    const indexOfBigWord = 200;
+    const word = getNextWord(indexOfBigWord);
+    const creature = getSeaCreature(word);
     field.push(creature);
   }
 }
 function spawnDoubleTrouble(belowScore, chance) {
   if (score < belowScore && random() > chance) {
     for (let i = 0; i < 2; i++) {
-      let creature = getSeaCreature(WORDS.splice(WORDS.length / 2, 1)[0]);
+      const indexOfSemiBigWord = Math.round(WORDS.length / 3);
+      const word = getNextWord(indexOfSemiBigWord);
+      const creature = getSeaCreature(word);
       field.push(creature);
     }
   }
 }
 function spawnTrippleNipple(belowScore, chance) {
   if (score < belowScore && random() > chance) {
-    for (let i = 0; i < 2; i++) {
-      let creature = getSeaCreature(WORDS.splice(WORDS.length / 3, 1)[0]);
+    for (let i = 0; i < 3; i++) {
+      const indexOfMediumWord = Math.round(WORDS.length / 5);
+      const word = getNextWord(indexOfMediumWord);
+      const creature = getSeaCreature(word);
       field.push(creature);
     }
   }
 }
 function spawnProgression(chance) {
   if (random() < chance) {
-    let creature = getSeaCreature(WORDS.pop());
+    const indexOfLastWord = WORDS.length - 1;
+    const word = getNextWord(indexOfLastWord);
+    const creature = getSeaCreature(word);
     if (creature.name) {
       secondfield.push(creature);
     } else {
@@ -666,58 +625,94 @@ function spawnProgression(chance) {
   }
 }
 function spawnOne() {
-  let creature = getSeaCreature(WORDS.pop());
+  const indexOfLastWord = WORDS.length - 1;
+  const word = getNextWord(indexOfLastWord);
+  const creature = getSeaCreature(word);
   if (creature.name) {
     secondfield.push(creature);
   } else {
     field.push(creature);
   }
 }
+function getNextWord(startIndex) {
+  let notAvailableChars = [];
+  for (let i = 0; i < field.length; i++) {
+    if (field[i]) {
+      if (!notAvailableChars.includes(field[i].text.charAt(0))) {
+        notAvailableChars.push(field[i].text.charAt(0));
+      }
+    }
+  }
+  for (let i = 0; i < secondfield.length; i++) {
+    if (secondfield[i]) {
+      if (!notAvailableChars.includes(secondfield[i].text.charAt(0))) {
+        notAvailableChars.push(secondfield[i].text.charAt(0));
+      }
+    }
+  }
+
+  for (let i = startIndex; i > 0; i--) {
+    const wordSuggestion = WORDS[i];
+    if (wordSuggestion) {
+      const firstLetterInWord = wordSuggestion.charAt(0);
+      if (!notAvailableChars.includes(firstLetterInWord)) {
+        return WORDS.splice(i, 1)[0];
+      } else {
+        continue;
+      }
+    }
+  }
+}
+
 function getSeaCreature(value) {
-  if (value == "lulu" || value == "chtulu" || value == "chtululu") {
-    return new Chtullie(value);
-  }
-  if (value.length == 1) {
-    enemies = [
-      new Shotty(value),
-      new Ghosty(value),
-      new Puffer(value),
-      new Inker(value),
-      new Inky(value),
-      new Croccy(value),
-    ];
-    return random(enemies);
-  }
-  if (value.length == 2) {
-    enemies = [
-      new Jinxy(value),
-      new Puffer(value),
-      new Inker(value),
-      new Inky(value),
-      new Croccy(value),
-    ];
-    return random(enemies);
-  }
-  if (value.length == 3) {
-    enemies = [
-      new Jinxy(value),
-      new Fish(value),
-      new Teethy(value),
-      new Ghosty(value),
-    ];
-    return random(enemies);
-  }
-  if (value.length == 4) {
-    enemies = [new Fish(value), new Teethy(value)];
-    return random(enemies);
-  }
-  if (value.length == 5) {
-    return new Qocto(value);
-  }
-  if (value.length < 7) {
-    return new Leona(value);
-  }
-  if (value.length > 7) {
-    return new Whale(value);
+  if (value) {
+    if (value == "lulu" || value == "chtulu" || value == "chtululu") {
+      return new Chtullie(value);
+    }
+    if (value.length == 1) {
+      enemies = [
+        new Shotty(value),
+        new Ghosty(value),
+        new Puffer(value),
+        new Inker(value),
+        new Inky(value),
+        new Croccy(value),
+        new Spearo(value),
+      ];
+      return random(enemies);
+    }
+    if (value.length == 2) {
+      enemies = [
+        new Jinxy(value),
+        new Puffer(value),
+        new Inker(value),
+        new Inky(value),
+        new Croccy(value),
+        new Ghosty(value),
+      ];
+      return random(enemies);
+    }
+    if (value.length == 3) {
+      enemies = [
+        new Jinxy(value),
+        new Fish(value),
+        new Teethy(value),
+        new Ghosty(value),
+      ];
+      return random(enemies);
+    }
+    if (value.length == 4) {
+      enemies = [new Fish(value), new Teethy(value)];
+      return random(enemies);
+    }
+    if (value.length == 5) {
+      return new Qocto(value);
+    }
+    if (value.length < 7) {
+      return new Leona(value);
+    }
+    if (value.length > 7) {
+      return new Whale(value);
+    }
   }
 }

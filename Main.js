@@ -762,10 +762,10 @@ function getSeaCreature(value) {
     if (value.length == 5) {
       return new Qocto(value);
     }
-    if (value.length < 7) {
+    if (value.length <= 6) {
       return new Leona(value);
     }
-    if (value.length > 7) {
+    if (value.length >= 7) {
       return new Whale(value);
     }
   }

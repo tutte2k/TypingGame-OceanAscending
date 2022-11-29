@@ -10,7 +10,7 @@ class Chtullie extends Hostile {
     );
   }
   static loadAnimationFiles() {
-    Chtullie.Animation = loadAnimation("./actors/hostiles/sheet_cthullie.png", {
+    Chtullie.Animation = loadAnimation("./actors/hostiles/cthullie.png", {
       size: [500, 500],
       frames: 48,
     });

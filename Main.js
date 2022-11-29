@@ -153,6 +153,9 @@ function togglePause() {
 
 function setup() {
   var canvas = createCanvas(windowWidth, windowHeight);
+  if (windowWidth > 500) {
+    resizeCanvas(windowWidth, windowHeight - windowHeight / 3);
+  }
   button = createButton("Pause");
   button.position(80, height / 2 + 165);
   button.mousePressed(togglePause);
@@ -167,9 +170,6 @@ function setup() {
   radio.mouseClicked(resetGame);
   focus = null;
   textFont(font);
-  if (windowWidth > 500) {
-    prompt();
-  }
 }
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
@@ -388,6 +388,39 @@ function keyPressed() {
       focus = findFocus(keyCode);
       if (focus) {
         focus.erode(keyCode);
+      }
+    }
+  }
+}
+
+function virtuaKeyPressed(keyCodeFromChar) {
+  if (!paused) {
+    if (keyCodeFromChar == 13 && zapperAvailable === true) {
+      for (let i = field.length; i > -1; i--) {
+        score += 3;
+        field.splice(i, 1);
+        kills++;
+      }
+      for (let i = secondfield.length; i > -1; i--) {
+        score += 3;
+        kills++;
+        secondfield.splice(i, 1);
+      }
+      environmentfield = [];
+      zapperAvailable = false;
+      environmentfield.push(new Zapper(depth));
+      focus = null;
+    }
+    if (paused && !gameOver) {
+      loop();
+      paused = !paused;
+    }
+    if (focus) {
+      focus.erode(keyCodeFromChar);
+    } else {
+      focus = findFocus(keyCodeFromChar);
+      if (focus) {
+        focus.erode(keyCodeFromChar);
       }
     }
   }

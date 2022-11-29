@@ -163,3 +163,6 @@
   font-size: xx-large;
   font-weight: 900;
 }
+.simple-keyboard .hg-button {
+  min-height: 135px;
+}

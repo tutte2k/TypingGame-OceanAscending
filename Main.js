@@ -158,7 +158,7 @@ function setup() {
   }
 
   button = createButton("Pause");
-  button.position(width - 20, 10);
+  button.position(width / 4, 10);
   button.mousePressed(togglePause);
   canvas.parent("ocean");
   radio = createRadio();

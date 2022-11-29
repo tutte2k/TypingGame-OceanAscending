@@ -159,15 +159,7 @@
   opacity: 0.3;
 }
 
-.column {
-  float: left;
-  width: 25%;
-}
-
-.row:after {
-  display: table;
-  clear: both;
-}
-.qr {
-  padding-top: 10px;
+.simple-keyboard {
+  font-size: xx-large;
+  font-weight: 900;
 }

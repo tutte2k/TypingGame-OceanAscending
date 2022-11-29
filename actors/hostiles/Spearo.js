@@ -6,7 +6,7 @@ class Spearo extends Hostile {
       text,
       Spearo.Animation,
       createVector(-50, -50),
-      createVector(width / 2 - 400, height),
+      createVector(width / 2, height),
       (score) => 1,
       (score) => 1
     );

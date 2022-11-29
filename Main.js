@@ -6,7 +6,7 @@ const NUMBERS = NUMBERSTRING.split(" ");
 let WORDS;
 
 let word;
-
+let mobileMode = false;
 const url = {
   kids: {
     get: "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/7872d5c0-aac9-4ace-9624-96215c65d527",
@@ -153,11 +153,12 @@ function togglePause() {
 
 function setup() {
   var canvas = createCanvas(windowWidth, windowHeight);
-  if (windowWidth > 500) {
+  if (windowWidth < 1000) {
     resizeCanvas(windowWidth, windowHeight - windowHeight / 3);
   }
+
   button = createButton("Pause");
-  button.position(80, height / 2 + 165);
+  button.position(width - 20, 10);
   button.mousePressed(togglePause);
   canvas.parent("ocean");
   radio = createRadio();

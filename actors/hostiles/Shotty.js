@@ -5,10 +5,10 @@ class Shotty extends Hostile {
     super(text, Shotty.Animation, createVector(-30, 0));
   }
   static loadAnimationFiles() {
-    Shotty.Animation = loadAnimation(
-      "../../assets/sprites/bulletsquid/sheet_shotty.png",
-      { size: [100, 100], frames: 22 }
-    );
+    Shotty.Animation = loadAnimation("./sheet_shotty.png", {
+      size: [100, 100],
+      frames: 22,
+    });
     // Shotty.Animation = loadAnimation(...Shotty.Sprites);
   }
 

@@ -10,9 +10,9 @@ class Chtullie extends Hostile {
     );
   }
   static loadAnimationFiles() {
-    Chtullie.Animation = loadAnimation(
-      "../../assets/sprites/chtullie/sheet_cthullie.png",
-      { size: [500, 500], frames: 48 }
-    );
+    Chtullie.Animation = loadAnimation("./sheet_cthullie.png", {
+      size: [500, 500],
+      frames: 48,
+    });
   }
 }

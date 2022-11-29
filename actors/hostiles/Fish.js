@@ -10,7 +10,7 @@ class Fish extends Hostile {
     );
   }
   static loadAnimationFiles() {
-    Fish.Animation = loadAnimation("../../assets/sprites/fish/sheet_fish.png", {
+    Fish.Animation = loadAnimation("./sheet_fish.png", {
       size: [250, 250],
       frames: 61,
     });

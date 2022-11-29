@@ -55,11 +55,14 @@ var misses = 0;
 function preload() {
   WORDS = WORDSTRING.split(" ").sort((a, b) => b.length - a.length);
   font = loadFont("./assets/RifficFree-Bold.ttf");
+
   Whale.loadAnimationFiles();
   Teethy.loadAnimationFiles();
   Qocto.loadAnimationFiles();
   Shotty.loadAnimationFiles();
-
+  Jormungandr.loadAnimationFiles();
+  Abezethibou.loadAnimationFiles();
+  Swordeath.loadAnimationFiles();
   Shellie.loadAnimationFiles();
   Leona.loadAnimationFiles();
   Jinxy.loadAnimationFiles();
@@ -67,7 +70,6 @@ function preload() {
   Fish.loadAnimationFiles();
   Chtullie.loadAnimationFiles();
   Puffer.loadAnimationFiles();
-
   Spearo.loadAnimationFiles();
   Snail.loadAnimationFiles();
 
@@ -165,6 +167,9 @@ function setup() {
   radio.mouseClicked(resetGame);
   focus = null;
   textFont(font);
+  if (windowWidth > 500) {
+    prompt();
+  }
 }
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
@@ -220,7 +225,10 @@ function handleField() {
       } else {
         spawnProgression(0.1);
       }
-      spawnChtullie(100, 0.99, "lulu");
+      spawnBoss(100, 0.99, "lulu");
+      spawnBoss(500, 0.99, "aaa");
+      spawnBoss(750, 0.99, "jjj");
+      spawnBoss(1000, 0.99, "sss");
     } else if (easyMode) {
       if (field.length == 0 && secondfield.length == 0) {
         spawnOne();
@@ -228,7 +236,10 @@ function handleField() {
         spawnProgression(0.5);
       }
       spawnRandom(50, 0.99);
-      spawnChtullie(200, 0.99, "chtulu");
+      spawnBoss(200, 0.99, "chtulu");
+      spawnBoss(500, 0.99, "abezeth");
+      spawnBoss(750, 0.99, "jormun");
+      spawnBoss(1000, 0.99, "sworde");
     } else if (normalMode) {
       if (field.length == 0 && secondfield.length == 0) {
         spawnOne();
@@ -242,7 +253,10 @@ function handleField() {
       spawnWhale(100, 0.99);
       spawnRandom(150, 0.99);
       //depth
-      spawnChtullie(300, 0.99, "chtululu");
+      spawnBoss(250, 0.99, "chtululu");
+      spawnBoss(500, 0.99, "abezethibou");
+      spawnBoss(750, 0.99, "jormungadr");
+      spawnBoss(1000, 0.99, "swordeath");
     }
   }
   if (kidsMode) {
@@ -530,20 +544,14 @@ function postRequest() {
     let get_api_url;
     let post_api_url;
     if (radio.value() == "kids") {
-      get_api_url =
-        "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/7872d5c0-aac9-4ace-9624-96215c65d527";
-      post_api_url =
-        "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/7872d5c0-aac9-4ace-9624-96215c65d527?apiKey=74595edf-2138-43c5-aee8-0b94a8c76fac";
+      get_api_url = url.kids.get;
+      post_api_url = url.kids.put;
     } else if (radio.value() == "easy") {
-      get_api_url =
-        "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/2bf39cf4-8b8c-40da-b4b6-328ce40363ca";
-      post_api_url =
-        "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/2bf39cf4-8b8c-40da-b4b6-328ce40363ca?apiKey=74595edf-2138-43c5-aee8-0b94a8c76fac";
+      get_api_url = url.easy.get;
+      post_api_url = url.easy.put;
     } else if (radio.value() == "normal") {
-      get_api_url =
-        "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/0d51decd-56ba-45d1-ace6-eec4ddb43bec";
-      post_api_url =
-        "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/0d51decd-56ba-45d1-ace6-eec4ddb43bec?apiKey=74595edf-2138-43c5-aee8-0b94a8c76fac";
+      get_api_url = url.normal.get;
+      post_api_url = url.normal.put;
     }
     postBtn.elt.hidden = true;
     let responseData;
@@ -569,8 +577,8 @@ function postRequest() {
   }
 }
 
-function spawnChtullie(chtullieDepth, chance, value) {
-  if (depth > chtullieDepth && random() > chance) {
+function spawnBoss(afterDepth, chance, value) {
+  if (depth > afterDepth && random() > chance) {
     field.push(getSeaCreature(value));
   }
 }
@@ -668,6 +676,15 @@ function getSeaCreature(value) {
   if (value) {
     if (value == "lulu" || value == "chtulu" || value == "chtululu") {
       return new Chtullie(value);
+    }
+    if (value == "sss" || value == "sworde" || value == "swordeath") {
+      return new Swordeath(value);
+    }
+    if (value == "jjj" || value == "jormun" || value == "jormungandr") {
+      return new Jormungandr(value);
+    }
+    if (value == "aaa" || value == "abezeth" || value == "abezethibou") {
+      return new Abezethibou(value);
     }
     if (value.length == 1) {
       enemies = [

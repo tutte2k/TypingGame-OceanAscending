@@ -11,7 +11,7 @@ class Jormungandr extends Hostile {
   }
   static loadAnimationFiles() {
     Jormungandr.Animation = loadAnimation(
-      "../../assets/sprites/jormungandr/sheet_jormungandr.png",
+      "./actors/hostiles/sheet_jormungandr.png",
       { size: [500, 500], frames: 50 }
     );
 

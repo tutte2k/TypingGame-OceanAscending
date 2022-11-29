@@ -5,7 +5,7 @@ class Shotty extends Hostile {
     super(text, Shotty.Animation, createVector(-30, 0));
   }
   static loadAnimationFiles() {
-    Shotty.Animation = loadAnimation("./sheet_shotty.png", {
+    Shotty.Animation = loadAnimation("./actors/hostiles/sheet_shotty.png", {
       size: [100, 100],
       frames: 22,
     });

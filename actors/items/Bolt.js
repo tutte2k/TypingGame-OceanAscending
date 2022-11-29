@@ -5,7 +5,7 @@ class Bolt extends Item {
     super(text, Bolt.Animation, createVector(-10, 40));
   }
   static loadAnimationFiles() {
-    Bolt.Animation = loadAnimation("../../assets/sprites/bolt/sheet_bolt.png", {
+    Bolt.Animation = loadAnimation("./actors/items/sheet_bolt.png", {
       size: [100, 100],
       frames: 91,
     });

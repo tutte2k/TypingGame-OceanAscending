@@ -155,6 +155,9 @@ function setup() {
   var canvas = createCanvas(windowWidth, windowHeight);
   if (windowWidth < 1000) {
     resizeCanvas(windowWidth, windowHeight - windowHeight / 3);
+  } else {
+    let keyboard = document.getElementById("keyboard");
+    keyboard.hidden = true;
   }
 
   button = createButton("Pause");

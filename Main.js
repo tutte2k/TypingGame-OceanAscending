@@ -1,13 +1,9 @@
-const CHARSTRING = "a b c d e f g h i j k l m n o p q r s t u v x y z";
-const NUMBERSTRING = "1 2 3 4 5 6 7 8 9 0";
-const CHARS = CHARSTRING.split(" ");
-const NUMBERS = NUMBERSTRING.split(" ");
-
-let WORDS;
-
-let word;
-let mobileMode = false;
-const url = {
+const target = {
+  words: [],
+  numbers: "1 2 3 4 5 6 7 8 9 0".split(" "),
+  chars: "a b c d e f g h i j k l m n o p q r s t u v x y z".split(" "),
+};
+const api = {
   kids: {
     get: "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/7872d5c0-aac9-4ace-9624-96215c65d527",
     put: "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/7872d5c0-aac9-4ace-9624-96215c65d527?apiKey=74595edf-2138-43c5-aee8-0b94a8c76fac",
@@ -21,27 +17,27 @@ const url = {
     put: "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/0d51decd-56ba-45d1-ace6-eec4ddb43bec?apiKey=74595edf-2138-43c5-aee8-0b94a8c76fac",
   },
 };
+const field = {
+  hostile: [],
+  neutral: [],
+  item: [],
+  environment: [],
+};
 
-var paused = false;
-var gameOver = false;
-
-var radio;
+var radioBtn;
 var postBtn;
-var playAgain;
+var playAgainBtn;
+let inputContents;
 
 var data;
 var kidsdata;
 var easydata;
 var normaldata;
-let inputContents;
 
 var focus;
-var field = [];
-var secondfield = [];
-var itemfield = [];
-var environmentfield = [];
+var paused = false;
+var gameOver = false;
 var guyDepth = 0;
-
 var totalScore = 0;
 var score = 0;
 var kills = 0;
@@ -49,11 +45,10 @@ var level = 1;
 var depth = 0;
 var health = 3;
 var zapperAvailable = false;
-
 var misses = 0;
 
 function preload() {
-  WORDS = WORDSTRING.split(" ").sort((a, b) => b.length - a.length);
+  target.words = WORDSTRING.split(" ").sort((a, b) => b.length - a.length);
   font = loadFont("./assets/RifficFree-Bold.ttf");
 
   Whale.loadAnimationFiles();
@@ -127,7 +122,7 @@ function preload() {
     "./assets/sprites/guy/guy (41).png"
   );
 
-  getHighscores(url.kids.get, url.easy.get, url.normal.get);
+  getHighscores(api.kids.get, api.easy.get, api.normal.get);
 }
 function getHighscores(kidsApiUrl, easyApiUrl, normalApiUrl) {
   httpGet(kidsApiUrl, "json", false, function (response) {
@@ -153,6 +148,7 @@ function togglePause() {
 
 function setup() {
   var canvas = createCanvas(windowWidth, windowHeight);
+  canvas.parent("ocean");
   if (windowWidth < 1000) {
     resizeCanvas(windowWidth, windowHeight - windowHeight / 3);
   } else {
@@ -160,20 +156,22 @@ function setup() {
     keyboard.hidden = true;
   }
 
+  setUpButtons();
+  focus = null;
+  textFont(font);
+}
+function setUpButtons() {
   button = createButton("Pause");
   button.position(width / 4, 10);
   button.mousePressed(togglePause);
-  canvas.parent("ocean");
-  radio = createRadio();
-  radio.option("kids");
-  radio.option("easy");
-  var normalOptions = radio.option("normal");
+  radioBtn = createRadio();
+  radioBtn.option("kids");
+  radioBtn.option("easy");
+  var normalOptions = radioBtn.option("normal");
   normalOptions.checked = true;
-  radio.style("width", "10px");
-  radio.position(10, 10);
-  radio.mouseClicked(resetGame);
-  focus = null;
-  textFont(font);
+  radioBtn.style("width", "10px");
+  radioBtn.position(10, 10);
+  radioBtn.mouseClicked(resetGame);
 }
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
@@ -194,12 +192,12 @@ function resetGame() {
   guyDepth = 0;
   kills = 0;
   zapperAvailable = false;
-  field = [];
-  secondfield = [];
-  itemfield = [];
-  environmentfield = [];
+  field.hostile = [];
+  field.neutral = [];
+  field.item = [];
+  field.environment = [];
   focus = null;
-  radio.elt.hidden = false;
+  radioBtn.elt.hidden = false;
   loop();
 }
 function handleField() {
@@ -210,105 +208,96 @@ function handleField() {
 
   if (frameCount % 60 === 0) {
     depth++;
-    var kidsMode = radio.value() == "kids";
-    var easyMode = radio.value() == "easy";
-    var normalMode = radio.value() == "normal";
-
-    if (random() > 0.99 && health < 3) {
-      itemfield.push(new Health(random(NUMBERS)));
-    }
-    if (random() > 0.99 && health > 1) {
-      itemfield.push(new LivingDead(random(NUMBERS)));
-    }
-    if (random() > 0.99) {
-      itemfield.push(new Bolt(random(NUMBERS)));
-    }
-    if (kidsMode) {
-      if (field.length == 0 && secondfield.length == 0) {
-        spawnOne();
-      } else {
-        spawnProgression(0.1);
-      }
-      spawnBoss(100, 0.99, "lulu");
-      spawnBoss(500, 0.99, "aaa");
-      spawnBoss(750, 0.99, "jjj");
-      spawnBoss(1000, 0.99, "sss");
-    } else if (easyMode) {
-      if (field.length == 0 && secondfield.length == 0) {
-        spawnOne();
-      } else {
-        spawnProgression(0.5);
-      }
-      spawnRandom(50, 0.99);
-      spawnBoss(200, 0.99, "chtulu");
-      spawnBoss(500, 0.99, "abezeth");
-      spawnBoss(750, 0.99, "jormun");
-      spawnBoss(1000, 0.99, "sworde");
-    } else if (normalMode) {
-      if (field.length == 0 && secondfield.length == 0) {
-        spawnOne();
-      } else {
-        spawnProgression(1);
-      }
-
-      //belowscore
-      spawnDoubleTrouble(50, 0.99);
-      spawnTrippleNipple(50, 0.99);
-      spawnWhale(100, 0.99);
-      spawnRandom(150, 0.99);
-      //depth
-      spawnBoss(250, 0.99, "chtululu");
-      spawnBoss(500, 0.99, "abezethibou");
-      spawnBoss(750, 0.99, "jormungadr");
-      spawnBoss(1000, 0.99, "swordeath");
-    }
-  }
-  if (kidsMode) {
-    if (score > 100) {
-      totalScore += score + depth;
-      score = 0;
-      level++;
-      for (let i = 0; i < 3; i++) {
-        const indexOfLastWord = WORDS.length - 1;
-        const word = getNextWord(indexOfLastWord);
-        field.push(new Shellie(word));
-      }
-    }
-  } else if (easyMode) {
-    if (score > 200) {
-      totalScore += score + depth;
-      score = 0;
-      level++;
-      for (let i = 0; i < 3; i++) {
-        const indexOfMediumWord = Math.round(WORDS.length / 4);
-        const word = getNextWord(indexOfMediumWord);
-        field.push(new Shellie(word));
-      }
-    }
-  } else {
-    if (score > 330) {
-      totalScore += score + depth;
-      score = 0;
-      level++;
-      for (let i = 0; i < 3; i++) {
-        const indexOfSemiBigWord = Math.round(WORDS.length / 3);
-        const word = getNextWord(indexOfSemiBigWord);
-        field.push(new Shellie(word));
+    var kidsMode = radioBtn.value() == "kids";
+    var easyMode = radioBtn.value() == "easy";
+    var normalMode = radioBtn.value() == "normal";
+    spawnItems();
+    if (field.hostile.length == 0 && field.neutral.length == 0) {
+      spawnActor();
+    } else {
+      if (kidsMode) {
+        if (score > 100) {
+          levelUp(10);
+        }
+        spawnKidsMode();
+      } else if (easyMode) {
+        if (score > 200) {
+          levelUp(5);
+        }
+        spawnEasyMode();
+      } else if (normalMode) {
+        if (score > 330) {
+          levelUp(2);
+        }
+        spawnNormalMode();
       }
     }
   }
 }
+function spawnItems() {
+  if (random() > 0.99 && health < 3) {
+    field.item.push(new Health(random(target.numbers)));
+  }
+  if (random() > 0.99 && health > 1) {
+    field.item.push(new LivingDead(random(target.numbers)));
+  }
+  if (random() > 0.99) {
+    field.item.push(new Bolt(random(target.numbers)));
+  }
+}
+function spawnKidsMode() {
+  spawnProgression(0.1);
+
+  spawnBoss(200, 0.99, "lulu");
+  spawnBoss(500, 0.99, "abe");
+  spawnBoss(750, 0.99, "jor");
+  spawnBoss(1000, 0.99, "swo");
+}
+function spawnEasyMode() {
+  spawnProgression(0.5);
+
+  spawnRandom(50, 0.99);
+
+  spawnBoss(200, 0.99, "chtulu");
+  spawnBoss(500, 0.99, "abezeth");
+  spawnBoss(750, 0.99, "jormun");
+  spawnBoss(1000, 0.99, "sworde");
+}
+function spawnNormalMode() {
+  spawnProgression(1);
+
+  spawnDoubleTrouble(50, 0.99);
+  spawnTrippleNipple(50, 0.99);
+  spawnWhale(100, 0.99);
+  spawnRandom(150, 0.99);
+
+  spawnBoss(200, 0.99, "chtululu");
+  spawnBoss(500, 0.99, "abezethibou");
+  spawnBoss(750, 0.99, "jormungadr");
+  spawnBoss(1000, 0.99, "swordeath");
+}
+function levelUp(denominator) {
+  totalScore += score + depth;
+  score = 0;
+  level++;
+  for (let i = 0; i < 3; i++) {
+    const index = Math.round(target.words.length / denominator);
+    const word = getNextWord(index);
+    const creature = new Shellie(word);
+    field.hostile.push(creature);
+  }
+}
 function updateField() {
-  for (var i = field.length - 1; i >= 0; i--) {
-    if (field[i]) {
-      field[i].update();
-      if (field[i].intact) {
-        field[i].draw();
+  for (var i = field.hostile.length - 1; i >= 0; i--) {
+    if (field.hostile[i]) {
+      field.hostile[i].update();
+      if (field.hostile[i].intact) {
+        field.hostile[i].draw();
       } else {
-        if (field[i].text) {
-          score += field[i].text.length;
+        if (field.hostile[i].text) {
+          score += field.hostile[i].text.length;
           kills++;
-          field.splice(i, 1);
+          field.hostile.splice(i, 1);
           focus = null;
         }
       }
@@ -316,50 +305,51 @@ function updateField() {
   }
 }
 function updateSecondField() {
-  for (var i = secondfield.length - 1; i >= 0; i--) {
-    if (secondfield[i]) {
-      secondfield[i].update();
-      if (secondfield[i].intact) {
-        secondfield[i].draw();
-      } else if (!secondfield.intact) {
-        score += secondfield[i].score;
-        if (secondfield[i].score > 0) {
+  for (var i = field.neutral.length - 1; i >= 0; i--) {
+    if (field.neutral[i]) {
+      field.neutral[i].update();
+      if (field.neutral[i].intact) {
+        field.neutral[i].draw();
+      } else if (!field.neutral.intact) {
+        score += field.neutral[i].score;
+        if (field.neutral[i].score > 0) {
           kills++;
         }
-        if (secondfield[i].focused) {
+        if (field.neutral[i].focused) {
           focus = null;
         }
-        secondfield.splice(i, 1);
+        field.neutral.splice(i, 1);
       }
     }
   }
 }
 function updateItemField() {
-  for (var i = itemfield.length - 1; i >= 0; i--) {
-    if (itemfield[i]) {
-      itemfield[i].update();
-      if (itemfield[i].intact) {
-        itemfield[i].draw();
-      } else if (!itemfield.intact) {
-        if (itemfield[i].focused) {
+  for (var i = field.item.length - 1; i >= 0; i--) {
+    if (field.item[i]) {
+      field.item[i].update();
+      if (field.item[i].intact) {
+        field.item[i].draw();
+      } else if (!field.item.intact) {
+        if (field.item[i].focused) {
+          score += 10;
           focus = null;
         }
-        itemfield.splice(i, 1);
+        field.item.splice(i, 1);
       }
     }
   }
 }
 function updateEnvironmentField() {
-  for (var i = environmentfield.length - 1; i >= 0; i--) {
-    if (environmentfield[i]) {
-      environmentfield[i].update();
-      if (environmentfield[i].intact) {
-        environmentfield[i].draw();
-      } else if (!environmentfield.intact) {
-        if (environmentfield[i].focused) {
+  for (var i = field.environment.length - 1; i >= 0; i--) {
+    if (field.environment[i]) {
+      field.environment[i].update();
+      if (field.environment[i].intact) {
+        field.environment[i].draw();
+      } else if (!field.environment.intact) {
+        if (field.environment[i].focused) {
           focus = null;
         }
-        environmentfield.splice(i, 1);
+        field.environment.splice(i, 1);
       }
     }
   }
@@ -367,19 +357,10 @@ function updateEnvironmentField() {
 function keyPressed() {
   if (!paused) {
     if (keyCode == 13 && zapperAvailable === true) {
-      for (let i = field.length; i > -1; i--) {
-        score += 3;
-        field.splice(i, 1);
-        kills++;
-      }
-      for (let i = secondfield.length; i > -1; i--) {
-        score += 3;
-        kills++;
-        secondfield.splice(i, 1);
-      }
-      environmentfield = [];
+      clearFields();
+      field.environment = [];
       zapperAvailable = false;
-      environmentfield.push(new Zapper(depth));
+      field.environment.push(new Zapper(depth));
       focus = null;
     }
     if (paused && !gameOver) {
@@ -396,23 +377,13 @@ function keyPressed() {
     }
   }
 }
-
 function virtuaKeyPressed(keyCodeFromChar) {
   if (!paused) {
     if (keyCodeFromChar == 13 && zapperAvailable === true) {
-      for (let i = field.length; i > -1; i--) {
-        score += 3;
-        field.splice(i, 1);
-        kills++;
-      }
-      for (let i = secondfield.length; i > -1; i--) {
-        score += 3;
-        kills++;
-        secondfield.splice(i, 1);
-      }
-      environmentfield = [];
+      clearFields();
+      field.environment = [];
       zapperAvailable = false;
-      environmentfield.push(new Zapper(depth));
+      field.environment.push(new Zapper(depth));
       focus = null;
     }
     if (paused && !gameOver) {
@@ -431,37 +402,37 @@ function virtuaKeyPressed(keyCodeFromChar) {
 }
 function findFocus(code) {
   var char = String.fromCharCode(code).toLowerCase();
-  for (var i = 0; i < itemfield.length; i++) {
-    if (itemfield[i]) {
-      if (itemfield[i].text.startsWith(char)) {
-        itemfield[i].focused = true;
+  for (var i = 0; i < field.item.length; i++) {
+    if (field.item[i]) {
+      if (field.item[i].text.startsWith(char)) {
+        field.item[i].focused = true;
         misses = 0;
-        return itemfield[i];
+        return field.item[i];
       }
     }
   }
-  for (var i = 0; i < field.length; i++) {
-    if (field[i]) {
-      if (field[i].text.startsWith(char)) {
-        field[i].focused = true;
+  for (var i = 0; i < field.hostile.length; i++) {
+    if (field.hostile[i]) {
+      if (field.hostile[i].text.startsWith(char)) {
+        field.hostile[i].focused = true;
         misses = 0;
-        return field[i];
+        return field.hostile[i];
       }
     }
   }
 
-  for (var i = 0; i < secondfield.length; i++) {
-    if (secondfield[i]) {
-      if (secondfield[i].text.startsWith(char)) {
-        secondfield[i].focused = true;
+  for (var i = 0; i < field.neutral.length; i++) {
+    if (field.neutral[i]) {
+      if (field.neutral[i].text.startsWith(char)) {
+        field.neutral[i].focused = true;
         misses = 0;
-        return secondfield[i];
+        return field.neutral[i];
       }
     }
   }
   misses++;
   if (misses > 10) {
-    field.push(new Snail("10 000 IQ :}"));
+    field.hostile.push(new Snail("10 000 IQ :}"));
   }
   return null;
 }
@@ -499,31 +470,22 @@ function drawGuy() {
 function endGame(enemy) {
   if (enemy.name) {
     if (enemy.name === "LivingDead") {
-      for (let i = field.length; i > -1; i--) {
-        score += 3;
-        field.splice(i, 1);
-        kills++;
-      }
-      for (let i = secondfield.length; i > -1; i--) {
-        score += 3;
-        kills++;
-        secondfield.splice(i, 1);
-      }
+      clearFields();
     }
   }
   if (health === 0) {
-    radio.elt.hidden = true;
+    radioBtn.elt.hidden = true;
     gameOver = true;
     noLoop();
     fill(255);
     strokeWeight(5);
     stroke(0);
     textAlign(LEFT);
-    if (radio.value() == "kids") {
+    if (radioBtn.value() == "kids") {
       data = kidsdata;
-    } else if (radio.value() == "easy") {
+    } else if (radioBtn.value() == "easy") {
       data = easydata;
-    } else if (radio.value() == "normal") {
+    } else if (radioBtn.value() == "normal") {
       data = normaldata;
     }
     if (data) {
@@ -535,7 +497,7 @@ function endGame(enemy) {
         return b[1] - a[1];
       });
       const top10 = sortable.slice(0, 10);
-      text(`${radio.value()}Highscores`, 30, 30);
+      text(`${radioBtn.value()}Highscores`, 30, 30);
       for (let i = 0; i < top10.length; i++) {
         text(`#${i + 1} ${top10[i][0]} : ${top10[i][1]}`, 30, 70 + i * 40);
       }
@@ -552,9 +514,9 @@ function endGame(enemy) {
     textAlign(CENTER);
     textSize(80);
 
-    playAgain = createButton("Play Again");
-    playAgain.position(30, height / 2 + 60);
-    playAgain.mouseClicked(goPlayAgain);
+    playAgainBtn = createButton("Play Again");
+    playAgainBtn.position(30, height / 2 + 60);
+    playAgainBtn.mouseClicked(goPlayAgain);
 
     text("Game Over!", width / 2, height / 3);
     text(`Score: ${totalScore + score}`, width / 2, height / 2);
@@ -567,8 +529,20 @@ function endGame(enemy) {
     health--;
   }
 }
+function clearFields() {
+  for (let i = field.hostile.length; i >= 0; i--) {
+    score += 3;
+    field.hostile.splice(i, 1);
+    kills++;
+  }
+  for (let i = field.neutral.length; i >= 0; i--) {
+    score += 3;
+    kills++;
+    field.neutral.splice(i, 1);
+  }
+}
 function goPlayAgain() {
-  playAgain.remove();
+  playAgainBtn.remove();
   postBtn.remove();
   usernameInput.remove();
   resetGame();
@@ -580,15 +554,15 @@ function postRequest() {
   if (inputContents) {
     let get_api_url;
     let post_api_url;
-    if (radio.value() == "kids") {
-      get_api_url = url.kids.get;
-      post_api_url = url.kids.put;
-    } else if (radio.value() == "easy") {
-      get_api_url = url.easy.get;
-      post_api_url = url.easy.put;
-    } else if (radio.value() == "normal") {
-      get_api_url = url.normal.get;
-      post_api_url = url.normal.put;
+    if (radioBtn.value() == "kids") {
+      get_api_url = api.kids.get;
+      post_api_url = api.kids.put;
+    } else if (radioBtn.value() == "easy") {
+      get_api_url = api.easy.get;
+      post_api_url = api.easy.put;
+    } else if (radioBtn.value() == "normal") {
+      get_api_url = api.normal.get;
+      post_api_url = api.normal.put;
     }
     postBtn.elt.hidden = true;
     let responseData;
@@ -613,114 +587,111 @@ function postRequest() {
       });
   }
 }
-
 function spawnBoss(afterDepth, chance, value) {
   if (depth > afterDepth && random() > chance) {
-    field.push(getSeaCreature(value));
+    field.hostile.push(getSeaCreature(value));
   }
 }
 function spawnRandom(belowScore, chance) {
   if (score < belowScore && random() > chance) {
-    const indexOfLastWord = WORDS.length - 1;
+    const indexOfLastWord = target.words.length - 1;
     const randomIndex = Math.round(random(0, indexOfLastWord));
     const word = getNextWord(randomIndex);
     const creature = getSeaCreature(word);
-    field.push(creature);
+    field.hostile.push(creature);
   }
 }
-
 function spawnWhale(belowScore, chance) {
   if (score < belowScore && random() > chance) {
     const indexOfBigWord = 200;
     const word = getNextWord(indexOfBigWord);
     const creature = getSeaCreature(word);
-    field.push(creature);
+    field.hostile.push(creature);
   }
 }
 function spawnDoubleTrouble(belowScore, chance) {
   if (score < belowScore && random() > chance) {
     for (let i = 0; i < 2; i++) {
-      const indexOfSemiBigWord = Math.round(WORDS.length / 3);
+      const indexOfSemiBigWord = Math.round(target.words.length / 3);
       const word = getNextWord(indexOfSemiBigWord);
       const creature = getSeaCreature(word);
-      field.push(creature);
+      field.hostile.push(creature);
     }
   }
 }
 function spawnTrippleNipple(belowScore, chance) {
   if (score < belowScore && random() > chance) {
     for (let i = 0; i < 3; i++) {
-      const indexOfMediumWord = Math.round(WORDS.length / 5);
+      const indexOfMediumWord = Math.round(target.words.length / 5);
       const word = getNextWord(indexOfMediumWord);
       const creature = getSeaCreature(word);
-      field.push(creature);
+      field.hostile.push(creature);
     }
   }
 }
 function spawnProgression(chance) {
   if (random() < chance) {
-    const indexOfLastWord = WORDS.length - 1;
+    const indexOfLastWord = target.words.length - 1;
     const word = getNextWord(indexOfLastWord);
     const creature = getSeaCreature(word);
     if (creature.name) {
-      secondfield.push(creature);
+      field.neutral.push(creature);
     } else {
-      field.push(creature);
+      field.hostile.push(creature);
     }
   }
 }
-function spawnOne() {
-  const indexOfLastWord = WORDS.length - 1;
+function spawnActor() {
+  const indexOfLastWord = target.words.length - 1;
   const word = getNextWord(indexOfLastWord);
   const creature = getSeaCreature(word);
   if (creature.name) {
-    secondfield.push(creature);
+    field.neutral.push(creature);
   } else {
-    field.push(creature);
+    field.hostile.push(creature);
   }
 }
 function getNextWord(startIndex) {
   let notAvailableChars = [];
-  for (let i = 0; i < field.length; i++) {
-    if (field[i]) {
-      if (!notAvailableChars.includes(field[i].text.charAt(0))) {
-        notAvailableChars.push(field[i].text.charAt(0));
+  for (let i = 0; i < field.hostile.length; i++) {
+    if (field.hostile[i]) {
+      if (!notAvailableChars.includes(field.hostile[i].text.charAt(0))) {
+        notAvailableChars.push(field.hostile[i].text.charAt(0));
       }
     }
   }
-  for (let i = 0; i < secondfield.length; i++) {
-    if (secondfield[i]) {
-      if (!notAvailableChars.includes(secondfield[i].text.charAt(0))) {
-        notAvailableChars.push(secondfield[i].text.charAt(0));
+  for (let i = 0; i < field.neutral.length; i++) {
+    if (field.neutral[i]) {
+      if (!notAvailableChars.includes(field.neutral[i].text.charAt(0))) {
+        notAvailableChars.push(field.neutral[i].text.charAt(0));
       }
     }
   }
 
-  for (let i = startIndex; i > 0; i--) {
-    const wordSuggestion = WORDS[i];
+  for (let i = startIndex; i >= 0; i--) {
+    const wordSuggestion = target.words[i];
     if (wordSuggestion) {
       const firstLetterInWord = wordSuggestion.charAt(0);
       if (!notAvailableChars.includes(firstLetterInWord)) {
-        return WORDS.splice(i, 1)[0];
+        return target.words.splice(i, 1)[0];
       } else {
         continue;
       }
     }
   }
 }
-
 function getSeaCreature(value) {
   if (value) {
     if (value == "lulu" || value == "chtulu" || value == "chtululu") {
       return new Chtullie(value);
     }
-    if (value == "sss" || value == "sworde" || value == "swordeath") {
+    if (value == "swo" || value == "sworde" || value == "swordeath") {
       return new Swordeath(value);
     }
-    if (value == "jjj" || value == "jormun" || value == "jormungandr") {
+    if (value == "jor" || value == "jormun" || value == "jormungandr") {
       return new Jormungandr(value);
     }
-    if (value == "aaa" || value == "abezeth" || value == "abezethibou") {
+    if (value == "abe" || value == "abezeth" || value == "abezethibou") {
       return new Abezethibou(value);
     }
     if (value.length == 1) {

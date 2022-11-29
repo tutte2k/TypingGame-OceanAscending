@@ -11,9 +11,12 @@ class Swordeath extends Hostile {
     );
   }
   static loadAnimationFiles() {
-    Swordeath.Animation = loadAnimation("./actors/hostiles/swordeath.png", {
-      size: [440, 230],
-      frames: 50,
-    });
+    Swordeath.Animation = loadAnimation(
+      "./actors/hostiles/sprites/swordeath.png",
+      {
+        size: [440, 230],
+        frames: 50,
+      }
+    );
   }
 }

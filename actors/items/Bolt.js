@@ -5,7 +5,7 @@ class Bolt extends Item {
     super(text, Bolt.Animation, createVector(-10, 40));
   }
   static loadAnimationFiles() {
-    Bolt.Animation = loadAnimation("./actors/items/bolt.png", {
+    Bolt.Animation = loadAnimation("./actors/items/sprites/bolt.png", {
       size: [100, 100],
       frames: 91,
     });
@@ -14,7 +14,7 @@ class Bolt extends Item {
   erode(keyCode) {
     let matched = super.erode(keyCode);
     if (matched) {
-      environmentfield.push(new BoltIcon());
+      field.environment.push(new BoltIcon());
       zapperAvailable = true;
     }
   }

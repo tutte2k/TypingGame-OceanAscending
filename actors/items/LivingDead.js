@@ -7,10 +7,13 @@ class LivingDead extends Item {
   }
 
   static loadAnimationFiles() {
-    LivingDead.Animation = loadAnimation("./actors/items/livingdead.png", {
-      size: [200, 200],
-      frames: 51,
-    });
+    LivingDead.Animation = loadAnimation(
+      "./actors/items/sprites/livingdead.png",
+      {
+        size: [200, 200],
+        frames: 51,
+      }
+    );
   }
 
   erode(keyCode) {

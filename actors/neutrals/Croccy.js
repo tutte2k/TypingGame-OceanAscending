@@ -12,7 +12,7 @@ class Croccy extends Neutral {
     );
   }
   static loadAnimationFiles() {
-    Croccy.Animation = loadAnimation("./actors/neutrals/croccy.png", {
+    Croccy.Animation = loadAnimation("./actors/neutrals/sprites/croccy.png", {
       size: [250, 250],
       frames: 121,
     });

@@ -5,7 +5,7 @@ class Shellie extends Hostile {
     super(text, Shellie.Animation, createVector(12, 7));
   }
   static loadAnimationFiles() {
-    Shellie.Animation = loadAnimation("./actors/hostiles/shellie.png", {
+    Shellie.Animation = loadAnimation("./actors/hostiles/sprites/shellie.png", {
       size: [264, 224],
       frames: 60,
     });

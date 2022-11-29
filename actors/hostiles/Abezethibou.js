@@ -10,9 +10,12 @@ class Abezethibou extends Hostile {
     );
   }
   static loadAnimationFiles() {
-    Abezethibou.Animation = loadAnimation("./actors/hostiles/abezethibou.png", {
-      size: [500, 500],
-      frames: 75,
-    });
+    Abezethibou.Animation = loadAnimation(
+      "./actors/hostiles/sprites/abezethibou.png",
+      {
+        size: [640, 640],
+        frames: 75,
+      }
+    );
   }
 }

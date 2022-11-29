@@ -12,7 +12,7 @@ class Spearo extends Hostile {
     );
   }
   static loadAnimationFiles() {
-    Spearo.Animation = loadAnimation("./actors/hostiles/spearo.png", {
+    Spearo.Animation = loadAnimation("./actors/hostiles/sprites/spearo.png", {
       size: [250, 250],
       frames: 60,
     });

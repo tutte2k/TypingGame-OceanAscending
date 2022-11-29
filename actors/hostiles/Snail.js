@@ -11,7 +11,7 @@ class Snail extends Hostile {
     );
   }
   static loadAnimationFiles() {
-    Snail.Animation = loadAnimation("./actors/hostiles/snail.png", {
+    Snail.Animation = loadAnimation("./actors/hostiles/sprites/snail.png", {
       size: [640, 640],
       frames: 46,
     });

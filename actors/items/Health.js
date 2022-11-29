@@ -6,7 +6,7 @@ class Health extends Item {
   }
 
   static loadAnimationFiles() {
-    Health.Animation = loadAnimation("./actors/items/health.png", {
+    Health.Animation = loadAnimation("./actors/items/sprites/health.png", {
       size: [200, 200],
       frames: 31,
     });

@@ -5,7 +5,7 @@ class Ghosty extends Neutral {
     super(text, Ghosty.Animation, createVector(0, -85));
   }
   static loadAnimationFiles() {
-    Ghosty.Animation = loadAnimation("./actors/neutrals/ghosty.png", {
+    Ghosty.Animation = loadAnimation("./actors/neutrals/sprites/ghosty.png", {
       size: [500, 500],
       frames: 60,
     });

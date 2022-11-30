@@ -6,7 +6,7 @@ class Jinxy extends Hostile {
   }
   static loadAnimationFiles() {
     Jinxy.Animation = loadAnimation("./actors/hostiles/sprites/jinxy.png", {
-      size: [170, 182],
+      size: [166, 162],
       frames: 38,
     });
   }

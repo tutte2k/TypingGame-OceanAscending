@@ -2,11 +2,11 @@ class Leona extends Hostile {
   static Animation = null;
 
   constructor(text) {
-    super(text, Leona.Animation, createVector(-50, 15));
+    super(text, Leona.Animation, createVector(-50, 40));
   }
   static loadAnimationFiles() {
     Leona.Animation = loadAnimation("./actors/hostiles/sprites/leona.png", {
-      size: [500, 500],
+      size: [364, 257],
       frames: 61,
     });
   }

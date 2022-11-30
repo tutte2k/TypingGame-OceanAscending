@@ -5,7 +5,7 @@ class Abezethibou extends Hostile {
     super(
       text,
       Abezethibou.Animation,
-      createVector(-70, -10),
+      createVector(-35, -70),
       createVector(width, height / 2)
     );
   }
@@ -13,7 +13,7 @@ class Abezethibou extends Hostile {
     Abezethibou.Animation = loadAnimation(
       "./actors/hostiles/sprites/abezethibou.png",
       {
-        size: [640, 640],
+        size: [419, 389],
         frames: 75,
       }
     );

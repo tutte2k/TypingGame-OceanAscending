@@ -6,7 +6,7 @@ class Shellie extends Hostile {
   }
   static loadAnimationFiles() {
     Shellie.Animation = loadAnimation("./actors/hostiles/sprites/shellie.png", {
-      size: [264, 224],
+      size: [299, 259],
       frames: 60,
     });
   }

@@ -47,6 +47,10 @@ var health = 3;
 var zapperAvailable = false;
 var misses = 0;
 
+var kidsMode;
+var easyMode;
+var normalMode;
+
 function preload() {
   target.words = WORDSTRING.split(" ").sort((a, b) => b.length - a.length);
   font = loadFont("./assets/RifficFree-Bold.ttf");
@@ -188,7 +192,6 @@ function resetGame() {
   depth = 0;
   score = 0;
   level = 1;
-  health = 3;
   guyDepth = 0;
   kills = 0;
   zapperAvailable = false;
@@ -208,9 +211,9 @@ function handleField() {
 
   if (frameCount % 60 === 0) {
     depth++;
-    var kidsMode = radioBtn.value() == "kids";
-    var easyMode = radioBtn.value() == "easy";
-    var normalMode = radioBtn.value() == "normal";
+    kidsMode = radioBtn.value() == "kids";
+    easyMode = radioBtn.value() == "easy";
+    normalMode = radioBtn.value() == "normal";
     spawnItems();
     if (field.hostile.length == 0 && field.neutral.length == 0) {
       spawnActor();
@@ -603,7 +606,7 @@ function spawnRandom(belowScore, chance) {
 }
 function spawnWhale(belowScore, chance) {
   if (score < belowScore && random() > chance) {
-    const indexOfBigWord = 200;
+    const indexOfBigWord = 0;
     const word = getNextWord(indexOfBigWord);
     const creature = getSeaCreature(word);
     field.hostile.push(creature);
@@ -679,6 +682,7 @@ function getNextWord(startIndex) {
       }
     }
   }
+  return target.words.pop();
 }
 function getSeaCreature(value) {
   if (value) {
@@ -700,7 +704,6 @@ function getSeaCreature(value) {
         new Ghosty(value),
         new Puffer(value),
         new Inker(value),
-        new Inky(value),
         new Croccy(value),
         new Spearo(value),
       ];
@@ -719,6 +722,7 @@ function getSeaCreature(value) {
     }
     if (value.length == 3) {
       enemies = [
+        new Inky(value),
         new Jinxy(value),
         new Fish(value),
         new Teethy(value),
@@ -727,7 +731,7 @@ function getSeaCreature(value) {
       return random(enemies);
     }
     if (value.length == 4) {
-      enemies = [new Fish(value), new Teethy(value)];
+      enemies = [new Fish(value), new Teethy(value), new Inky(value)];
       return random(enemies);
     }
     if (value.length == 5) {

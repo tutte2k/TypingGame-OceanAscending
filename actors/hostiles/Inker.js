@@ -6,7 +6,7 @@ class Inker extends Hostile {
   }
   static loadAnimationFiles() {
     Inker.Animation = loadAnimation("./actors/hostiles/sprites/inker.png", {
-      size: [188, 188],
+      size: [105, 88],
       frames: 91,
     });
   }

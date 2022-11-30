@@ -5,8 +5,8 @@ class Swordeath extends Hostile {
     super(
       text,
       Swordeath.Animation,
-      createVector(25, 75),
-      createVector(width, height - 100),
+      createVector(15, 100),
+      createVector(width, height - 140),
       (score) => 7
     );
   }
@@ -14,7 +14,7 @@ class Swordeath extends Hostile {
     Swordeath.Animation = loadAnimation(
       "./actors/hostiles/sprites/swordeath.png",
       {
-        size: [440, 230],
+        size: [556, 282],
         frames: 50,
       }
     );

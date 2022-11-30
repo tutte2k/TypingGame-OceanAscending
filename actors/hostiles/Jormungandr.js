@@ -5,15 +5,17 @@ class Jormungandr extends Hostile {
     super(
       text,
       Jormungandr.Animation,
-      createVector(0, 90),
-      createVector(width, height - 100)
+      createVector(40, 220),
+      createVector(width, height - 100),
+      (score) => 5,
+      (score) => 2.5
     );
   }
   static loadAnimationFiles() {
     Jormungandr.Animation = loadAnimation(
       "./actors/hostiles/sprites/jormungandr.png",
       {
-        size: [500, 500],
+        size: [426, 519],
         frames: 50,
       }
     );

@@ -8,7 +8,7 @@ class Spearo extends Hostile {
       createVector(-50, -50),
       createVector(width / 2, height),
       (score) => 1,
-      (score) => 1.5
+      (score) => 1
     );
   }
   static loadAnimationFiles() {

@@ -5,7 +5,7 @@ class Croccy extends Neutral {
     super(
       text,
       Croccy.Animation,
-      createVector(0, 0),
+      createVector(0, 10),
       createVector(width / 9, height + 100),
       (score) => -3,
       (score) => 4

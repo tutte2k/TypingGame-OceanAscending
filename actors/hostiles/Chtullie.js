@@ -11,7 +11,7 @@ class Chtullie extends Hostile {
   }
   static loadAnimationFiles() {
     Chtullie.Animation = loadAnimation(
-      "./actors/hostiles/sprites/cthullie.png",
+      "./actors/hostiles/sprites/chtullie.png",
       {
         size: [500, 500],
         frames: 48,

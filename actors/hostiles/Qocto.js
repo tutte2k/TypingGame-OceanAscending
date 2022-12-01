@@ -2,12 +2,12 @@ class Qocto extends Hostile {
   static Animation = null;
 
   constructor(text) {
-    super(text, Qocto.Animation, createVector(10, 0));
+    super(text, Qocto.Animation, createVector(3, -20));
   }
   static loadAnimationFiles() {
-    Qocto.Animation = loadAnimation("./actors/hostiles/sprites/qocto.png", {
-      size: [500, 500],
-      frames: 30,
+    Qocto.Animation = loadAnimation("./actors/hostiles/sprites/qocto.webp", {
+      size: [430, 227],
+      frames: 60,
     });
   }
 }

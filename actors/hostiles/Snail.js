@@ -6,13 +6,13 @@ class Snail extends Hostile {
       text,
       Snail.Animation,
       createVector(12, 7),
-      createVector(width, height - 160),
+      createVector(width, height - 90),
       (score) => text.length
     );
   }
   static loadAnimationFiles() {
-    Snail.Animation = loadAnimation("./actors/hostiles/sprites/snail.png", {
-      size: [640, 640],
+    Snail.Animation = loadAnimation("./actors/hostiles/sprites/snail.webp", {
+      size: [243, 203],
       frames: 46,
     });
   }

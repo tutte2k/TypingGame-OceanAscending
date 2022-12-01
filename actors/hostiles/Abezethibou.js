@@ -11,7 +11,7 @@ class Abezethibou extends Hostile {
   }
   static loadAnimationFiles() {
     Abezethibou.Animation = loadAnimation(
-      "./actors/hostiles/sprites/abezethibou.png",
+      "./actors/hostiles/sprites/abezethibou.webp",
       {
         size: [419, 389],
         frames: 75,

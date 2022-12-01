@@ -12,7 +12,7 @@ class Shotty extends Hostile {
     );
   }
   static loadAnimationFiles() {
-    Shotty.Animation = loadAnimation("./actors/hostiles/sprites/shotty.png", {
+    Shotty.Animation = loadAnimation("./actors/hostiles/sprites/shotty.webp", {
       size: [100, 100],
       frames: 37,
     });

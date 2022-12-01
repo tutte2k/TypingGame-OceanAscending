@@ -12,7 +12,7 @@ class Swordeath extends Hostile {
   }
   static loadAnimationFiles() {
     Swordeath.Animation = loadAnimation(
-      "./actors/hostiles/sprites/swordeath.png",
+      "./actors/hostiles/sprites/swordeath.webp",
       {
         size: [556, 282],
         frames: 50,

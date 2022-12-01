@@ -276,7 +276,7 @@ function spawnNormalMode() {
 
   spawnBoss(200, 0.99, "chtululu");
   spawnBoss(500, 0.99, "abezethibou");
-  spawnBoss(750, 0.99, "jormungadr");
+  spawnBoss(750, 0.99, "jormungandr");
   spawnBoss(1000, 0.99, "swordeath");
 }
 function levelUp(denominator) {

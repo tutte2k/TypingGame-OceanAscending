@@ -249,7 +249,7 @@ function spawnItems() {
   }
 }
 function spawnKidsMode() {
-  spawnProgression(0.01);
+  spawnProgression(0.05);
 
   spawnBoss(200, 0.99, "lulu");
   spawnBoss(500, 0.99, "abe");

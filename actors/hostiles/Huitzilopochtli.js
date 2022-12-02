@@ -13,7 +13,7 @@ class Huitzilopochtli extends Hostile {
   }
   static loadAnimationFiles() {
     Huitzilopochtli.Animation = loadAnimation(
-      "./actors/hostiles/sprites/Huitzilopochtli.webp",
+      "./actors/hostiles/sprites/huitzilopochtli.webp",
       {
         size: [640, 640],
         frames: 56,

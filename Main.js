@@ -122,7 +122,7 @@ function preload() {
 
   getHighscores();
 }
-function getHighscores(kids, easy, normal) {
+function getHighscores() {
   httpGet(api.kids.get, "json", false, function (response) {
     api.kids.data = response;
   });

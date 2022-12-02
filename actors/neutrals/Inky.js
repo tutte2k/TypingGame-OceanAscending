@@ -5,7 +5,7 @@ class Inky extends Neutral {
     super(text, Inky.Animation, createVector(0, -30));
   }
   static loadAnimationFiles() {
-    Inky.Animation = loadAnimation("./actors/neutrals/sprites/inky.png", {
+    Inky.Animation = loadAnimation("./actors/neutrals/sprites/inky.webp", {
       size: [118, 137],
       frames: 91,
     });

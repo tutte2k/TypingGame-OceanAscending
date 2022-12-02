@@ -46,6 +46,9 @@ var depth = 0;
 var health = 3;
 var zapperAvailable = false;
 var misses = 0;
+var hits = 0;
+var missedFishes = 0;
+var missesInARow = 0;
 
 var kidsMode;
 var easyMode;
@@ -82,49 +85,10 @@ function preload() {
 
   Zapper.loadAnimationFiles();
 
-  guy = loadAnimation(
-    "./assets/sprites/guy/guy (1).png",
-    "./assets/sprites/guy/guy (2).png",
-    "./assets/sprites/guy/guy (3).png",
-    "./assets/sprites/guy/guy (4).png",
-    "./assets/sprites/guy/guy (5).png",
-    "./assets/sprites/guy/guy (6).png",
-    "./assets/sprites/guy/guy (7).png",
-    "./assets/sprites/guy/guy (8).png",
-    "./assets/sprites/guy/guy (9).png",
-    "./assets/sprites/guy/guy (10).png",
-    "./assets/sprites/guy/guy (11).png",
-    "./assets/sprites/guy/guy (12).png",
-    "./assets/sprites/guy/guy (13).png",
-    "./assets/sprites/guy/guy (14).png",
-    "./assets/sprites/guy/guy (15).png",
-    "./assets/sprites/guy/guy (16).png",
-    "./assets/sprites/guy/guy (17).png",
-    "./assets/sprites/guy/guy (18).png",
-    "./assets/sprites/guy/guy (19).png",
-    "./assets/sprites/guy/guy (20).png",
-    "./assets/sprites/guy/guy (21).png",
-    "./assets/sprites/guy/guy (22).png",
-    "./assets/sprites/guy/guy (23).png",
-    "./assets/sprites/guy/guy (24).png",
-    "./assets/sprites/guy/guy (25).png",
-    "./assets/sprites/guy/guy (26).png",
-    "./assets/sprites/guy/guy (27).png",
-    "./assets/sprites/guy/guy (28).png",
-    "./assets/sprites/guy/guy (29).png",
-    "./assets/sprites/guy/guy (30).png",
-    "./assets/sprites/guy/guy (31).png",
-    "./assets/sprites/guy/guy (32).png",
-    "./assets/sprites/guy/guy (33).png",
-    "./assets/sprites/guy/guy (34).png",
-    "./assets/sprites/guy/guy (35).png",
-    "./assets/sprites/guy/guy (36).png",
-    "./assets/sprites/guy/guy (37).png",
-    "./assets/sprites/guy/guy (38).png",
-    "./assets/sprites/guy/guy (39).png",
-    "./assets/sprites/guy/guy (40).png",
-    "./assets/sprites/guy/guy (41).png"
-  );
+  guy = loadAnimation("./actors/guy.webp", {
+    size: [177, 192],
+    frames: 48,
+  });
 
   getHighscores(api.kids.get, api.easy.get, api.normal.get);
 }
@@ -317,6 +281,8 @@ function updateSecondField() {
         score += field.neutral[i].score;
         if (field.neutral[i].score > 0) {
           kills++;
+        } else {
+          missedFishes++;
         }
         if (field.neutral[i].focused) {
           focus = null;
@@ -371,11 +337,18 @@ function keyPressed() {
       paused = !paused;
     }
     if (focus) {
-      focus.erode(keyCode);
+      let hit = focus.erode(keyCode);
+      if (hit) {
+        hits++;
+      }
     } else {
       focus = findFocus(keyCode);
       if (focus) {
-        focus.erode(keyCode);
+        let hit = focus.erode(keyCode);
+        console.log(hit);
+        if (hit) {
+          hits++;
+        }
       }
     }
   }
@@ -409,7 +382,8 @@ function findFocus(code) {
     if (field.item[i]) {
       if (field.item[i].text.startsWith(char)) {
         field.item[i].focused = true;
-        misses = 0;
+
+        missesInARow = 0;
         return field.item[i];
       }
     }
@@ -418,7 +392,8 @@ function findFocus(code) {
     if (field.hostile[i]) {
       if (field.hostile[i].text.startsWith(char)) {
         field.hostile[i].focused = true;
-        misses = 0;
+
+        missesInARow = 0;
         return field.hostile[i];
       }
     }
@@ -428,13 +403,14 @@ function findFocus(code) {
     if (field.neutral[i]) {
       if (field.neutral[i].text.startsWith(char)) {
         field.neutral[i].focused = true;
-        misses = 0;
+        missesInARow = 0;
         return field.neutral[i];
       }
     }
   }
   misses++;
-  if (misses > 10) {
+  missesInARow++;
+  if (missesInARow > 10) {
     field.hostile.push(new Snail("10 000 IQ :}"));
   }
   return null;
@@ -452,9 +428,15 @@ function drawScore() {
   textAlign(CENTER);
   textSize(30);
   fill(255);
-  text(`Level ${level} (${Math.round((score / 350) * 100)}%)`, width / 2, 30);
-  text(`Depth ${depth}m`, 100, height / 2 + 145);
-  text(`Catches ${kills}`, 100, height - 10);
+  text(`Level: ${level} (${Math.round((score / 350) * 100)}%)`, width / 2, 30);
+  text(`Depth: ${depth}m`, 100, height / 2 + 145);
+  text(`Catches: ${kills}`, 100, height - 10);
+  text(`Missed: ${missedFishes}`, width / 3, height - 10);
+  text(
+    `Accuracy: ${Math.round((hits / (misses + hits)) * 100)}%`,
+    (width / 3) * 2,
+    height - 10
+  );
   textFont("Helvetica");
   for (let i = 0; i < health; i++) {
     text(`❤️`, width / 2 - 40 + i * 40, height - 10);

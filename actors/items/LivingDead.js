@@ -8,7 +8,7 @@ class LivingDead extends Item {
 
   static loadAnimationFiles() {
     LivingDead.Animation = loadAnimation(
-      "./actors/items/sprites/livingdead.png",
+      "./actors/items/sprites/livingdead.webp",
       {
         size: [200, 200],
         frames: 51,

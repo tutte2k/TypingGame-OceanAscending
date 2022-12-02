@@ -158,6 +158,10 @@ function resetGame() {
   level = 1;
   guyDepth = 0;
   kills = 0;
+  misses = 0;
+  hits = 0;
+  missedFishes = 0;
+  missesInARow = 0;
   zapperAvailable = false;
   field.hostile = [];
   field.neutral = [];

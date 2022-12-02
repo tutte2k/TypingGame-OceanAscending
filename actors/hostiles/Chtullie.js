@@ -1,6 +1,5 @@
 class Chtullie extends Hostile {
   static Animation = null;
-
   constructor(text) {
     super(
       text,
@@ -8,6 +7,7 @@ class Chtullie extends Hostile {
       createVector(12, 7),
       createVector(width, height / 2)
     );
+    this.loot = "sapphire";
   }
   static loadAnimationFiles() {
     Chtullie.Animation = loadAnimation(

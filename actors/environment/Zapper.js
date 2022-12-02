@@ -10,7 +10,7 @@ class Zapper {
     animation(Zapper.Animation, this.position.x, this.position.y);
   }
   update() {
-    if (depth > this.zapDepth + 1) {
+    if (player.depth > this.zapDepth + 1) {
       this.intact = false;
     }
   }

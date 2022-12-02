@@ -9,6 +9,7 @@ class Swordeath extends Hostile {
       createVector(width, height - 140),
       (score) => 7
     );
+    this.loot = "topaz";
   }
   static loadAnimationFiles() {
     Swordeath.Animation = loadAnimation(

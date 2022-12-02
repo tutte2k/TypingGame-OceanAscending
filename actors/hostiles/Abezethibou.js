@@ -1,6 +1,5 @@
 class Abezethibou extends Hostile {
   static Animation = null;
-
   constructor(text) {
     super(
       text,
@@ -8,6 +7,7 @@ class Abezethibou extends Hostile {
       createVector(-35, -70),
       createVector(width, height / 2)
     );
+    this.loot = "amethyst";
   }
   static loadAnimationFiles() {
     Abezethibou.Animation = loadAnimation(

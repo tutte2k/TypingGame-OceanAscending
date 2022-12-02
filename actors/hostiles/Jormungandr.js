@@ -1,6 +1,5 @@
 class Jormungandr extends Hostile {
   static Animation = null;
-
   constructor(text) {
     super(
       text,
@@ -10,6 +9,7 @@ class Jormungandr extends Hostile {
       (score) => 5,
       (score) => 2.5
     );
+    this.loot = "diamond";
   }
   static loadAnimationFiles() {
     Jormungandr.Animation = loadAnimation(

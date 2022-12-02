@@ -12,10 +12,10 @@ class Item extends Actor {
     this.speedFunctionY = speedFunctionY;
   }
   update() {
-    this.position.x += this.speedFunctionX(score);
-    this.position.y += this.speedFunctionY(score);
+    this.position.x += this.speedFunctionX();
+    this.position.y += this.speedFunctionY();
     if (this.focused) {
-      this.position.x++;
+      this.position.y = this.position.y - 3;
     }
     if (this.position.y > height + 100) {
       this.intact = false;
@@ -27,10 +27,10 @@ class Item extends Actor {
   static randomPosition() {
     return createVector(random(100, width - 100), 0);
   }
-  static standardSpeedX(score) {
+  static standardSpeedX() {
     return 0;
   }
-  static standardSpeedY(score) {
+  static standardSpeedY() {
     return 6;
   }
 }

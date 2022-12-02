@@ -15,8 +15,8 @@ class Health extends Item {
   erode(keyCode) {
     let matched = super.erode(keyCode);
     if (matched) {
-      if (health < 3) {
-        health++;
+      if (player.health < 3) {
+        player.health++;
       }
     }
   }

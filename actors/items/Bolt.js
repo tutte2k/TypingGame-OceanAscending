@@ -15,7 +15,7 @@ class Bolt extends Item {
     let matched = super.erode(keyCode);
     if (matched) {
       field.environment.push(new BoltIcon());
-      zapperAvailable = true;
+      player.items.zapper = true;
     }
   }
 }

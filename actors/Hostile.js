@@ -12,8 +12,8 @@ class Hostile extends Actor {
     this.speedFunctionY = speedFunctionY;
   }
   update() {
-    this.position.x -= this.speedFunctionX(score);
-    this.position.y -= this.speedFunctionY(score);
+    this.position.x -= this.speedFunctionX(player.experience);
+    this.position.y -= this.speedFunctionY(player.experience);
 
     if (this.focused) {
       this.position.x++;

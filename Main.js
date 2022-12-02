@@ -345,7 +345,6 @@ function keyPressed() {
       focus = findFocus(keyCode);
       if (focus) {
         let hit = focus.erode(keyCode);
-        console.log(hit);
         if (hit) {
           hits++;
         }
@@ -368,10 +367,16 @@ function virtuaKeyPressed(keyCodeFromChar) {
     }
     if (focus) {
       focus.erode(keyCodeFromChar);
+      if (hit) {
+        hits++;
+      }
     } else {
       focus = findFocus(keyCodeFromChar);
       if (focus) {
         focus.erode(keyCodeFromChar);
+        if (hit) {
+          hits++;
+        }
       }
     }
   }
@@ -461,6 +466,7 @@ function endGame(enemy) {
   if (health === 0) {
     radioBtn.elt.hidden = true;
     gameOver = true;
+    clearFields();
     noLoop();
     fill(255);
     strokeWeight(5);
@@ -512,18 +518,27 @@ function endGame(enemy) {
       focus = null;
     }
     health--;
+    missedFishes++;
+    kills--;
   }
 }
 function clearFields() {
-  for (let i = field.hostile.length; i >= 0; i--) {
-    score += 3;
-    field.hostile.splice(i, 1);
-    kills++;
-  }
-  for (let i = field.neutral.length; i >= 0; i--) {
-    score += 3;
-    kills++;
-    field.neutral.splice(i, 1);
+  if (gameOver) {
+    noLoop();
+    field.hostile.length = 0;
+    field.neutral.length = 0;
+    field.item.length = 0;
+  } else {
+    for (let i = field.hostile.length; i >= 0; i--) {
+      field.hostile.splice(i, 1);
+      score += 3;
+      kills++;
+    }
+    for (let i = field.neutral.length; i >= 0; i--) {
+      field.neutral.splice(i, 1);
+      score += 3;
+      kills++;
+    }
   }
 }
 function goPlayAgain() {
@@ -561,7 +576,10 @@ function postRequest() {
         responseData = await response.json();
       })
       .then(async () => {
-        responseData[inputContents] = totalScore + score;
+        responseData[inputContents] = Math.round(
+          totalScore + score * (hits / (misses + hits))
+        );
+        console.log(responseData);
         fetch(post_api_url, {
           method: "PUT",
           headers: {

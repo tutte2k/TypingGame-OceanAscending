@@ -1,200 +1,25 @@
-const ui = {
-  radio: null,
-  playAgain: null,
-  pause: null,
-  post: null,
-  textInput: null,
-};
-const userInput = {
-  name: null,
-};
-
-const target = {
-  words: [],
-  numbers: "1 2 3 4 5 6 7 8 9 0".split(" "),
-  chars: "a b c d e f g h i j k l m n o p q r s t u v x y z".split(" "),
-};
-
-const api = {
-  data: {},
-  kids: {
-    get: "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/7872d5c0-aac9-4ace-9624-96215c65d527",
-    put: "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/7872d5c0-aac9-4ace-9624-96215c65d527?apiKey=74595edf-2138-43c5-aee8-0b94a8c76fac",
-    data: {},
-  },
-  easy: {
-    get: "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/2bf39cf4-8b8c-40da-b4b6-328ce40363ca",
-    put: "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/2bf39cf4-8b8c-40da-b4b6-328ce40363ca?apiKey=74595edf-2138-43c5-aee8-0b94a8c76fac",
-    data: {},
-  },
-  hard: {
-    get: "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/0d51decd-56ba-45d1-ace6-eec4ddb43bec",
-    put: "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/0d51decd-56ba-45d1-ace6-eec4ddb43bec?apiKey=74595edf-2138-43c5-aee8-0b94a8c76fac",
-    data: {},
-  },
-};
-
-const field = {
-  hostile: [],
-  neutral: [],
-  item: [],
-  environment: [],
-};
-
-const game = {
-  mode: null,
-  paused: false,
-  over: false,
-};
-
-const player = {
-  animation: null,
-  position: 0,
-  health: 3,
-  level: 1,
-  experience: 0,
-  depth: 0,
-  totalScore: 0,
-
-  catched: {
-    fishes: 0,
-    letters: 0,
-  },
-
-  missed: {
-    fishes: 0,
-    letters: {
-      total: 0,
-      consecutive: 0,
-    },
-  },
-  items: {
-    zapper: false,
-    cash: 0,
-  },
-};
-
-const config = {
-  kids: {
-    name: "kids",
-    experience: 100,
-    bosses: [
-      { value: "lulu", spawnDepth: 150 },
-      { value: "abe", spawnDepth: 500 },
-      { value: "jor", spawnDepth: 750 },
-      { value: "swo", spawnDepth: 1000 },
-      { value: "hui", spawnDepth: 1250 },
-      { value: "bez", spawnDepth: 1500 },
-    ],
-    spawn: {
-      progression: Spawn.Progression,
-      events: [],
-      boss: Spawn.Boss,
-      indexDenominator: 1,
-      progressionValue: 0,
-    },
-  },
-  easy: {
-    name: "easy",
-    experience: 200,
-    bosses: [
-      { value: "chtulu", spawnDepth: 150 },
-      { value: "abezeth", spawnDepth: 500 },
-      { value: "jormun", spawnDepth: 750 },
-      { value: "sworde", spawnDepth: 1000 },
-      { value: "huitzi", spawnDepth: 1250 },
-      { value: "bezzelle", spawnDepth: 1500 },
-    ],
-    spawn: {
-      progression: Spawn.Progression,
-      events: [],
-      boss: Spawn.Boss,
-      indexDenominator: 2,
-      progressionValue: 0.5,
-    },
-  },
-  hard: {
-    name: "hard",
-    experience: 330,
-    bosses: [
-      { value: "chtululu", spawnDepth: 150 },
-      { value: "abezethibou", spawnDepth: 500 },
-      { value: "jormungandr", spawnDepth: 750 },
-      { value: "swordeath", spawnDepth: 1000 },
-      { value: "huitzilopochtli", spawnDepth: 1250 },
-      { value: "bezzellebobba", spawnDepth: 1500 },
-    ],
-    spawn: {
-      progression: Spawn.Progression,
-      events: [Spawn.Double, Spawn.Triple, Spawn.Brute, Spawn.Random],
-      boss: Spawn.Boss,
-      indexDenominator: 3,
-      progressionValue: 1,
-    },
-  },
-};
-
 function preload() {
   target.words = WORDSTRING.split(" ").sort((a, b) => b.length - a.length);
   font = loadFont("./assets/RifficFree-Bold.ttf");
-
-  Whale.loadAnimationFiles();
-  Teethy.loadAnimationFiles();
-  Qocto.loadAnimationFiles();
-  Shotty.loadAnimationFiles();
-  Jormungandr.loadAnimationFiles();
-  Abezethibou.loadAnimationFiles();
-  Swordeath.loadAnimationFiles();
-  Shellie.loadAnimationFiles();
-  Leona.loadAnimationFiles();
-  Jinxy.loadAnimationFiles();
-  Inker.loadAnimationFiles();
-  Fish.loadAnimationFiles();
-  Chtullie.loadAnimationFiles();
-  Puffer.loadAnimationFiles();
-  Spearo.loadAnimationFiles();
-  Snail.loadAnimationFiles();
-  Bezzellebobba.loadAnimationFiles();
-  Huitzilopochtli.loadAnimationFiles();
-
-  Ghosty.loadAnimationFiles();
-  Inky.loadAnimationFiles();
-  Croccy.loadAnimationFiles();
-
-  Bolt.loadAnimationFiles();
-  Health.loadAnimationFiles();
-  LivingDead.loadAnimationFiles();
-
-  Emerald.loadAnimationFiles();
-  Prism.loadAnimationFiles();
-  Topaz.loadAnimationFiles();
-  Diamond.loadAnimationFiles();
-  Amethyst.loadAnimationFiles();
-  Obsidian.loadAnimationFiles();
-  Sapphire.loadAnimationFiles();
-
-  Zapper.loadAnimationFiles();
-  Death.loadAnimationFiles();
-  8;
-
-  player.animation = loadAnimation("./actors/guy.webp", {
-    size: [177, 192],
-    frames: 48,
-  });
+  Load.Animations();
+  getStoredCash();
+  getHighscores();
+}
+function getStoredCash() {
   if (localStorage.getItem("cash")) {
     player.items.cash = +localStorage.getItem("cash");
   }
-  getHighscores();
 }
+
 function getHighscores() {
-  httpGet(api.kids.get, "json", false, function (response) {
-    api.kids.data = response;
+  httpGet(config.kids.api.get, "json", false, function (response) {
+    config.kids.api.data = response;
   });
-  httpGet(api.easy.get, "json", false, function (response) {
-    api.easy.data = response;
+  httpGet(config.easy.api.get, "json", false, function (response) {
+    config.easy.api.data = response;
   });
-  httpGet(api.hard.get, "json", false, function (response) {
-    api.hard.data = response;
+  httpGet(config.hard.api.get, "json", false, function (response) {
+    config.hard.api.data = response;
   });
 }
 function togglePause() {
@@ -215,37 +40,11 @@ function setup() {
     let keyboard = document.getElementById("keyboard");
     keyboard.hidden = true;
   }
-
-  setUpButtons();
+  Draw.Pausebutton();
+  Draw.Radiobuttons();
   game.mode = config.easy;
   focus = null;
   textFont(font);
-}
-function setUpButtons() {
-  setUpPauseButton();
-  ui.radio = createRadio();
-  ui.radio.option("kids");
-  var easyOptions = ui.radio.option("easy");
-  ui.radio.option("hard");
-  easyOptions.checked = true;
-
-  ui.radio.elt.children.forEach((radio) => {
-    radio.classList.add("form-check");
-    radio.children[0].classList.add("form-check-input");
-    radio.children[1].classList.add("text-uppercase");
-    radio.children[1].classList.add("fs-6");
-    radio.children[1].classList.add("fw-bold");
-  });
-
-  ui.radio.position(10, 50);
-  ui.radio.mouseClicked(resetGame);
-}
-function setUpPauseButton() {
-  ui.pause = createButton("Pause");
-  ui.pause.position(10, 10);
-  ui.pause.elt.classList.add("btn");
-  ui.pause.elt.classList.add("btn-outline-warning");
-  ui.pause.mousePressed(togglePause);
 }
 
 function windowResized() {
@@ -253,16 +52,19 @@ function windowResized() {
 }
 function draw() {
   clear();
-  drawLine();
-  drawScore();
+  Draw.Line();
+
+  Draw.Gui();
   handleField();
-  drawGuy();
+  Draw.Player();
 }
 function resetGame() {
   game.over = false;
   player.depth = 0;
   player.experience = 0;
   player.level = 1;
+  player.score = 0;
+  player.totalScore = 0;
   player.position = 0;
   player.catched.fishes = 0;
   player.missed.letters.total = 0;
@@ -275,16 +77,14 @@ function resetGame() {
   field.item = [];
   field.environment = [];
   ui.radio.elt.hidden = false;
+  ui.pause.elt.hidden = false;
   focus = null;
-  setUpPauseButton();
   if (ui.radio.value() == "kids") {
     game.mode = config.kids;
   }
-
   if (ui.radio.value() == "easy") {
     game.mode = config.easy;
   }
-
   if (ui.radio.value() == "hard") {
     game.mode = config.hard;
   }
@@ -354,7 +154,6 @@ function updateField() {
     }
   }
 }
-
 function updateSecondField() {
   for (var i = field.neutral.length - 1; i >= 0; i--) {
     if (field.neutral[i]) {
@@ -512,54 +311,6 @@ function findFocus(code) {
   }
   return null;
 }
-function drawLine() {
-  if (!focus) return;
-  stroke(0.1);
-  line(90, player.position, focus.position.x, focus.position.y);
-  textAlign(CENTER);
-  textSize(100);
-  text(focus.displayText.toUpperCase(), width / 2, height - 50);
-}
-function drawScore() {
-  textAlign(CENTER);
-  stroke(1);
-  textSize(30);
-  fill(255);
-  text(
-    `Level: ${player.level} (${Math.round(
-      (player.experience / game.mode.experience) * 100
-    )}%)`,
-    width / 2,
-    30
-  );
-  text(`Depth: ${player.depth}m`, 100, height / 2 + 145);
-  text(`Catches: ${player.catched.fishes}`, 100, height - 10);
-  text(`$${player.items.cash}k`, width - 150, height - 10);
-  text(`Missed: ${player.missed.fishes}`, width / 3, height - 10);
-  text(
-    `Accuracy: ${Math.round(
-      (player.catched.letters /
-        (player.missed.letters.total + player.catched.letters)) *
-        100
-    )}%`,
-    (width / 3) * 2,
-    height - 10
-  );
-  textFont("Helvetica");
-  for (let i = 0; i < player.health; i++) {
-    text(`❤️`, width / 2 - 40 + i * 40, height - 10);
-  }
-  textFont(font);
-}
-function drawGuy() {
-  let standardPosition = height / 2;
-  if (player.position < standardPosition) {
-    player.position++;
-  }
-  if (!game.over) {
-    animation(player.animation, 90, player.position);
-  }
-}
 function endGame(enemy) {
   if (enemy.name) {
     if (enemy.name === "LivingDead") {
@@ -568,77 +319,24 @@ function endGame(enemy) {
     }
   }
   if (player.health === 0) {
-    ui.pause.remove();
-    localStorage.setItem("cash", player.items.cash);
+    ui.pause.elt.hidden = true;
     ui.radio.elt.hidden = true;
+    localStorage.setItem("cash", player.items.cash);
     game.over = true;
+
     clearFields();
     noLoop();
-    fill(255);
-    strokeWeight(5);
-    stroke(0);
-    textAlign(LEFT);
-    if (ui.radio.value() == "kids") {
-      api.data = api.kids.data;
-    } else if (ui.radio.value() == "easy") {
-      api.data = api.easy.data;
-    } else if (ui.radio.value() == "hard") {
-      api.data = api.hard.data;
-    }
-    if (api.data) {
-      let sortable = [];
-      for (var entry in api.data) {
-        sortable.push([entry, api.data[entry]]);
-      }
-      sortable.sort(function (a, b) {
-        return b[1] - a[1];
-      });
-      const top10 = sortable.slice(0, 10);
-      text(`Highscores [${ui.radio.value()}]`, 30, 30);
-      for (let i = 0; i < top10.length; i++) {
-        text(`#${i + 1} ${top10[i][0]} : ${top10[i][1]}`, 30, 70 + i * 40);
-      }
-      ui.textInput = createInput("", "text");
-      ui.textInput.position(30, height / 2);
-      ui.textInput.input(onInput);
-      ui.textInput.elt.classList.add("form-control");
-      ui.textInput.elt.classList.add("w-25");
-      console.log(ui.textInput);
 
-      ui.post = createButton("Submit Score");
-      ui.post.position(30, height / 2 + 50);
-      ui.post.elt.classList.add("btn");
-      ui.post.elt.classList.add("btn-outline-warning");
-      ui.post.mouseClicked(postRequest);
+    if (game.mode.api.data) {
+      Draw.Highscores();
+      Draw.Inputfield();
+      Draw.Postbutton();
     } else {
       text(`Highscores:`, 30, 30);
       text(`Max 500 requests/day`, 30, 70);
     }
-    textAlign(CENTER);
-    textSize(80);
-
-    ui.playAgain = createButton("Play Again");
-    ui.playAgain.position(width / 5, height / 2 + 50);
-    ui.playAgain.elt.classList.add("btn");
-    ui.playAgain.elt.classList.add("btn-outline-warning");
-    ui.playAgain.mouseClicked(goPlayAgain);
-
-    text("Game Over!", width / 2, height / 3);
-    text(
-      `Score: ${Math.round(
-        player.totalScore +
-          player.experience *
-            (player.catched.letters /
-              (player.missed.letters.total + player.catched.letters))
-      )}`,
-      width / 2,
-      height / 2
-    );
-    text(
-      `Total catches: ${player.catched.fishes}`,
-      width / 2,
-      (height / 3) * 2
-    );
+    Draw.Playbutton();
+    Draw.Gameover();
   } else {
     enemy.intact = false;
     if (enemy.focused === true) {
@@ -648,6 +346,9 @@ function endGame(enemy) {
     player.missed.fishes++;
     player.catched.fishes--;
   }
+}
+function onInput() {
+  userInput.name = this.value();
 }
 function clearFields() {
   if (game.over) {
@@ -674,28 +375,14 @@ function goPlayAgain() {
   ui.textInput.remove();
   resetGame();
 }
-function onInput() {
-  userInput.name = this.value();
-}
+
 function postRequest() {
   if (userInput.name) {
-    let get_api_url;
-    let post_api_url;
-    if (ui.radio.value() == "kids") {
-      get_api_url = api.kids.get;
-      post_api_url = api.kids.put;
-    } else if (ui.radio.value() == "easy") {
-      get_api_url = api.easy.get;
-      post_api_url = api.easy.put;
-    } else if (ui.radio.value() == "hard") {
-      get_api_url = api.hard.get;
-      post_api_url = api.hard.put;
-    }
     ui.post.elt.innerHTML = "";
     ui.post.elt.innerText = "";
     ui.post.elt.classList.add("spinner-border");
     let responseData;
-    fetch(get_api_url, {
+    fetch(game.mode.api.get, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -712,7 +399,7 @@ function postRequest() {
                 (player.missed.letters.total + player.catched.letters))
         );
 
-        fetch(post_api_url, {
+        fetch(game.mode.api.put, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",

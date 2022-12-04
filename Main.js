@@ -258,14 +258,14 @@ function virtuaKeyPressed(keyCodeFromChar) {
       game.paused = !game.paused;
     }
     if (focus) {
-      focus.erode(keyCodeFromChar);
+      let hit = focus.erode(keyCodeFromChar);
       if (hit) {
         player.catched.letters++;
       }
     } else {
       focus = findFocus(keyCodeFromChar);
       if (focus) {
-        focus.erode(keyCodeFromChar);
+        let hit = focus.erode(keyCodeFromChar);
         if (hit) {
           player.catched.letters++;
         }

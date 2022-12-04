@@ -26,6 +26,7 @@ class Load {
     Bolt.loadAnimationFiles();
     Health.loadAnimationFiles();
     LivingDead.loadAnimationFiles();
+    Hourglass.loadAnimationFiles();
 
     Emerald.loadAnimationFiles();
     Prism.loadAnimationFiles();

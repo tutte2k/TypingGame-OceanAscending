@@ -20,11 +20,13 @@ class Draw {
     ui.pause.position(10, 10);
     ui.pause.elt.classList.add("btn");
     ui.pause.elt.classList.add("btn-outline-warning");
+    ui.pause.elt.classList.add("fw-bold");
     ui.pause.mousePressed(togglePause);
   }
   static Gui() {
     textAlign(CENTER);
     stroke(1);
+    strokeWeight(3);
     textSize(30);
     fill(255);
     text(
@@ -82,12 +84,13 @@ class Draw {
     ui.post.position(30, height / 2 + 50);
     ui.post.elt.classList.add("btn");
     ui.post.elt.classList.add("btn-outline-warning");
+    ui.post.elt.classList.add("fw-bold");
     ui.post.mouseClicked(postRequest);
   }
   static Highscores() {
     fill(255);
-    strokeWeight(5);
-    stroke(0);
+    stroke(1);
+    strokeWeight(3);
     textAlign(LEFT);
     let sortable = [];
     for (var entry in game.mode.api.data) {
@@ -107,6 +110,7 @@ class Draw {
     ui.playAgain.position(width / 5, height / 2 + 50);
     ui.playAgain.elt.classList.add("btn");
     ui.playAgain.elt.classList.add("btn-outline-warning");
+    ui.playAgain.elt.classList.add("fw-bold");
     ui.playAgain.mouseClicked(goPlayAgain);
   }
   static Gameover() {

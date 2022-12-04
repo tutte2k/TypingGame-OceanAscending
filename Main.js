@@ -72,6 +72,7 @@ function resetGame() {
   player.missed.fishes = 0;
   player.missed.letters.consecutive = 0;
   player.items.zapper = false;
+  player.items.timewarp = false;
   field.hostile = [];
   field.neutral = [];
   field.item = [];
@@ -219,10 +220,24 @@ function keyPressed() {
   if (!game.paused) {
     if (keyCode == 13 && player.items.zapper === true) {
       clearFields();
-      field.environment = [];
+      field.environment = field.environment.filter((x) => x.keyCode != 13);
       player.items.zapper = false;
       field.environment.push(new Zapper(player.depth));
       focus = null;
+    } else if (keyCode == 17 && player.items.timewarp === true) {
+      field.environment = field.environment.filter((x) => x.keyCode != 17);
+      player.totalScore += player.experience;
+      player.experience = 0;
+      player.items.timewarp = false;
+      for (let i = 0; i < field.hostile.length; i++) {
+        field.hostile[i].position.x = windowWidth - 100;
+      }
+      for (let i = 0; i < field.neutral.length; i++) {
+        field.neutral[i].position.y = windowHeight - 100;
+      }
+      for (let i = 0; i < field.item.length; i++) {
+        field.item[i].position.y = 0;
+      }
     }
     if (game.paused && !game.over) {
       loop();
@@ -258,14 +273,14 @@ function virtuaKeyPressed(keyCodeFromChar) {
       game.paused = !game.paused;
     }
     if (focus) {
-      let hit = focus.erode(keyCodeFromChar);
+      focus.erode(keyCodeFromChar);
       if (hit) {
         player.catched.letters++;
       }
     } else {
       focus = findFocus(keyCodeFromChar);
       if (focus) {
-        let hit = focus.erode(keyCodeFromChar);
+        focus.erode(keyCodeFromChar);
         if (hit) {
           player.catched.letters++;
         }
@@ -323,10 +338,8 @@ function endGame(enemy) {
     ui.radio.elt.hidden = true;
     localStorage.setItem("cash", player.items.cash);
     game.over = true;
-
     clearFields();
     noLoop();
-
     if (game.mode.api.data) {
       Draw.Highscores();
       Draw.Inputfield();

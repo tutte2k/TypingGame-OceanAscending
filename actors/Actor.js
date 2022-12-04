@@ -13,7 +13,8 @@ class Actor {
   draw() {
     animation(this.animation, this.position.x, this.position.y);
     this.displayText = this.text.replace(this.completedText, "");
-    noStroke();
+    stroke(1);
+    strokeWeight(3);
     textAlign(CENTER);
     textSize(25);
     text(

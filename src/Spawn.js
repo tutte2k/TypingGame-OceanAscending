@@ -10,6 +10,9 @@ class Spawn {
       field.item.push(new Bolt(random(target.numbers)));
     }
     if (random() > 0.99) {
+      field.item.push(new Hourglass(random(target.numbers)));
+    }
+    if (random() > 0.99) {
       if (random() > 0.5) {
         field.item.push(new Sapphire());
       }

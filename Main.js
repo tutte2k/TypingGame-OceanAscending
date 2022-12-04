@@ -244,7 +244,7 @@ function setUpPauseButton() {
   ui.pause = createButton("Pause");
   ui.pause.position(10, 10);
   ui.pause.elt.classList.add("btn");
-  ui.pause.elt.classList.add("btn-outline-secondary");
+  ui.pause.elt.classList.add("btn-outline-warning");
   ui.pause.mousePressed(togglePause);
 }
 
@@ -608,7 +608,7 @@ function endGame(enemy) {
       ui.post = createButton("Submit Score");
       ui.post.position(30, height / 2 + 50);
       ui.post.elt.classList.add("btn");
-      ui.post.elt.classList.add("btn-outline-secondary");
+      ui.post.elt.classList.add("btn-outline-warning");
       ui.post.mouseClicked(postRequest);
     } else {
       text(`Highscores:`, 30, 30);
@@ -620,7 +620,7 @@ function endGame(enemy) {
     ui.playAgain = createButton("Play Again");
     ui.playAgain.position(width / 5, height / 2 + 50);
     ui.playAgain.elt.classList.add("btn");
-    ui.playAgain.elt.classList.add("btn-outline-secondary");
+    ui.playAgain.elt.classList.add("btn-outline-warning");
     ui.playAgain.mouseClicked(goPlayAgain);
 
     text("Game Over!", width / 2, height / 3);

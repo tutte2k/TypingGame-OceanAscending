@@ -1,3 +1,9 @@
+let radioBtn;
+let postBtn;
+let playAgainBtn;
+let inputContents;
+let focus;
+
 const target = {
   words: [],
   numbers: "1 2 3 4 5 6 7 8 9 0".split(" "),
@@ -16,7 +22,7 @@ const api = {
     put: "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/2bf39cf4-8b8c-40da-b4b6-328ce40363ca?apiKey=74595edf-2138-43c5-aee8-0b94a8c76fac",
     data: {},
   },
-  normal: {
+  hard: {
     get: "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/0d51decd-56ba-45d1-ace6-eec4ddb43bec",
     put: "https://api.jsonstorage.net/v1/json/ab0d2017-8d1b-452e-95d3-eacc1ecbc3ad/0d51decd-56ba-45d1-ace6-eec4ddb43bec?apiKey=74595edf-2138-43c5-aee8-0b94a8c76fac",
     data: {},
@@ -31,14 +37,9 @@ const field = {
 };
 
 const game = {
+  mode: null,
   paused: false,
   over: false,
-
-  difficulty: {
-    kids: false,
-    easy: false,
-    normal: true,
-  },
 };
 
 const player = {
@@ -68,11 +69,65 @@ const player = {
   },
 };
 
-let radioBtn;
-let postBtn;
-let playAgainBtn;
-let focus;
-let inputContents;
+const config = {
+  kids: {
+    name: "kids",
+    experience: 100,
+    bosses: [
+      { value: "lulu", spawnDepth: 150 },
+      { value: "abe", spawnDepth: 500 },
+      { value: "jor", spawnDepth: 750 },
+      { value: "swo", spawnDepth: 1000 },
+      { value: "hui", spawnDepth: 1250 },
+      { value: "bez", spawnDepth: 1500 },
+    ],
+    spawn: {
+      progression: Spawn.Progression,
+      events: [],
+      boss: Spawn.Boss,
+      indexDenominator: 1,
+      progressionValue: 0,
+    },
+  },
+  easy: {
+    name: "easy",
+    experience: 200,
+    bosses: [
+      { value: "chtulu", spawnDepth: 150, loot: "sapphire" },
+      { value: "abezeth", spawnDepth: 500, loot: "amethyst" },
+      { value: "jormun", spawnDepth: 750, loot: "diamond" },
+      { value: "sworde", spawnDepth: 1000, loot: "topaz" },
+      { value: "huitzi", spawnDepth: 1250 },
+      { value: "bezzelle", spawnDepth: 1500, loot: "prism" },
+    ],
+    spawn: {
+      progression: Spawn.Progression,
+      events: [],
+      boss: Spawn.Boss,
+      indexDenominator: 2,
+      progressionValue: 0.5,
+    },
+  },
+  hard: {
+    name: "hard",
+    experience: 330,
+    bosses: [
+      { value: "chtululu", spawnDepth: 150 },
+      { value: "abezethethibou", spawnDepth: 500 },
+      { value: "jormungandr", spawnDepth: 750 },
+      { value: "swordeath", spawnDepth: 1000 },
+      { value: "huitzilopochtli", spawnDepth: 1250 },
+      { value: "bezzellebobba", spawnDepth: 1500 },
+    ],
+    spawn: {
+      progression: Spawn.Progression,
+      events: [Spawn.Double, Spawn.Triple, Spawn.Brute, Spawn.Random],
+      boss: Spawn.Boss,
+      indexDenominator: 3,
+      progressionValue: 1,
+    },
+  },
+};
 
 function preload() {
   target.words = WORDSTRING.split(" ").sort((a, b) => b.length - a.length);
@@ -119,7 +174,9 @@ function preload() {
     size: [177, 192],
     frames: 48,
   });
-
+  if (localStorage.getItem("cash")) {
+    player.items.cash = +localStorage.getItem("cash");
+  }
   getHighscores();
 }
 function getHighscores() {
@@ -129,8 +186,8 @@ function getHighscores() {
   httpGet(api.easy.get, "json", false, function (response) {
     api.easy.data = response;
   });
-  httpGet(api.normal.get, "json", false, function (response) {
-    api.normal.data = response;
+  httpGet(api.hard.get, "json", false, function (response) {
+    api.hard.data = response;
   });
 }
 function togglePause() {
@@ -153,6 +210,7 @@ function setup() {
   }
 
   setUpButtons();
+  game.mode = config.easy;
   focus = null;
   textFont(font);
 }
@@ -162,9 +220,10 @@ function setUpButtons() {
   button.mousePressed(togglePause);
   radioBtn = createRadio();
   radioBtn.option("kids");
-  radioBtn.option("easy");
-  var normalOptions = radioBtn.option("normal");
-  normalOptions.checked = true;
+  var easyOptions = radioBtn.option("easy");
+  radioBtn.option("hard");
+  easyOptions.checked = true;
+
   radioBtn.style("width", "10px");
   radioBtn.position(10, 10);
   radioBtn.mouseClicked(resetGame);
@@ -195,101 +254,51 @@ function resetGame() {
   field.neutral = [];
   field.item = [];
   field.environment = [];
-  focus = null;
   radioBtn.elt.hidden = false;
+  focus = null;
+  if (radioBtn.value() == "kids") {
+    game.mode = config.kids;
+  }
+
+  if (radioBtn.value() == "easy") {
+    game.mode = config.easy;
+  }
+
+  if (radioBtn.value() == "hard") {
+    game.mode = config.hard;
+  }
   loop();
 }
 function handleField() {
-  updateItemField();
-  updateField();
-  updateSecondField();
-  updateEnvironmentField();
+  try {
+    updateItemField();
+    updateField();
+    updateSecondField();
+    updateEnvironmentField();
+  } catch (error) {}
 
   if (frameCount % 60 === 0) {
     player.depth++;
-    game.difficulty.kids = radioBtn.value() == "kids";
-    game.difficulty.easy = radioBtn.value() == "easy";
-    game.difficulty.normal = radioBtn.value() == "normal";
-    spawnItems();
+    Spawn.Items();
     if (field.hostile.length == 0 && field.neutral.length == 0) {
-      spawnActor();
+      Spawn.Single();
     } else {
-      if (game.difficulty.kids) {
-        if (player.experience > 100) {
-          levelUp(1);
-        }
-        spawnKidsMode();
-      } else if (game.difficulty.easy) {
-        if (player.experience > 200) {
-          levelUp(5);
-        }
-        spawnEasyMode();
-      } else if (game.difficulty.normal) {
-        if (player.experience > 330) {
-          levelUp(2);
-        }
-        spawnNormalMode();
+      if (player.experience > game.mode.experience) {
+        levelUp();
       }
+      game.mode.spawn.progression();
+      game.mode.spawn.boss();
     }
   }
 }
-function spawnItems() {
-  if (random() > 0.99 && player.health < 3) {
-    field.item.push(new Health(random(target.numbers)));
-  }
-  if (random() > 0.99 && player.health > 1) {
-    field.item.push(new LivingDead(random(target.numbers)));
-  }
-  if (random() > 0.99) {
-    field.item.push(new Bolt(random(target.numbers)));
-  }
-  if (random() > 0.99) {
-    field.item.push(new Sapphire());
-  }
-}
-function spawnKidsMode() {
-  spawnProgression(0.05);
-
-  spawnBoss(200, 0.99, "lulu");
-  spawnBoss(500, 0.99, "abe");
-  spawnBoss(750, 0.99, "jor");
-  spawnBoss(1000, 0.99, "swo");
-  spawnBoss(1250, 0.99, "hui");
-  spawnBoss(1500, 0.99, "bez");
-}
-function spawnEasyMode() {
-  spawnProgression(0.5);
-
-  spawnRandom(50, 0.99);
-
-  spawnBoss(200, 0.99, "chtulu");
-  spawnBoss(500, 0.99, "abezeth");
-  spawnBoss(750, 0.99, "jormun");
-  spawnBoss(1000, 0.99, "sworde");
-  spawnBoss(1250, 0.99, "huitzi");
-  spawnBoss(1500, 0.99, "bezzelle");
-}
-function spawnNormalMode() {
-  spawnProgression(1);
-
-  spawnDoubleTrouble(50, 0.99);
-  spawnTrippleNipple(50, 0.99);
-  spawnWhale(100, 0.99);
-  spawnRandom(150, 0.99);
-
-  spawnBoss(200, 0.99, "chtululu");
-  spawnBoss(500, 0.99, "abezethibou");
-  spawnBoss(750, 0.99, "jormungandr");
-  spawnBoss(1000, 0.99, "swordeath");
-  spawnBoss(1250, 0.99, "huitzilopochtli");
-  spawnBoss(1500, 0.99, "bezzellebobba");
-}
-function levelUp(denominator) {
+function levelUp() {
   player.totalScore += player.experience + player.depth;
   player.experience = 0;
   player.level++;
   for (let i = 0; i < 3; i++) {
-    const index = Math.round(target.words.length / denominator);
+    const index = Math.round(
+      target.words.length / game.mode.spawn.indexDenominator
+    );
     const word = getNextWord(index);
     const creature = new Shellie(word);
     field.hostile.push(creature);
@@ -302,32 +311,29 @@ function updateField() {
   for (var i = field.hostile.length - 1; i >= 0; i--) {
     if (field.hostile[i]) {
       field.hostile[i].update();
-      if (field.hostile[i].intact) {
+      if (
+        focus == null &&
+        field.hostile[i].intact &&
+        field.hostile[i].focused
+      ) {
+        focus = field.hostile[i];
+      } else if (field.hostile[i].intact) {
         field.hostile[i].draw();
       } else {
         if (field.hostile[i].text) {
           player.experience += field.hostile[i].text.length;
           player.catched.fishes++;
-
           if (field.hostile[i].loot) {
-            const loot = {
-              sapphire: new Sapphire(),
-              amethyst: new Amethyst(),
-              diamond: new Diamond(),
-              topaz: new Topaz(),
-              emerald: new Emerald(),
-              prism: new Prism(),
-            };
-            field.item.push(loot[field.hostile[i].loot]);
+            field.item.push(getLoot(field.hostile[i].loot));
           }
           field.hostile.splice(i, 1);
-
           focus = null;
         }
       }
     }
   }
 }
+
 function updateSecondField() {
   for (var i = field.neutral.length - 1; i >= 0; i--) {
     if (field.neutral[i]) {
@@ -372,13 +378,21 @@ function updateEnvironmentField() {
       if (field.environment[i].intact) {
         field.environment[i].draw();
       } else if (!field.environment.intact) {
-        if (field.environment[i].focused) {
-          focus = null;
-        }
         field.environment.splice(i, 1);
       }
     }
   }
+}
+function getLoot(type) {
+  const loot = {
+    sapphire: new Sapphire(),
+    amethyst: new Amethyst(),
+    diamond: new Diamond(),
+    topaz: new Topaz(),
+    emerald: new Emerald(),
+    prism: new Prism(),
+  };
+  return loot[type];
 }
 function keyPressed() {
   if (!game.paused) {
@@ -444,7 +458,6 @@ function findFocus(code) {
     if (field.item[i]) {
       if (field.item[i].text.startsWith(char)) {
         field.item[i].focused = true;
-
         player.missed.letters.consecutive = 0;
         return field.item[i];
       }
@@ -454,7 +467,6 @@ function findFocus(code) {
     if (field.hostile[i]) {
       if (field.hostile[i].text.startsWith(char)) {
         field.hostile[i].focused = true;
-
         player.missed.letters.consecutive = 0;
         return field.hostile[i];
       }
@@ -473,7 +485,8 @@ function findFocus(code) {
   player.missed.letters.total++;
   player.missed.letters.consecutive++;
   if (player.missed.letters.consecutive > 10) {
-    field.hostile.push(new Snail("10 000 IQ :}"));
+    field.hostile.push(new Snail("{anticheat}"));
+    player.missed.letters.consecutive = 8;
   }
   return null;
 }
@@ -515,7 +528,7 @@ function drawScore() {
   textFont(font);
 }
 function drawGuy() {
-  standardPosition = height / 2;
+  let standardPosition = height / 2;
   if (player.position < standardPosition) {
     player.position++;
   }
@@ -530,6 +543,7 @@ function endGame(enemy) {
     }
   }
   if (player.health === 0) {
+    localStorage.setItem("cash", player.items.cash);
     radioBtn.elt.hidden = true;
     game.over = true;
     clearFields();
@@ -542,8 +556,8 @@ function endGame(enemy) {
       api.data = api.kids.data;
     } else if (radioBtn.value() == "easy") {
       api.data = api.easy.data;
-    } else if (radioBtn.value() == "normal") {
-      api.data = api.normal.data;
+    } else if (radioBtn.value() == "hard") {
+      api.data = api.hard.data;
     }
     if (api.data) {
       let sortable = [];
@@ -554,7 +568,7 @@ function endGame(enemy) {
         return b[1] - a[1];
       });
       const top10 = sortable.slice(0, 10);
-      text(`${radioBtn.value()}Highscores`, 30, 30);
+      text(`Highscores [${radioBtn.value()}021]`, 30, 30);
       for (let i = 0; i < top10.length; i++) {
         text(`#${i + 1} ${top10[i][0]} : ${top10[i][1]}`, 30, 70 + i * 40);
       }
@@ -577,7 +591,12 @@ function endGame(enemy) {
 
     text("Game Over!", width / 2, height / 3);
     text(
-      `Score: ${player.totalScore + player.experience}`,
+      `Score: ${Math.round(
+        player.totalScore +
+          player.experience *
+            (player.catched.letters /
+              (player.missed.letters.total + player.catched.letters))
+      )}`,
       width / 2,
       height / 2
     );
@@ -634,9 +653,9 @@ function postRequest() {
     } else if (radioBtn.value() == "easy") {
       get_api_url = api.easy.get;
       post_api_url = api.easy.put;
-    } else if (radioBtn.value() == "normal") {
-      get_api_url = api.normal.get;
-      post_api_url = api.normal.put;
+    } else if (radioBtn.value() == "hard") {
+      get_api_url = api.hard.get;
+      post_api_url = api.hard.put;
     }
     postBtn.elt.hidden = true;
     let responseData;
@@ -663,74 +682,10 @@ function postRequest() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(responseData),
-        });
+        })
+          .then((x) => console.log(x))
+          .then((x) => console.log(x));
       });
-  }
-}
-function spawnBoss(afterDepth, chance, value) {
-  if (player.depth > afterDepth && random() > chance) {
-    let creature = getSeaCreature(value);
-    field.hostile.push(creature);
-    field.item.push(creature.Loot);
-  }
-}
-function spawnRandom(belowScore, chance) {
-  if (player.experience < belowScore && random() > chance) {
-    const indexOfLastWord = target.words.length - 1;
-    const randomIndex = Math.round(random(0, indexOfLastWord));
-    const word = getNextWord(randomIndex);
-    const creature = getSeaCreature(word);
-    field.hostile.push(creature);
-  }
-}
-function spawnWhale(belowScore, chance) {
-  if (player.experience < belowScore && random() > chance) {
-    const indexOfBigWord = 0;
-    const word = getNextWord(indexOfBigWord);
-    const creature = getSeaCreature(word);
-    field.hostile.push(creature);
-  }
-}
-function spawnDoubleTrouble(belowScore, chance) {
-  if (player.experience < belowScore && random() > chance) {
-    for (let i = 0; i < 2; i++) {
-      const indexOfSemiBigWord = Math.round(target.words.length / 3);
-      const word = getNextWord(indexOfSemiBigWord);
-      const creature = getSeaCreature(word);
-      field.hostile.push(creature);
-    }
-  }
-}
-function spawnTrippleNipple(belowScore, chance) {
-  if (player.experience < belowScore && random() > chance) {
-    for (let i = 0; i < 3; i++) {
-      const indexOfMediumWord = Math.round(target.words.length / 5);
-      const word = getNextWord(indexOfMediumWord);
-      const creature = getSeaCreature(word);
-      field.hostile.push(creature);
-    }
-  }
-}
-function spawnProgression(chance) {
-  if (random() < chance) {
-    const indexOfLastWord = target.words.length - 1;
-    const word = getNextWord(indexOfLastWord);
-    const creature = getSeaCreature(word);
-    if (creature.name) {
-      field.neutral.push(creature);
-    } else {
-      field.hostile.push(creature);
-    }
-  }
-}
-function spawnActor() {
-  const indexOfLastWord = target.words.length - 1;
-  const word = getNextWord(indexOfLastWord);
-  const creature = getSeaCreature(word);
-  if (creature.name) {
-    field.neutral.push(creature);
-  } else {
-    field.hostile.push(creature);
   }
 }
 function getNextWord(startIndex) {

@@ -7,7 +7,7 @@ class Snail extends Hostile {
       Snail.Animation,
       createVector(12, 7),
       createVector(width, height - 90),
-      (score) => text.length
+      (score) => 10
     );
   }
   static loadAnimationFiles() {

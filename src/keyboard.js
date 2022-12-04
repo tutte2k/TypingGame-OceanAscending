@@ -12,7 +12,6 @@ const myKeyboard = new Keyboard({
 });
 
 function onKeyPress(button) {
-  console.log(button.charCodeAt(0));
   if (button.charCodeAt(0) == 9889) {
     return virtuaKeyPressed(13);
   }

@@ -10,7 +10,9 @@ class Spawn {
       field.item.push(new Bolt(random(target.numbers)));
     }
     if (random() > 0.99) {
-      field.item.push(new Sapphire());
+      if (random() > 0.5) {
+        field.item.push(new Sapphire());
+      }
     }
   }
   static Progression() {

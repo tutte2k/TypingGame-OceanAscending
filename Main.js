@@ -1,8 +1,13 @@
-let radioBtn;
-let postBtn;
-let playAgainBtn;
-let inputContents;
-let focus;
+const ui = {
+  radio: null,
+  playAgain: null,
+  pause: null,
+  post: null,
+  textInput: null,
+};
+const userInput = {
+  name: null,
+};
 
 const target = {
   words: [],
@@ -93,12 +98,12 @@ const config = {
     name: "easy",
     experience: 200,
     bosses: [
-      { value: "chtulu", spawnDepth: 150, loot: "sapphire" },
-      { value: "abezeth", spawnDepth: 500, loot: "amethyst" },
-      { value: "jormun", spawnDepth: 750, loot: "diamond" },
-      { value: "sworde", spawnDepth: 1000, loot: "topaz" },
+      { value: "chtulu", spawnDepth: 150 },
+      { value: "abezeth", spawnDepth: 500 },
+      { value: "jormun", spawnDepth: 750 },
+      { value: "sworde", spawnDepth: 1000 },
       { value: "huitzi", spawnDepth: 1250 },
-      { value: "bezzelle", spawnDepth: 1500, loot: "prism" },
+      { value: "bezzelle", spawnDepth: 1500 },
     ],
     spawn: {
       progression: Spawn.Progression,
@@ -113,7 +118,7 @@ const config = {
     experience: 330,
     bosses: [
       { value: "chtululu", spawnDepth: 150 },
-      { value: "abezethethibou", spawnDepth: 500 },
+      { value: "abezethibou", spawnDepth: 500 },
       { value: "jormungandr", spawnDepth: 750 },
       { value: "swordeath", spawnDepth: 1000 },
       { value: "huitzilopochtli", spawnDepth: 1250 },
@@ -169,6 +174,8 @@ function preload() {
   Sapphire.loadAnimationFiles();
 
   Zapper.loadAnimationFiles();
+  Death.loadAnimationFiles();
+  8;
 
   player.animation = loadAnimation("./actors/guy.webp", {
     size: [177, 192],
@@ -215,19 +222,32 @@ function setup() {
   textFont(font);
 }
 function setUpButtons() {
-  button = createButton("Pause");
-  button.position(width / 4, 10);
-  button.mousePressed(togglePause);
-  radioBtn = createRadio();
-  radioBtn.option("kids");
-  var easyOptions = radioBtn.option("easy");
-  radioBtn.option("hard");
+  setUpPauseButton();
+  ui.radio = createRadio();
+  ui.radio.option("kids");
+  var easyOptions = ui.radio.option("easy");
+  ui.radio.option("hard");
   easyOptions.checked = true;
 
-  radioBtn.style("width", "10px");
-  radioBtn.position(10, 10);
-  radioBtn.mouseClicked(resetGame);
+  ui.radio.elt.children.forEach((radio) => {
+    radio.classList.add("form-check");
+    radio.children[0].classList.add("form-check-input");
+    radio.children[1].classList.add("text-uppercase");
+    radio.children[1].classList.add("fs-6");
+    radio.children[1].classList.add("fw-bold");
+  });
+
+  ui.radio.position(10, 50);
+  ui.radio.mouseClicked(resetGame);
 }
+function setUpPauseButton() {
+  ui.pause = createButton("Pause");
+  ui.pause.position(10, 10);
+  ui.pause.elt.classList.add("btn");
+  ui.pause.elt.classList.add("btn-outline-secondary");
+  ui.pause.mousePressed(togglePause);
+}
+
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
@@ -254,17 +274,18 @@ function resetGame() {
   field.neutral = [];
   field.item = [];
   field.environment = [];
-  radioBtn.elt.hidden = false;
+  ui.radio.elt.hidden = false;
   focus = null;
-  if (radioBtn.value() == "kids") {
+  setUpPauseButton();
+  if (ui.radio.value() == "kids") {
     game.mode = config.kids;
   }
 
-  if (radioBtn.value() == "easy") {
+  if (ui.radio.value() == "easy") {
     game.mode = config.easy;
   }
 
-  if (radioBtn.value() == "hard") {
+  if (ui.radio.value() == "hard") {
     game.mode = config.hard;
   }
   loop();
@@ -338,6 +359,7 @@ function updateSecondField() {
   for (var i = field.neutral.length - 1; i >= 0; i--) {
     if (field.neutral[i]) {
       field.neutral[i].update();
+
       if (field.neutral[i].intact) {
         field.neutral[i].draw();
       } else if (!field.neutral.intact) {
@@ -492,19 +514,21 @@ function findFocus(code) {
 }
 function drawLine() {
   if (!focus) return;
-  stroke(1);
+  stroke(0.1);
   line(90, player.position, focus.position.x, focus.position.y);
   textAlign(CENTER);
   textSize(100);
-
   text(focus.displayText.toUpperCase(), width / 2, height - 50);
 }
 function drawScore() {
   textAlign(CENTER);
+  stroke(1);
   textSize(30);
   fill(255);
   text(
-    `Level: ${player.level} (${Math.round((player.experience / 350) * 100)}%)`,
+    `Level: ${player.level} (${Math.round(
+      (player.experience / game.mode.experience) * 100
+    )}%)`,
     width / 2,
     30
   );
@@ -539,12 +563,14 @@ function drawGuy() {
 function endGame(enemy) {
   if (enemy.name) {
     if (enemy.name === "LivingDead") {
+      field.environment.push(new Death(player.depth));
       clearFields();
     }
   }
   if (player.health === 0) {
+    ui.pause.remove();
     localStorage.setItem("cash", player.items.cash);
-    radioBtn.elt.hidden = true;
+    ui.radio.elt.hidden = true;
     game.over = true;
     clearFields();
     noLoop();
@@ -552,11 +578,11 @@ function endGame(enemy) {
     strokeWeight(5);
     stroke(0);
     textAlign(LEFT);
-    if (radioBtn.value() == "kids") {
+    if (ui.radio.value() == "kids") {
       api.data = api.kids.data;
-    } else if (radioBtn.value() == "easy") {
+    } else if (ui.radio.value() == "easy") {
       api.data = api.easy.data;
-    } else if (radioBtn.value() == "hard") {
+    } else if (ui.radio.value() == "hard") {
       api.data = api.hard.data;
     }
     if (api.data) {
@@ -568,16 +594,22 @@ function endGame(enemy) {
         return b[1] - a[1];
       });
       const top10 = sortable.slice(0, 10);
-      text(`Highscores [${radioBtn.value()}021]`, 30, 30);
+      text(`Highscores [${ui.radio.value()}]`, 30, 30);
       for (let i = 0; i < top10.length; i++) {
         text(`#${i + 1} ${top10[i][0]} : ${top10[i][1]}`, 30, 70 + i * 40);
       }
-      usernameInput = createInput("", "text");
-      usernameInput.position(30, height / 2);
-      usernameInput.input(onInput);
-      postBtn = createButton("Submit Score");
-      postBtn.position(30, height / 2 + 30);
-      postBtn.mouseClicked(postRequest);
+      ui.textInput = createInput("", "text");
+      ui.textInput.position(30, height / 2);
+      ui.textInput.input(onInput);
+      ui.textInput.elt.classList.add("form-control");
+      ui.textInput.elt.classList.add("w-25");
+      console.log(ui.textInput);
+
+      ui.post = createButton("Submit Score");
+      ui.post.position(30, height / 2 + 50);
+      ui.post.elt.classList.add("btn");
+      ui.post.elt.classList.add("btn-outline-secondary");
+      ui.post.mouseClicked(postRequest);
     } else {
       text(`Highscores:`, 30, 30);
       text(`Max 500 requests/day`, 30, 70);
@@ -585,9 +617,11 @@ function endGame(enemy) {
     textAlign(CENTER);
     textSize(80);
 
-    playAgainBtn = createButton("Play Again");
-    playAgainBtn.position(30, height / 2 + 60);
-    playAgainBtn.mouseClicked(goPlayAgain);
+    ui.playAgain = createButton("Play Again");
+    ui.playAgain.position(width / 5, height / 2 + 50);
+    ui.playAgain.elt.classList.add("btn");
+    ui.playAgain.elt.classList.add("btn-outline-secondary");
+    ui.playAgain.mouseClicked(goPlayAgain);
 
     text("Game Over!", width / 2, height / 3);
     text(
@@ -635,29 +669,31 @@ function clearFields() {
   }
 }
 function goPlayAgain() {
-  playAgainBtn.remove();
-  postBtn.remove();
-  usernameInput.remove();
+  ui.post.remove();
+  ui.playAgain.remove();
+  ui.textInput.remove();
   resetGame();
 }
 function onInput() {
-  inputContents = this.value();
+  userInput.name = this.value();
 }
 function postRequest() {
-  if (inputContents) {
+  if (userInput.name) {
     let get_api_url;
     let post_api_url;
-    if (radioBtn.value() == "kids") {
+    if (ui.radio.value() == "kids") {
       get_api_url = api.kids.get;
       post_api_url = api.kids.put;
-    } else if (radioBtn.value() == "easy") {
+    } else if (ui.radio.value() == "easy") {
       get_api_url = api.easy.get;
       post_api_url = api.easy.put;
-    } else if (radioBtn.value() == "hard") {
+    } else if (ui.radio.value() == "hard") {
       get_api_url = api.hard.get;
       post_api_url = api.hard.put;
     }
-    postBtn.elt.hidden = true;
+    ui.post.elt.innerHTML = "";
+    ui.post.elt.innerText = "";
+    ui.post.elt.classList.add("spinner-border");
     let responseData;
     fetch(get_api_url, {
       method: "GET",
@@ -669,7 +705,7 @@ function postRequest() {
         responseData = await response.json();
       })
       .then(async () => {
-        responseData[inputContents] = Math.round(
+        responseData[userInput.name] = Math.round(
           player.totalScore +
             player.experience *
               (player.catched.letters /
@@ -683,8 +719,8 @@ function postRequest() {
           },
           body: JSON.stringify(responseData),
         })
-          .then((x) => console.log(x))
-          .then((x) => console.log(x));
+          .then()
+          .then((x) => (ui.post.elt.hidden = true));
       });
   }
 }

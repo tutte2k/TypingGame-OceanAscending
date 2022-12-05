@@ -262,34 +262,48 @@ function keyPressed() {
   }
 }
 function virtuaKeyPressed(keyCodeFromChar) {
-  if (!game.paused) {
+  if (!game.paused)
     if (keyCodeFromChar == 13 && player.items.zapper === true) {
       clearFields();
       field.environment = [];
       player.items.zapper = false;
       field.environment.push(new Zapper(player.depth));
       focus = null;
+    } else if (keyCode == 17 && player.items.timewarp === true) {
+      field.environment = field.environment.filter((x) => x.keyCode != 17);
+      player.totalScore += player.experience;
+      player.experience = 0;
+      player.items.timewarp = false;
+      for (let i = 0; i < field.hostile.length; i++) {
+        field.hostile[i].position.x = windowWidth - 100;
+      }
+      for (let i = 0; i < field.neutral.length; i++) {
+        field.neutral[i].position.y = windowHeight - 100;
+      }
+      for (let i = 0; i < field.item.length; i++) {
+        field.item[i].position.y = 0;
+      }
     }
-    if (game.paused && !game.over) {
-      loop();
-      game.paused = !game.paused;
+  if (game.paused && !game.over) {
+    loop();
+    game.paused = !game.paused;
+  }
+  if (focus) {
+    focus.erode(keyCodeFromChar);
+    if (hit) {
+      player.catched.letters++;
     }
+  } else {
+    focus = findFocus(keyCodeFromChar);
     if (focus) {
       focus.erode(keyCodeFromChar);
       if (hit) {
         player.catched.letters++;
       }
-    } else {
-      focus = findFocus(keyCodeFromChar);
-      if (focus) {
-        focus.erode(keyCodeFromChar);
-        if (hit) {
-          player.catched.letters++;
-        }
-      }
     }
   }
 }
+
 function findFocus(code) {
   var char = String.fromCharCode(code).toLowerCase();
   for (var i = 0; i < field.item.length; i++) {

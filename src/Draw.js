@@ -66,8 +66,14 @@ class Draw {
   }
   static Line() {
     if (!focus) return;
-    stroke(0.1);
-    line(90, player.position, focus.position.x, focus.position.y);
+    stroke(255);
+    strokeWeight(1);
+    line(
+      90,
+      player.position,
+      focus.position.x + focus.textPositionOffset.x,
+      focus.position.y + focus.textPositionOffset.y
+    );
     textAlign(CENTER);
     textSize(100);
     text(focus.displayText.toUpperCase(), width / 2, height - 50);

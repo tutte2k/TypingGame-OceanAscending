@@ -97,7 +97,9 @@ function handleField() {
     updateField();
     updateSecondField();
     updateEnvironmentField();
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 
   if (frameCount % 60 === 0) {
     player.depth++;

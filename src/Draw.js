@@ -37,7 +37,7 @@ class Draw {
       30
     );
     text(`Depth: ${player.depth}m`, 100, height / 2 + 145);
-    text(`Catches: ${player.catched.fishes}`, 100, height - 10);
+    text(`Catched: ${player.catched.fishes}`, 100, height - 10);
     text(`$${player.items.cash}k`, width - 150, height - 10);
     text(`Missed: ${player.missed.fishes}`, width / 3, height - 10);
     text(
@@ -142,5 +142,52 @@ class Draw {
   static Error() {
     text(`Highscores:`, 30, 30);
     text(`Max 500 requests/day`, 30, 70);
+  }
+
+  static Upgradebuttons() {
+    ui.zapperBtn = select("#zBtn");
+    ui.zCount = select("#zCount");
+    for (let i = 0; i < player.items.levels.zapper; i++) {
+      ui.zCount.elt.innerHTML += "⚡";
+    }
+    ui.zapperBtn.elt.children[0].innerHTML =
+      player.items.levels.zapper === 0 ? "Unlock" : "Upgrade";
+    ui.zapperBtn.elt.children[1].innerHTML =
+      shop.upgrade[player.items.levels.zapper];
+    ui.zapperBtn.mouseClicked(upgradeZapper);
+
+    ui.timewarpBtn = select("#tBtn");
+    ui.tCount = select("#tCount");
+    for (let i = 0; i < player.items.levels.timewarp; i++) {
+      ui.tCount.elt.innerHTML += "⌛";
+    }
+    ui.timewarpBtn.elt.children[0].innerHTML =
+      player.items.levels.timewarp === 0 ? "Unlock" : "Upgrade";
+    ui.timewarpBtn.elt.children[1].innerHTML =
+      shop.upgrade[player.items.levels.timewarp];
+    ui.timewarpBtn.mouseClicked(upgradeTimewarp);
+
+    ui.shieldBtn = select("#sBtn");
+    ui.sCount = select("#sCount");
+    for (let i = 0; i < player.items.levels.shield; i++) {
+      ui.sCount.elt.innerHTML += "🔰";
+    }
+    ui.shieldBtn.elt.children[0].innerHTML =
+      player.items.levels.shield === 0 ? "Unlock" : "Upgrade";
+    ui.shieldBtn.elt.children[1].innerHTML =
+      shop.upgrade[player.items.levels.shield];
+    ui.shieldBtn.mouseClicked(upgradeShield);
+
+    ui.healthBtn = select("#hBtn");
+    ui.hCount = select("#hCount");
+    for (let i = 0; i < player.items.levels.health; i++) {
+      ui.hCount.elt.innerHTML += "❤️";
+    }
+    ui.healthBtn.elt.children[0].innerHTML =
+      player.items.levels.health === 0 ? "Unlock" : "Upgrade";
+    ui.healthBtn.elt.children[1].innerHTML =
+      shop.upgrade[player.items.levels.health];
+    ui.healthBtn.mouseClicked(upgradeHealth);
+    checkMax();
   }
 }

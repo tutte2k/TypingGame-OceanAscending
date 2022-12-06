@@ -1,16 +1,32 @@
 class Spawn {
   static Items() {
-    if (random() > 0.99 && player.health < 3) {
-      field.item.push(new Health(random(target.numbers)));
+    if (
+      player.health <= player.items.levels.health &&
+      player.items.levels.health != 0
+    ) {
+      for (let i = 0; i < player.items.levels.health.length; i++) {
+        if (random() > 0.99) {
+          field.item.push(new Health(random(target.numbers)));
+        }
+      }
     }
-    if (random() > 0.99 && player.health > 1) {
+    if (random() > 0.99 && player.health > 0) {
       field.item.push(new LivingDead(random(target.numbers)));
     }
-    if (random() > 0.99) {
-      field.item.push(new Bolt(random(target.numbers)));
+    for (let i = 0; i < player.items.levels.zapper.length; i++) {
+      if (random() > 0.99) {
+        field.item.push(new Bolt(random(target.numbers)));
+      }
     }
-    if (random() > 0.99) {
-      field.item.push(new Hourglass(random(target.numbers)));
+    for (let i = 0; i < player.items.levels.timewarp.length; i++) {
+      if (random() > 0.99) {
+        field.item.push(new Hourglass(random(target.numbers)));
+      }
+    }
+    for (let i = 0; i < player.items.levels.shield.length; i++) {
+      if (random() > 0.99) {
+        field.item.push(new Shield(random(target.numbers)));
+      }
     }
     if (random() > 0.99) {
       if (random() > 0.5) {

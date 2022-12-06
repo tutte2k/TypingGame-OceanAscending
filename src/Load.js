@@ -27,6 +27,7 @@ class Load {
     Health.loadAnimationFiles();
     LivingDead.loadAnimationFiles();
     Hourglass.loadAnimationFiles();
+    Shield.loadAnimationFiles();
 
     Emerald.loadAnimationFiles();
     Prism.loadAnimationFiles();
@@ -38,6 +39,7 @@ class Load {
 
     Zapper.loadAnimationFiles();
     Death.loadAnimationFiles();
+    Bubble.loadAnimationFiles();
 
     player.animation = loadAnimation("./actors/guy.webp", {
       size: [177, 192],

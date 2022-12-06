@@ -9,6 +9,10 @@ function getStoredCash() {
   if (localStorage.getItem("cash")) {
     player.items.cash = +localStorage.getItem("cash");
   }
+  if (localStorage.getItem("itemlevels")) {
+    player.items.levels = JSON.parse(localStorage.getItem("itemlevels"));
+    player.health = player.items.levels.health;
+  }
 }
 
 function getHighscores() {
@@ -42,6 +46,7 @@ function setup() {
   }
   Draw.Pausebutton();
   Draw.Radiobuttons();
+  Draw.Upgradebuttons();
   game.mode = config.easy;
   focus = null;
   textFont(font);
@@ -55,8 +60,8 @@ function draw() {
   Draw.Line();
 
   Draw.Gui();
-  handleField();
   Draw.Player();
+  handleField();
 }
 function resetGame() {
   game.over = false;
@@ -73,6 +78,7 @@ function resetGame() {
   player.missed.letters.consecutive = 0;
   player.items.zapper = false;
   player.items.timewarp = false;
+  plauer.items.shield = false;
   field.hostile = [];
   field.neutral = [];
   field.item = [];
@@ -219,6 +225,7 @@ function getLoot(type) {
   return loot[type];
 }
 function keyPressed() {
+  console.log(keyCode);
   if (!game.paused) {
     if (keyCode == 13 && player.items.zapper === true) {
       clearFields();
@@ -240,6 +247,11 @@ function keyPressed() {
       for (let i = 0; i < field.item.length; i++) {
         field.item[i].position.y = 0;
       }
+    } else if (keyCode == 16 && player.items.shield === true) {
+      field.environment = field.environment.filter((x) => x.keyCode != 16);
+      player.items.shield = false;
+      player.invulnerable = true;
+      field.environment.push(new Bubble(player.depth));
     }
     if (game.paused && !game.over) {
       loop();
@@ -349,7 +361,14 @@ function endGame(enemy) {
       clearFields();
     }
   }
-  if (player.health === 0) {
+  if (player.invulnerable === true) {
+    enemy.intact = false;
+    if (enemy.focused === true) {
+      focus = null;
+    }
+    player.missed.fishes++;
+    player.catched.fishes--;
+  } else if (player.health === 0) {
     ui.pause.elt.hidden = true;
     ui.radio.elt.hidden = true;
     localStorage.setItem("cash", player.items.cash);
@@ -535,5 +554,91 @@ function getSeaCreature(value) {
     if (value.length > 6) {
       return new Whale(value);
     }
+  }
+}
+
+function upgradeZapper() {
+  if (
+    player.items.cash >= shop.upgrade[player.items.levels.zapper] &&
+    player.items.levels.zapper < 5
+  ) {
+    player.items.cash -= shop.upgrade[player.items.levels.zapper];
+    ui.zCount.elt.innerHTML += "⚡";
+    player.items.levels.zapper++;
+    ui.zapperBtn.elt.children[1].innerHTML =
+      shop.upgrade[player.items.levels.zapper];
+    ui.zapperBtn.elt.children[0].innerHTML =
+      player.items.levels.zapper === 0 ? "Unlock" : "Upgrade";
+    localStorage.setItem("itemlevels", JSON.stringify(player.items.levels));
+    checkMax();
+  }
+}
+function upgradeTimewarp() {
+  if (
+    player.items.cash >= shop.upgrade[player.items.levels.timewarp] &&
+    player.items.levels.timewarp <= 5
+  ) {
+    player.items.cash -= shop.upgrade[player.items.levels.timewarp];
+    ui.tCount.elt.innerHTML += "⌛";
+    player.items.levels.timewarp++;
+    ui.timewarpBtn.elt.children[1].innerHTML =
+      shop.upgrade[player.items.levels.timewarp];
+    ui.timewarpBtn.elt.children[0].innerHTML =
+      player.items.levels.timewarp === 0 ? "Unlock" : "Upgrade";
+    localStorage.setItem("cash", player.items.cash);
+    localStorage.setItem("itemlevels", JSON.stringify(player.items.levels));
+  }
+}
+function upgradeShield() {
+  if (
+    player.items.cash >= shop.upgrade[player.items.levels.shield] &&
+    player.items.levels.shield < 5
+  ) {
+    player.items.cash -= shop.upgrade[player.items.levels.shield];
+    ui.sCount.elt.innerHTML += "🔰";
+    player.items.levels.shield++;
+    ui.shieldBtn.elt.children[1].innerHTML =
+      shop.upgrade[player.items.levels.shield];
+    ui.shieldBtn.elt.children[0].innerHTML =
+      player.items.levels.shield === 0 ? "Unlock" : "Upgrade";
+    localStorage.setItem("cash", player.items.cash);
+    localStorage.setItem("itemlevels", JSON.stringify(player.items.levels));
+    checkMax();
+  }
+}
+function upgradeHealth() {
+  if (
+    player.items.cash >= shop.upgrade[player.items.levels.health] &&
+    player.items.levels.health < 5
+  ) {
+    player.items.cash -= shop.upgrade[player.items.levels.health];
+    ui.hCount.elt.innerHTML += "❤️";
+    player.items.levels.health++;
+    ui.healthBtn.elt.children[1].innerHTML =
+      shop.upgrade[player.items.levels.health];
+    ui.healthBtn.elt.children[0].innerHTML =
+      player.items.levels.health === 0 ? "Unlock" : "Upgrade";
+    localStorage.setItem("cash", player.items.cash);
+    localStorage.setItem("itemlevels", JSON.stringify(player.items.levels));
+    checkMax();
+  }
+}
+
+function checkMax() {
+  if (player.items.levels.health == 5) {
+    ui.healthBtn.elt.hidden = true;
+    ui.hCount.elt.innerHTML = "MAX ❤️";
+  }
+  if (player.items.levels.shield == 5) {
+    ui.shieldBtn.elt.hidden = true;
+    ui.sCount.elt.innerHTML = "MAX 🔰";
+  }
+  if (player.items.levels.timewarp == 5) {
+    ui.timewarpBtn.elt.hidden = true;
+    ui.tCount.elt.innerHTML = "MAX ⌛";
+  }
+  if (player.items.levels.zapper == 5) {
+    ui.zapperBtn.elt.hidden = true;
+    ui.zCount.elt.innerHTML = "MAX ⚡";
   }
 }

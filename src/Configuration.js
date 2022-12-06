@@ -4,7 +4,25 @@ const ui = {
   pause: null,
   post: null,
   textInput: null,
+  zapperBtn: null,
+  zCount: null,
+  timewarpBtn: null,
+  tCount: null,
+  shieldBtn: null,
+  sCount: null,
+  healthBtn: null,
+  hCount: null,
 };
+const shop = {
+  upgrade: {
+    0: 5,
+    1: 25,
+    2: 100,
+    3: 500,
+    4: 1000,
+  },
+};
+
 const userInput = {
   name: null,
 };
@@ -31,11 +49,12 @@ const game = {
 const player = {
   animation: null,
   position: 0,
-  health: 3,
+  health: 0,
   level: 1,
   experience: 0,
   depth: 0,
   totalScore: 0,
+  invulnerable: false,
 
   catched: {
     fishes: 0,
@@ -52,7 +71,14 @@ const player = {
   items: {
     zapper: false,
     timewarp: false,
+    shield: false,
     cash: 0,
+    levels: {
+      zapper: 0,
+      timewarp: 0,
+      shield: 0,
+      health: 0,
+    },
   },
 };
 

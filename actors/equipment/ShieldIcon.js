@@ -1,9 +1,9 @@
-class BoltIcon {
+class ShieldIcon {
   constructor() {
-    this.position = createVector(40, height / 2 - 100);
+    this.position = createVector(40, height / 2 - 200);
     this.intact = true;
-    this.animation = Bolt.Animation;
-    this.keyCode = 13;
+    this.animation = Shield.Animation;
+    this.keyCode = 16;
   }
   draw() {
     animation(this.animation, this.position.x, this.position.y);

@@ -36,15 +36,13 @@
     <script type="text/javascript" src="./actors/Neutral.js"></script>
     <script type="text/javascript" src="./actors/Item.js"></script>
 
-
-
-
-
     <script type="text/javascript" src="./actors/environment/Zapper.js"></script>
     <script type="text/javascript" src="./actors/environment/Death.js"></script>
+    <script type="text/javascript" src="./actors/environment/Bubble.js"></script>
 
     <script type="text/javascript" src="./actors/equipment/BoltIcon.js"></script>
     <script type="text/javascript" src="./actors/equipment/HourglassIcon.js"></script>
+    <script type="text/javascript" src="./actors/equipment/ShieldIcon.js"></script>
 
     <script type="text/javascript" src="./actors/items/Bolt.js"></script>
     <script type="text/javascript" src="./actors/items/Health.js"></script>
@@ -57,6 +55,7 @@
     <script type="text/javascript" src="./actors/items/Amethyst.js"></script>
     <script type="text/javascript" src="./actors/items/Sapphire.js"></script>
     <script type="text/javascript" src="./actors/items/Hourglass.js"></script>
+    <script type="text/javascript" src="./actors/items/Shield.js"></script>
 
 
     <script type="text/javascript" src="./actors/hostiles/Fish.js"></script>
@@ -99,10 +98,11 @@
     <div class="bubble bubble--12"></div>
 </div>
 
+
+
 <div class="container">
     <div id="p5_loading" class="text-center">
         <h1 class="display-6">Loading... </h6>
-
             <span class="spinner-border"></span>
     </div>
 </div>
@@ -112,6 +112,26 @@
 <script src="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/index.js"></script>
 <script src="src/keyboard.js"></script>
 
+<div id="upgradeBtns" class="container mt-1">
+    <div class="row">
+        <div class="col-sm text-center">
+            <a id="zBtn" class="btn btn-outline-warning fw-bold"><span></span> ⚡ $<span></span>k</a>
+            <h1 id="zCount"></h1>
+        </div>
+        <div class="col-sm text-center ">
+            <a id="tBtn" class="btn btn-outline-warning fw-bold"><span></span> ⌛ $<span></span>k</a>
+            <h1 id="tCount"></h1>
+        </div>
+        <div class="col-sm text-center">
+            <a id="sBtn" class="btn btn-outline-warning fw-bold"><span></span> 🔰 $<span></span>k</a>
+            <h1 id="sCount"></h1>
+        </div>
+        <div class="col-sm text-center">
+            <a id="hBtn" class="btn btn-outline-warning fw-bold"><span></span> ❤️ $<span></span>k</a>
+            <h1 id="hCount"></h1>
+        </div>
+    </div>
+</div>
 <div class="container card mt-5">
     <div class="row">
         <div class="col-sm">
@@ -121,10 +141,10 @@
                     <li>Use keyboard to write the letters on the fish.</li>
                     <li>Approaching fish will bite.</li>
                     <li>Ascending fish give more points.</li>
-                    <li>Draught of Living Dead clears the board but hurts you.</li>
                     <li>[NOT NUMPAD] Take items with numbers.</li>
                     <li>[ENTER] for ZAPPER</li>
-                    <li>[LCTRL] for TIMEWARP</li>
+                    <li>[CTRL] for TIMEWARP</li>
+                    <li>[SHIFT] for SHIELD</li>
                 </ul>
             </ul>
         </div>

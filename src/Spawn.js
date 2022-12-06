@@ -1,17 +1,9 @@
 class Spawn {
   static Items() {
-    if (
-      player.health <= player.items.levels.health &&
-      player.items.levels.health != 0
-    ) {
-      for (let i = 0; i < player.items.levels.health; i++) {
-        if (random() > 0.99) {
-          field.item.push(new Health(random(target.numbers)));
-        }
+    for (let i = 0; i < player.items.levels.health; i++) {
+      if (random() > 0.99) {
+        field.item.push(new Health(random(target.numbers)));
       }
-    }
-    if (random() > 0.99 && player.health > 0) {
-      field.item.push(new LivingDead(random(target.numbers)));
     }
     for (let i = 0; i < player.items.levels.zapper; i++) {
       if (random() > 0.99) {
@@ -32,6 +24,10 @@ class Spawn {
       if (random() > 0.5) {
         field.item.push(new Sapphire());
       }
+    }
+
+    if (random() > 0.99 && player.health > 0) {
+      field.item.push(new LivingDead(random(target.numbers)));
     }
   }
   static Progression() {

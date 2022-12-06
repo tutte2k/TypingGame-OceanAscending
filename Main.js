@@ -78,7 +78,7 @@ function resetGame() {
   player.missed.letters.consecutive = 0;
   player.items.zapper = false;
   player.items.timewarp = false;
-  plauer.items.shield = false;
+  player.items.shield = false;
   field.hostile = [];
   field.neutral = [];
   field.item = [];
@@ -103,9 +103,7 @@ function handleField() {
     updateField();
     updateSecondField();
     updateEnvironmentField();
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 
   if (frameCount % 60 === 0) {
     player.depth++;
@@ -225,7 +223,6 @@ function getLoot(type) {
   return loot[type];
 }
 function keyPressed() {
-  console.log(keyCode);
   if (!game.paused) {
     if (keyCode == 13 && player.items.zapper === true) {
       clearFields();
@@ -576,7 +573,7 @@ function upgradeZapper() {
 function upgradeTimewarp() {
   if (
     player.items.cash >= shop.upgrade[player.items.levels.timewarp] &&
-    player.items.levels.timewarp <= 5
+    player.items.levels.timewarp < 5
   ) {
     player.items.cash -= shop.upgrade[player.items.levels.timewarp];
     ui.tCount.elt.innerHTML += "⌛";
@@ -627,18 +624,18 @@ function upgradeHealth() {
 function checkMax() {
   if (player.items.levels.health == 5) {
     ui.healthBtn.elt.hidden = true;
-    ui.hCount.elt.innerHTML = "MAX ❤️";
+    ui.hCount.elt.innerHTML = "💯";
   }
   if (player.items.levels.shield == 5) {
     ui.shieldBtn.elt.hidden = true;
-    ui.sCount.elt.innerHTML = "MAX 🔰";
+    ui.sCount.elt.innerHTML = "💯";
   }
   if (player.items.levels.timewarp == 5) {
     ui.timewarpBtn.elt.hidden = true;
-    ui.tCount.elt.innerHTML = "MAX ⌛";
+    ui.tCount.elt.innerHTML = "💯";
   }
   if (player.items.levels.zapper == 5) {
     ui.zapperBtn.elt.hidden = true;
-    ui.zCount.elt.innerHTML = "MAX ⚡";
+    ui.zCount.elt.innerHTML = "💯";
   }
 }

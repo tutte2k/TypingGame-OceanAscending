@@ -4,7 +4,7 @@ class Spawn {
       player.health <= player.items.levels.health &&
       player.items.levels.health != 0
     ) {
-      for (let i = 0; i < player.items.levels.health.length; i++) {
+      for (let i = 0; i < player.items.levels.health; i++) {
         if (random() > 0.99) {
           field.item.push(new Health(random(target.numbers)));
         }
@@ -13,17 +13,17 @@ class Spawn {
     if (random() > 0.99 && player.health > 0) {
       field.item.push(new LivingDead(random(target.numbers)));
     }
-    for (let i = 0; i < player.items.levels.zapper.length; i++) {
+    for (let i = 0; i < player.items.levels.zapper; i++) {
       if (random() > 0.99) {
         field.item.push(new Bolt(random(target.numbers)));
       }
     }
-    for (let i = 0; i < player.items.levels.timewarp.length; i++) {
+    for (let i = 0; i < player.items.levels.timewarp; i++) {
       if (random() > 0.99) {
         field.item.push(new Hourglass(random(target.numbers)));
       }
     }
-    for (let i = 0; i < player.items.levels.shield.length; i++) {
+    for (let i = 0; i < player.items.levels.shield; i++) {
       if (random() > 0.99) {
         field.item.push(new Shield(random(target.numbers)));
       }

@@ -115,6 +115,7 @@ const config = {
     experience: 100,
     bosses: [
       { value: "lulu", spawnDepth: 50 },
+      { value: "chk", spawnDepth: 200 },
       { value: "abe", spawnDepth: 500 },
       { value: "jor", spawnDepth: 750 },
       { value: "swo", spawnDepth: 1000 },
@@ -139,6 +140,7 @@ const config = {
     experience: 200,
     bosses: [
       { value: "chtulu", spawnDepth: 50 },
+      { value: "chkrac", spawnDepth: 200 },
       { value: "abezeth", spawnDepth: 500 },
       { value: "jormun", spawnDepth: 750 },
       { value: "sworde", spawnDepth: 1000 },
@@ -163,6 +165,7 @@ const config = {
     experience: 330,
     bosses: [
       { value: "chtululu", spawnDepth: 50 },
+      { value: "chkracken", spawnDepth: 200 },
       { value: "abezethibou", spawnDepth: 500 },
       { value: "jormungandr", spawnDepth: 750 },
       { value: "swordeath", spawnDepth: 1000 },

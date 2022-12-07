@@ -499,6 +499,9 @@ function getSeaCreature(value) {
     if (value == "lulu" || value == "chtulu" || value == "chtululu") {
       return new Chtullie(value);
     }
+    if (value == "chk" || value == "chkrac" || value == "chkracken") {
+      return new Kraken(value);
+    }
     if (value == "swo" || value == "sworde" || value == "swordeath") {
       return new Swordeath(value);
     }

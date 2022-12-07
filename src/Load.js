@@ -18,6 +18,7 @@ class Load {
     Snail.loadAnimationFiles();
     Bezzellebobba.loadAnimationFiles();
     Huitzilopochtli.loadAnimationFiles();
+    Kraken.loadAnimationFiles();
 
     Ghosty.loadAnimationFiles();
     Inky.loadAnimationFiles();

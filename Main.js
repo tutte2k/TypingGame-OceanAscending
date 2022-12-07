@@ -42,6 +42,8 @@ function setup() {
     let keyboard = document.getElementById("kb-con");
     keyboard.hidden = false;
     resizeCanvas(windowWidth, windowHeight - windowHeight / 3);
+    let btns = document.getElementById("upgradeBtns");
+    btns.classList.remove("opacity-25");
   }
   Draw.Pausebutton();
   Draw.Radiobuttons();
@@ -301,14 +303,14 @@ function virtuaKeyPressed(keyCodeFromChar) {
     game.paused = !game.paused;
   }
   if (focus) {
-    focus.erode(keyCodeFromChar);
+    let hit = focus.erode(keyCodeFromChar);
     if (hit) {
       player.catched.letters++;
     }
   } else {
     focus = findFocus(keyCodeFromChar);
     if (focus) {
-      focus.erode(keyCodeFromChar);
+      let hit = focus.erode(keyCodeFromChar);
       if (hit) {
         player.catched.letters++;
       }

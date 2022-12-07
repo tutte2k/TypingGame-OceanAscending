@@ -1,8 +1,5 @@
-#upgradeBtns {
-  opacity: 0.3;
-}
 #upgradeBtns:hover {
-  opacity: 1;
+  opacity: 1 !important;
 }
 #ocean {
   position: relative;
@@ -170,5 +167,5 @@
   font-weight: 900;
 }
 .simple-keyboard .hg-button {
-  min-height: 8vh !important;
+  min-height: 7vh !important;
 }

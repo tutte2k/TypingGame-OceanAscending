@@ -556,25 +556,26 @@ function getSeaCreature(value) {
 }
 
 function upgradeZapper() {
-  upgrade("zapper", player.items.levels.zapper, "⚡");
+  upgrade("zapper", player.items.levels.zapper);
 }
 function upgradeTimewarp() {
-  upgrade("timewarp", player.items.levels.timewarp, "⌛");
+  upgrade("timewarp", player.items.levels.timewarp);
 }
 function upgradeShield() {
-  upgrade("shield", player.items.levels.shield, "🔰");
+  upgrade("shield", player.items.levels.shield);
 }
 function upgradeHealth() {
-  upgrade("health", player.items.levels.health, "❤️");
+  upgrade("health", player.items.levels.health);
 }
-function upgrade(item, level, icon) {
+function upgrade(item, level) {
   let price = getPrice(item, level);
   if (player.items.cash >= price && player.items.levels[item] < 5) {
     player.items.cash -= price;
-    ui.count[item].elt.innerHTML += icon;
     player.items.levels[item]++;
     ui.button[item].elt.children[0].innerHTML =
-      player.items.levels.health === 0 ? "Unlock" : "Upgrade";
+      player.items.levels[item] === 0
+        ? "Unlock"
+        : `Level ${player.items.levels[item] + 1}`;
     ui.button[item].elt.children[1].innerHTML = getPrice(
       item,
       player.items.levels[item]
@@ -591,15 +592,15 @@ function getPrice(item, level) {
 
 function checkMax() {
   if (player.items.levels.health == 5) {
-    ui.healthBtn.elt.hidden = true;
+    ui.button.health.elt.hidden = true;
     ui.count.health.elt.innerHTML = "💯";
   }
   if (player.items.levels.shield == 5) {
-    ui.shieldBtn.elt.hidden = true;
+    ui.button.shield.elt.hidden = true;
     ui.count.shield.elt.innerHTML = "💯";
   }
   if (player.items.levels.timewarp == 5) {
-    ui.timewarpBtn.elt.hidden = true;
+    ui.button.timewarp.elt.hidden = true;
     ui.count.timewarp.elt.innerHTML = "💯";
   }
   if (player.items.levels.zapper == 5) {

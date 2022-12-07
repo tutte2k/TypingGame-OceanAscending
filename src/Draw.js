@@ -153,15 +153,17 @@ class Draw {
   static Upgradebuttons() {
     let shopbtn = select("#upgradeBtns");
     shopbtn.elt.hidden = false;
-    shopbtn.position(10, windowHeight / 2 + 200);
+    if (windowWidth > 1000) {
+      shopbtn.position(10, windowHeight / 2 + 200);
+    }
 
     ui.button.zapper = select("#zBtn");
     ui.count.zapper = select("#zCount");
-    for (let i = 0; i < player.items.levels.zapper; i++) {
-      ui.count.zapper.elt.innerHTML += "⚡";
-    }
+
     ui.button.zapper.elt.children[0].innerHTML =
-      player.items.levels.zapper === 0 ? "Unlock" : "Upgrade";
+      player.items.levels.zapper === 0
+        ? "Unlock"
+        : `Level ${player.items.levels.zapper + 1}`;
     ui.button.zapper.elt.children[1].innerHTML = getPrice(
       "zapper",
       player.items.levels.zapper
@@ -170,11 +172,11 @@ class Draw {
 
     ui.button.timewarp = select("#tBtn");
     ui.count.timewarp = select("#tCount");
-    for (let i = 0; i < player.items.levels.timewarp; i++) {
-      ui.count.timewarp.elt.innerHTML += "⌛";
-    }
+
     ui.button.timewarp.elt.children[0].innerHTML =
-      player.items.levels.timewarp === 0 ? "Unlock" : "Upgrade";
+      player.items.levels.timewarp === 0
+        ? "Unlock"
+        : `Level ${player.items.levels.timewarp + 1}`;
     ui.button.timewarp.elt.children[1].innerHTML = getPrice(
       "timewarp",
       player.items.levels.timewarp
@@ -183,12 +185,11 @@ class Draw {
 
     ui.button.shield = select("#sBtn");
     ui.count.shield = select("#sCount");
-    for (let i = 0; i < player.items.levels.shield; i++) {
-      ui.count.shield.elt.innerHTML += "🔰";
-    }
 
     ui.button.shield.elt.children[0].innerHTML =
-      player.items.levels.shield === 0 ? "Unlock" : "Upgrade";
+      player.items.levels.shield === 0
+        ? "Unlock"
+        : `Level ${player.items.levels.shield + 1}`;
     ui.button.shield.elt.children[1].innerHTML = getPrice(
       "shield",
       player.items.levels.shield
@@ -197,11 +198,11 @@ class Draw {
 
     ui.button.health = select("#hBtn");
     ui.count.health = select("#hCount");
-    for (let i = 0; i < player.items.levels.health; i++) {
-      ui.count.health.elt.innerHTML += "❤️";
-    }
+
     ui.button.health.elt.children[0].innerHTML =
-      player.items.levels.health === 0 ? "Unlock" : "Upgrade";
+      player.items.levels.health === 0
+        ? "Unlock"
+        : `Level ${player.items.levels.health + 1}`;
     ui.button.health.elt.children[1].innerHTML = getPrice(
       "health",
       player.items.levels.health

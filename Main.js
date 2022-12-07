@@ -39,10 +39,9 @@ function setup() {
   var canvas = createCanvas(windowWidth, windowHeight);
   canvas.parent("ocean");
   if (windowWidth < 1000) {
+    let keyboard = document.getElementById("kb-con");
+    keyboard.hidden = false;
     resizeCanvas(windowWidth, windowHeight - windowHeight / 3);
-  } else {
-    let keyboard = document.getElementById("keyboard");
-    keyboard.hidden = true;
   }
   Draw.Pausebutton();
   Draw.Radiobuttons();
@@ -53,7 +52,9 @@ function setup() {
 }
 
 function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
+  if (windowWidth < 1000) {
+    resizeCanvas(windowWidth, windowHeight);
+  }
 }
 function draw() {
   clear();

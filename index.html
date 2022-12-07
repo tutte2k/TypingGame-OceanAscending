@@ -107,29 +107,35 @@
     </div>
 </div>
 
-<div id="keyboard" class="simple-keyboard"></div>
+<div hidden=true id="kb-con">
+
+    <div id="keyboard" class="simple-keyboard"></div>
+
+</div>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/css/index.css">
 <script src="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/index.js"></script>
 <script src="src/keyboard.js"></script>
 
-<div id="upgradeBtns" class="container mt-1">
-    <div class="row">
-        <div class="col-sm text-center">
-            <a id="zBtn" class="btn btn-outline-warning fw-bold"><span></span> ⚡ $<span></span>k</a>
-            <h1 id="zCount"></h1>
-        </div>
-        <div class="col-sm text-center ">
-            <a id="tBtn" class="btn btn-outline-warning fw-bold"><span></span> ⌛ $<span></span>k</a>
-            <h1 id="tCount"></h1>
-        </div>
-        <div class="col-sm text-center">
-            <a id="sBtn" class="btn btn-outline-warning fw-bold"><span></span> 🔰 $<span></span>k</a>
-            <h1 id="sCount"></h1>
-        </div>
-        <div class="col-sm text-center">
+<div id="upgradeBtns" class="mt-1" hidden="true">
+    <div class="col-sm">
+        <div>
             <a id="hBtn" class="btn btn-outline-warning fw-bold"><span></span> ❤️ $<span></span>k</a>
             <h1 id="hCount"></h1>
         </div>
+        <div>
+            <a id="tBtn" class="btn btn-outline-warning fw-bold"><span></span> ⌛ $<span></span>k</a>
+            <h1 id="tCount"></h1>
+        </div>
+        <div>
+            <a id="zBtn" class="btn btn-outline-warning fw-bold"><span></span> ⚡ $<span></span>k</a>
+            <h1 id="zCount"></h1>
+        </div>
+
+        <div>
+            <a id="sBtn" class="btn btn-outline-warning fw-bold"><span></span> 🔰 $<span></span>k</a>
+            <h1 id="sCount"></h1>
+        </div>
+
     </div>
 </div>
 <div class="container card mt-5">

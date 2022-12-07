@@ -25,7 +25,8 @@ class Draw {
   }
   static Gui() {
     if (player.depth < 3) {
-      textSize(80);
+      textSize(30);
+      fill(255, 0, 0);
       text("Welcome!", width / 2, height / 3);
       text("Scroll down for instructions!", width / 2, (height / 3) * 2);
     }
@@ -150,6 +151,10 @@ class Draw {
   }
 
   static Upgradebuttons() {
+    let shopbtn = select("#upgradeBtns");
+    shopbtn.elt.hidden = false;
+    shopbtn.position(10, windowHeight / 2 + 200);
+
     ui.button.zapper = select("#zBtn");
     ui.count.zapper = select("#zCount");
     for (let i = 0; i < player.items.levels.zapper; i++) {

@@ -52,7 +52,7 @@ function setup() {
 }
 
 function windowResized() {
-  if (windowWidth < 1000) {
+  if (windowWidth > 1000) {
     resizeCanvas(windowWidth, windowHeight);
   }
 }

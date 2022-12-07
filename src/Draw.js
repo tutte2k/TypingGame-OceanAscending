@@ -46,15 +46,14 @@ class Draw {
     text(`Catched: ${player.catched.fishes}`, 100, height - 10);
     text(`$${player.items.cash}k`, width - 150, height - 10);
     text(`Missed: ${player.missed.fishes}`, width / 3, height - 10);
-    text(
-      `Accuracy: ${Math.round(
-        (player.catched.letters /
-          (player.missed.letters.total + player.catched.letters)) *
-          100
-      )}%`,
-      (width / 3) * 2,
-      height - 10
+
+    let accuracy = Math.round(
+      (player.catched.letters /
+        (player.missed.letters.total + player.catched.letters)) *
+        100
     );
+
+    text(`Accuracy: ${accuracy || 0}%`, (width / 3) * 2, height - 10);
     textFont("Helvetica");
     for (let i = 0; i < player.health; i++) {
       text(`❤️`, width / 2 - 40 + i * 40, height - 10);

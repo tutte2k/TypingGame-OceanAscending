@@ -408,9 +408,6 @@ function clearFields() {
     noLoop();
   } else {
     for (let i = field.hostile.length; i >= 0; i--) {
-      if (field.hostile[i].loot) {
-        field.item.push(getLoot(field.hostile[i].loot));
-      }
       field.hostile.splice(i, 1);
       player.experience += 3;
       player.catched.fishes++;

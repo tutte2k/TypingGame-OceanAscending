@@ -24,6 +24,11 @@ class Draw {
     ui.pause.mousePressed(togglePause);
   }
   static Gui() {
+    if (player.depth < 3) {
+      textSize(80);
+      text("Welcome!", width / 2, height / 3);
+      text("Scroll down for instructions!", width / 2, (height / 3) * 2);
+    }
     textAlign(CENTER);
     stroke(1);
     strokeWeight(3);
@@ -145,49 +150,58 @@ class Draw {
   }
 
   static Upgradebuttons() {
-    ui.zapperBtn = select("#zBtn");
-    ui.zCount = select("#zCount");
+    ui.button.zapper = select("#zBtn");
+    ui.count.zapper = select("#zCount");
     for (let i = 0; i < player.items.levels.zapper; i++) {
-      ui.zCount.elt.innerHTML += "⚡";
+      ui.count.zapper.elt.innerHTML += "⚡";
     }
-    ui.zapperBtn.elt.children[0].innerHTML =
+    ui.button.zapper.elt.children[0].innerHTML =
       player.items.levels.zapper === 0 ? "Unlock" : "Upgrade";
-    ui.zapperBtn.elt.children[1].innerHTML =
-      shop.upgrade[player.items.levels.zapper];
-    ui.zapperBtn.mouseClicked(upgradeZapper);
+    ui.button.zapper.elt.children[1].innerHTML = getPrice(
+      "zapper",
+      player.items.levels.zapper
+    );
+    ui.button.zapper.mouseClicked(upgradeZapper);
 
-    ui.timewarpBtn = select("#tBtn");
-    ui.tCount = select("#tCount");
+    ui.button.timewarp = select("#tBtn");
+    ui.count.timewarp = select("#tCount");
     for (let i = 0; i < player.items.levels.timewarp; i++) {
-      ui.tCount.elt.innerHTML += "⌛";
+      ui.count.timewarp.elt.innerHTML += "⌛";
     }
-    ui.timewarpBtn.elt.children[0].innerHTML =
+    ui.button.timewarp.elt.children[0].innerHTML =
       player.items.levels.timewarp === 0 ? "Unlock" : "Upgrade";
-    ui.timewarpBtn.elt.children[1].innerHTML =
-      shop.upgrade[player.items.levels.timewarp];
-    ui.timewarpBtn.mouseClicked(upgradeTimewarp);
+    ui.button.timewarp.elt.children[1].innerHTML = getPrice(
+      "timewarp",
+      player.items.levels.timewarp
+    );
+    ui.button.timewarp.mouseClicked(upgradeTimewarp);
 
-    ui.shieldBtn = select("#sBtn");
-    ui.sCount = select("#sCount");
+    ui.button.shield = select("#sBtn");
+    ui.count.shield = select("#sCount");
     for (let i = 0; i < player.items.levels.shield; i++) {
-      ui.sCount.elt.innerHTML += "🔰";
+      ui.count.shield.elt.innerHTML += "🔰";
     }
-    ui.shieldBtn.elt.children[0].innerHTML =
-      player.items.levels.shield === 0 ? "Unlock" : "Upgrade";
-    ui.shieldBtn.elt.children[1].innerHTML =
-      shop.upgrade[player.items.levels.shield];
-    ui.shieldBtn.mouseClicked(upgradeShield);
 
-    ui.healthBtn = select("#hBtn");
-    ui.hCount = select("#hCount");
+    ui.button.shield.elt.children[0].innerHTML =
+      player.items.levels.shield === 0 ? "Unlock" : "Upgrade";
+    ui.button.shield.elt.children[1].innerHTML = getPrice(
+      "shield",
+      player.items.levels.shield
+    );
+    ui.button.shield.mouseClicked(upgradeShield);
+
+    ui.button.health = select("#hBtn");
+    ui.count.health = select("#hCount");
     for (let i = 0; i < player.items.levels.health; i++) {
-      ui.hCount.elt.innerHTML += "❤️";
+      ui.count.health.elt.innerHTML += "❤️";
     }
-    ui.healthBtn.elt.children[0].innerHTML =
+    ui.button.health.elt.children[0].innerHTML =
       player.items.levels.health === 0 ? "Unlock" : "Upgrade";
-    ui.healthBtn.elt.children[1].innerHTML =
-      shop.upgrade[player.items.levels.health];
-    ui.healthBtn.mouseClicked(upgradeHealth);
+    ui.button.health.elt.children[1].innerHTML = getPrice(
+      "health",
+      player.items.levels.health
+    );
+    ui.button.health.mouseClicked(upgradeHealth);
     checkMax();
   }
 }

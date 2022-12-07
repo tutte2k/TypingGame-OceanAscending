@@ -4,22 +4,49 @@ const ui = {
   pause: null,
   post: null,
   textInput: null,
-  zapperBtn: null,
-  zCount: null,
-  timewarpBtn: null,
-  tCount: null,
-  shieldBtn: null,
-  sCount: null,
-  healthBtn: null,
-  hCount: null,
+
+  button: {
+    zapper: null,
+    timewarp: null,
+    shield: null,
+    health: null,
+  },
+  count: {
+    zapper: null,
+    timewarp: null,
+    shield: null,
+    health: null,
+  },
 };
+
 const shop = {
-  upgrade: {
+  zapper: {
+    0: 10,
+    1: 200,
+    2: 600,
+    3: 1200,
+    4: 2400,
+  },
+  timewarp: {
     0: 5,
-    1: 25,
+    1: 100,
+    2: 300,
+    3: 600,
+    4: 1200,
+  },
+  shield: {
+    0: 30,
+    1: 300,
+    2: 900,
+    3: 1800,
+    4: 3600,
+  },
+  health: {
+    0: 1,
+    1: 15,
     2: 100,
-    3: 500,
-    4: 1000,
+    3: 300,
+    4: 900,
   },
 };
 

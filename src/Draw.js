@@ -125,16 +125,19 @@ class Draw {
     ui.playAgain.mouseClicked(goPlayAgain);
   }
   static Gameover() {
+    updateFields();
     textAlign(CENTER);
     textSize(80);
     text("Game Over!", width / 2, height / 3);
     text(
-      `Score: ${Math.round(
-        player.totalScore +
-          player.experience *
-            (player.catched.letters /
-              (player.missed.letters.total + player.catched.letters))
-      )}`,
+      `Score: ${
+        Math.round(
+          player.totalScore +
+            player.experience *
+              (player.catched.letters /
+                (player.missed.letters.total + player.catched.letters))
+        ) || 0
+      }`,
       width / 2,
       height / 2
     );
@@ -168,7 +171,7 @@ class Draw {
       player.items.levels.zapper
     );
     ui.button.zapper.mouseClicked(upgradeZapper);
-
+    checkMax("zapper");
     ui.button.timewarp = select("#tBtn");
     ui.count.timewarp = select("#tCount");
 
@@ -181,7 +184,7 @@ class Draw {
       player.items.levels.timewarp
     );
     ui.button.timewarp.mouseClicked(upgradeTimewarp);
-
+    checkMax("timewarp");
     ui.button.shield = select("#sBtn");
     ui.count.shield = select("#sCount");
 
@@ -194,7 +197,7 @@ class Draw {
       player.items.levels.shield
     );
     ui.button.shield.mouseClicked(upgradeShield);
-
+    checkMax("shield");
     ui.button.health = select("#hBtn");
     ui.count.health = select("#hCount");
 
@@ -207,6 +210,6 @@ class Draw {
       player.items.levels.health
     );
     ui.button.health.mouseClicked(upgradeHealth);
-    checkMax();
+    checkMax("health");
   }
 }

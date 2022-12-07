@@ -100,10 +100,7 @@ function resetGame() {
 }
 function handleField() {
   try {
-    updateItemField();
-    updateField();
-    updateSecondField();
-    updateEnvironmentField();
+    updateFields();
   } catch (error) {}
 
   if (frameCount % 60 === 0) {
@@ -136,6 +133,12 @@ function levelUp() {
     }
   }
 }
+function updateFields() {
+  updateItemField();
+  updateField();
+  updateSecondField();
+  updateEnvironmentField();
+}
 function updateField() {
   for (var i = field.hostile.length - 1; i >= 0; i--) {
     if (field.hostile[i]) {
@@ -166,7 +169,6 @@ function updateSecondField() {
   for (var i = field.neutral.length - 1; i >= 0; i--) {
     if (field.neutral[i]) {
       field.neutral[i].update();
-
       if (field.neutral[i].intact) {
         field.neutral[i].draw();
       } else if (!field.neutral.intact) {
@@ -398,12 +400,15 @@ function onInput() {
 }
 function clearFields() {
   if (game.over) {
-    noLoop();
     field.hostile.length = 0;
     field.neutral.length = 0;
     field.item.length = 0;
+    noLoop();
   } else {
     for (let i = field.hostile.length; i >= 0; i--) {
+      if (field.hostile[i].loot) {
+        field.item.push(getLoot(field.hostile[i].loot));
+      }
       field.hostile.splice(i, 1);
       player.experience += 3;
       player.catched.fishes++;
@@ -556,18 +561,19 @@ function getSeaCreature(value) {
 }
 
 function upgradeZapper() {
-  upgrade("zapper", player.items.levels.zapper);
+  upgrade("zapper");
 }
 function upgradeTimewarp() {
-  upgrade("timewarp", player.items.levels.timewarp);
+  upgrade("timewarp");
 }
 function upgradeShield() {
-  upgrade("shield", player.items.levels.shield);
+  upgrade("shield");
 }
 function upgradeHealth() {
-  upgrade("health", player.items.levels.health);
+  upgrade("health");
 }
-function upgrade(item, level) {
+function upgrade(item) {
+  let level = player.items.levels[item];
   let price = getPrice(item, level);
   if (player.items.cash >= price && player.items.levels[item] < 5) {
     player.items.cash -= price;
@@ -582,7 +588,7 @@ function upgrade(item, level) {
     );
     localStorage.setItem("cash", player.items.cash);
     localStorage.setItem("itemlevels", JSON.stringify(player.items.levels));
-    checkMax();
+    checkMax(item);
   }
 }
 
@@ -590,21 +596,9 @@ function getPrice(item, level) {
   return shop[item][level];
 }
 
-function checkMax() {
-  if (player.items.levels.health == 5) {
-    ui.button.health.elt.hidden = true;
-    ui.count.health.elt.innerHTML = "💯";
-  }
-  if (player.items.levels.shield == 5) {
-    ui.button.shield.elt.hidden = true;
-    ui.count.shield.elt.innerHTML = "💯";
-  }
-  if (player.items.levels.timewarp == 5) {
-    ui.button.timewarp.elt.hidden = true;
-    ui.count.timewarp.elt.innerHTML = "💯";
-  }
-  if (player.items.levels.zapper == 5) {
-    ui.button.zapper.elt.hidden = true;
-    ui.count.zapper.elt.innerHTML = "💯";
+function checkMax(item) {
+  if (player.items.levels[item] == 5) {
+    ui.button[item].elt.hidden = true;
+    ui.count[item].elt.innerHTML = "💯";
   }
 }

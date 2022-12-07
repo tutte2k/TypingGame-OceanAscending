@@ -2,39 +2,37 @@ class Spawn {
   static Items() {
     for (let i = 0; i < player.items.levels.health; i++) {
       if (random() > 0.99) {
-        if (random() < player.items.levels.health / 10) {
+        if (random() < (player.items.levels.health / 10) * 2) {
           field.item.push(new Health(random(target.numbers)));
         }
       }
     }
     for (let i = 0; i < player.items.levels.zapper; i++) {
       if (random() > 0.99) {
-        if (random() < player.items.levels.zapper / 10) {
+        if (random() < (player.items.levels.zapper / 10) * 2) {
           field.item.push(new Bolt(random(target.numbers)));
         }
       }
     }
     for (let i = 0; i < player.items.levels.timewarp; i++) {
       if (random() > 0.99) {
-        if (random() < player.items.levels.timewarp / 10) {
+        if (random() < (player.items.levels.timewarp / 10) * 2) {
           field.item.push(new Hourglass(random(target.numbers)));
         }
       }
     }
     for (let i = 0; i < player.items.levels.shield; i++) {
       if (random() > 0.99) {
-        if (random() < player.items.levels.shield / 10) {
+        if (random() < (player.items.levels.shield / 10) * 2) {
           field.item.push(new Shield(random(target.numbers)));
         }
       }
     }
-
     if (random() > 0.99) {
-      if (random() > 0.5) {
+      if (random() < player.level / 10) {
         field.item.push(new Sapphire());
       }
     }
-
     if (random() > 0.99 && player.health > 0) {
       field.item.push(new LivingDead(random(target.numbers)));
     }

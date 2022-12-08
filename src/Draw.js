@@ -118,7 +118,7 @@ class Draw {
   }
   static Playbutton() {
     ui.playAgain = createButton("Play Again");
-    ui.playAgain.position(width / 5, height / 2 + 50);
+    ui.playAgain.position(width / 2, height / 2 + 200);
     ui.playAgain.elt.classList.add("btn");
     ui.playAgain.elt.classList.add("btn-outline-warning");
     ui.playAgain.elt.classList.add("fw-bold");

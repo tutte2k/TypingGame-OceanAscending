@@ -2,7 +2,7 @@ class Topaz extends Item {
   static Animation = null;
 
   constructor() {
-    super("5thousand", Topaz.Animation, createVector(0, 6));
+    super("5000", Topaz.Animation, createVector(0, 6));
   }
 
   static loadAnimationFiles() {

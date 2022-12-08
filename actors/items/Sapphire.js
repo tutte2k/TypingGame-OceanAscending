@@ -2,7 +2,7 @@ class Sapphire extends Item {
   static Animation = null;
 
   constructor() {
-    super("1thousand", Sapphire.Animation, createVector(0, 6));
+    super("1000", Sapphire.Animation, createVector(0, 6));
   }
 
   static loadAnimationFiles() {

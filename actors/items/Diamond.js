@@ -2,7 +2,7 @@ class Diamond extends Item {
   static Animation = null;
 
   constructor() {
-    super("3thousand", Diamond.Animation, createVector(0, 6));
+    super("3000", Diamond.Animation, createVector(0, 6));
   }
 
   static loadAnimationFiles() {

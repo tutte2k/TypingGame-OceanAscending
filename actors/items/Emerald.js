@@ -2,7 +2,7 @@ class Emerald extends Item {
   static Animation = null;
 
   constructor() {
-    super("6thousand", Emerald.Animation, createVector(0, 6));
+    super("6000", Emerald.Animation, createVector(0, 6));
   }
 
   static loadAnimationFiles() {

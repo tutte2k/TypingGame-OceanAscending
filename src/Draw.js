@@ -94,7 +94,7 @@ class Draw {
     ui.post = createButton("Submit Score");
     ui.post.position(30, height / 2 + 50);
     ui.post.elt.classList.add("btn");
-    ui.post.elt.classList.add("btn-outline-warning");
+    ui.post.elt.classList.add("btn-outline-success");
     ui.post.elt.classList.add("fw-bold");
     ui.post.mouseClicked(postRequest);
   }
@@ -118,10 +118,11 @@ class Draw {
   }
   static Playbutton() {
     ui.playAgain = createButton("Play Again");
-    ui.playAgain.position(width / 2, height / 2 + 200);
+    ui.playAgain.position(width - 200, 1);
     ui.playAgain.elt.classList.add("btn");
-    ui.playAgain.elt.classList.add("btn-outline-warning");
+    ui.playAgain.elt.classList.add("btn-outline-danger");
     ui.playAgain.elt.classList.add("fw-bold");
+    ui.playAgain.elt.classList.add("fs-1");
     ui.playAgain.mouseClicked(goPlayAgain);
   }
   static Gameover() {

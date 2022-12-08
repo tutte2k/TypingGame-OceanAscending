@@ -2,7 +2,7 @@ class Amethyst extends Item {
   static Animation = null;
 
   constructor() {
-    super("2thousand", Amethyst.Animation, createVector(0, 6));
+    super("2000", Amethyst.Animation, createVector(0, 6));
   }
 
   static loadAnimationFiles() {

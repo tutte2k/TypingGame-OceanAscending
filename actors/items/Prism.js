@@ -2,7 +2,7 @@ class Prism extends Item {
   static Animation = null;
 
   constructor() {
-    super("7thousand", Prism.Animation, createVector(0, 6));
+    super("7000", Prism.Animation, createVector(0, 6));
   }
 
   static loadAnimationFiles() {

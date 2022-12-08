@@ -2,7 +2,7 @@ class Obsidian extends Item {
   static Animation = null;
 
   constructor() {
-    super("4thousand", Obsidian.Animation, createVector(0, 6));
+    super("4000", Obsidian.Animation, createVector(0, 6));
   }
 
   static loadAnimationFiles() {

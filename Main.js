@@ -3,7 +3,6 @@ function preload() {
   font = loadFont("./assets/RifficFree-Bold.ttf");
   Load.Animations();
   getStoredCash();
-  getHighscores();
 }
 function getStoredCash() {
   if (localStorage.getItem("cash")) {
@@ -36,21 +35,14 @@ function togglePause() {
   }
 }
 function setup() {
-  var canvas = createCanvas(windowWidth, windowHeight);
-  canvas.parent("ocean");
-  if (windowWidth < 1000) {
-    let keyboard = document.getElementById("kb-con");
-    keyboard.hidden = false;
-    resizeCanvas(windowWidth, windowHeight - windowHeight / 3);
-    let btns = document.getElementById("upgradeBtns");
-    btns.classList.remove("opacity-25");
-  }
+  Draw.Canvas();
   Draw.Pausebutton();
   Draw.Radiobuttons();
   Draw.Upgradebuttons();
   game.mode = config.easy;
   focus = null;
   textFont(font);
+  getHighscores();
 }
 
 function windowResized() {
@@ -136,86 +128,48 @@ function levelUp() {
   }
 }
 function updateFields() {
-  updateItemField();
-  updateField();
-  updateSecondField();
-  updateEnvironmentField();
+  updateField("item");
+  updateField("hostile");
+  updateField("neutral");
+  updateField("environment");
 }
-function updateField() {
-  for (var i = field.hostile.length - 1; i >= 0; i--) {
-    if (field.hostile[i]) {
-      field.hostile[i].update();
-      if (
-        focus == null &&
-        field.hostile[i].intact &&
-        field.hostile[i].focused
-      ) {
-        focus = field.hostile[i];
-      } else if (field.hostile[i].intact) {
-        field.hostile[i].draw();
+
+function updateField(fieldType) {
+  for (var i = field[fieldType].length - 1; i >= 0; i--) {
+    if (field[fieldType][i]) {
+      field[fieldType][i].update();
+      if (actorWasFocused(i, fieldType)) {
+        focus = field[fieldType][i];
+      } else if (field[fieldType][i].intact) {
+        field[fieldType][i].draw();
       } else {
-        if (field.hostile[i].text) {
-          player.experience += field.hostile[i].text.length;
+        if (field[fieldType][i].text) {
+          player.experience += field[fieldType][i].text.length;
           player.catched.fishes++;
-          if (field.hostile[i].loot) {
-            field.item.push(getLoot(field.hostile[i].loot));
+          if (field[fieldType][i].loot) {
+            field.item.push(getLoot(field[fieldType][i].loot));
           }
-          field.hostile.splice(i, 1);
+          if (field[fieldType][i].score) {
+            if (field[fieldType][i].score > 0) {
+              player.catched.fishes++;
+            } else {
+              player.missed.fishes++;
+            }
+          }
+          field[fieldType].splice(i, 1);
           focus = null;
         }
       }
     }
   }
 }
-function updateSecondField() {
-  for (var i = field.neutral.length - 1; i >= 0; i--) {
-    if (field.neutral[i]) {
-      field.neutral[i].update();
-      if (field.neutral[i].intact) {
-        field.neutral[i].draw();
-      } else if (!field.neutral.intact) {
-        player.experience += field.neutral[i].score;
-        if (field.neutral[i].score > 0) {
-          player.catched.fishes++;
-        } else {
-          player.missed.fishes++;
-        }
-        if (field.neutral[i].focused) {
-          focus = null;
-        }
-        field.neutral.splice(i, 1);
-      }
-    }
-  }
+
+function actorWasFocused(i, fieldType) {
+  return (
+    focus == null && field[fieldType][i].intact && field[fieldType][i].focused
+  );
 }
-function updateItemField() {
-  for (var i = field.item.length - 1; i >= 0; i--) {
-    if (field.item[i]) {
-      field.item[i].update();
-      if (field.item[i].intact) {
-        field.item[i].draw();
-      } else if (!field.item.intact) {
-        if (field.item[i].focused) {
-          player.experience += 10;
-          focus = null;
-        }
-        field.item.splice(i, 1);
-      }
-    }
-  }
-}
-function updateEnvironmentField() {
-  for (var i = field.environment.length - 1; i >= 0; i--) {
-    if (field.environment[i]) {
-      field.environment[i].update();
-      if (field.environment[i].intact) {
-        field.environment[i].draw();
-      } else if (!field.environment.intact) {
-        field.environment.splice(i, 1);
-      }
-    }
-  }
-}
+
 function getLoot(type) {
   const loot = {
     sapphire: new Sapphire(),
@@ -457,7 +411,7 @@ function postRequest() {
           body: JSON.stringify(responseData),
         })
           .then()
-          .then((x) => (ui.post.elt.hidden = true));
+          .then(() => (ui.post.elt.hidden = true));
       });
   }
 }

@@ -1,4 +1,15 @@
 class Draw {
+  static Canvas() {
+    var canvas = createCanvas(windowWidth, windowHeight);
+    canvas.parent("ocean");
+    if (windowWidth < 1000) {
+      let keyboard = document.getElementById("kb-con");
+      keyboard.hidden = false;
+      resizeCanvas(windowWidth, windowHeight - windowHeight / 3);
+      let btns = document.getElementById("upgradeBtns");
+      btns.classList.remove("opacity-25");
+    }
+  }
   static Radiobuttons() {
     ui.radio = createRadio();
     ui.radio.option("kids");

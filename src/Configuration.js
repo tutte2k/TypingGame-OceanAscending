@@ -145,7 +145,7 @@ const config = {
       { value: "jormun", spawnDepth: 750 },
       { value: "sworde", spawnDepth: 1000 },
       { value: "huitzi", spawnDepth: 1250 },
-      { value: "bezzelle", spawnDepth: 1500 },
+      { value: "bezelle", spawnDepth: 1500 },
     ],
     spawn: {
       progression: Spawn.Progression,

@@ -385,7 +385,6 @@ function postRequest() {
 }
 function getNextWord(startIndex) {
   let notAvailableChars = [];
-
   for (let i = 0; i < field.hostile.length; i++) {
     if (field.hostile[i]) {
       if (!notAvailableChars.includes(field.hostile[i].text.charAt(0))) {
@@ -400,7 +399,6 @@ function getNextWord(startIndex) {
       }
     }
   }
-
   for (let i = startIndex; i >= 0; i--) {
     const wordSuggestion = target.words[i];
     if (wordSuggestion) {
@@ -413,6 +411,35 @@ function getNextWord(startIndex) {
     }
   }
   return target.words.pop();
+}
+function getAvailableValue(value) {
+  let notAvailableChars = [];
+  let chars = target.chars;
+  for (let i = 0; i < field.hostile.length; i++) {
+    if (field.hostile[i]) {
+      if (!notAvailableChars.includes(field.hostile[i].text.charAt(0))) {
+        notAvailableChars.push(field.hostile[i].text.charAt(0));
+      }
+    }
+  }
+  for (let i = 0; i < field.neutral.length; i++) {
+    if (field.neutral[i]) {
+      if (!notAvailableChars.includes(field.neutral[i].text.charAt(0))) {
+        notAvailableChars.push(field.neutral[i].text.charAt(0));
+      }
+    }
+  }
+  if (!notAvailableChars.includes(value.charAt(0))) {
+    return value;
+  }
+  for (let i = 0; i < notAvailableChars.length; i++) {
+    chars.filter((x) => x != notAvailableChars[i]);
+  }
+  if (chars[0]) {
+    return chars[0] + value;
+  } else {
+    return value;
+  }
 }
 
 function upgradeZapper() {

@@ -50,25 +50,32 @@ class Actor {
   static Get(value) {
     if (value) {
       if (value == "lulu" || value == "chtulu" || value == "chtululu") {
-        return new Chtullie(value);
+        let checkedValue = getAvailableValue(value);
+        return new Chtullie(checkedValue);
       }
       if (value == "chk" || value == "chkrac" || value == "chkracken") {
-        return new Kraken(value);
+        let checkedValue = getAvailableValue(value);
+        return new Kraken(checkedValue);
       }
       if (value == "swo" || value == "sworde" || value == "swordeath") {
-        return new Swordeath(value);
+        let checkedValue = getAvailableValue(value);
+        return new Swordeath(checkedValue);
       }
       if (value == "jor" || value == "jormun" || value == "jormungandr") {
-        return new Jormungandr(value);
+        let checkedValue = getAvailableValue(value);
+        return new Jormungandr(checkedValue);
       }
       if (value == "abe" || value == "abezeth" || value == "abezethibou") {
-        return new Abezethibou(value);
+        let checkedValue = getAvailableValue(value);
+        return new Abezethibou(checkedValue);
       }
       if (value == "hui" || value == "huitzi" || value == "huitzilopochtli") {
-        return new Huitzilopochtli(value);
+        let checkedValue = getAvailableValue(value);
+        return new Huitzilopochtli(checkedValue);
       }
       if (value == "bez" || value == "bezelle" || value == "bezellebobba") {
-        return new Bezzellebobba(value);
+        let checkedValue = getAvailableValue(value);
+        return new Bezzellebobba(checkedValue);
       }
       if (value.length == 1) {
         let enemies = [

@@ -41,7 +41,7 @@ class Spawn {
     if (random() < game.mode.spawn.progressionValue) {
       const indexOfLastWord = target.words.length - 1;
       const word = getNextWord(indexOfLastWord);
-      const creature = getSeaCreature(word);
+      const creature = Actor.Get(word);
       if (creature.name) {
         field.neutral.push(creature);
       } else {
@@ -54,7 +54,7 @@ class Spawn {
   static Single() {
     const indexOfLastWord = target.words.length - 1;
     const word = getNextWord(indexOfLastWord);
-    const creature = getSeaCreature(word);
+    const creature = Actor.Get(word);
     if (creature.name) {
       field.neutral.push(creature);
     } else {
@@ -64,7 +64,7 @@ class Spawn {
   static Boss() {
     game.mode.bosses.forEach((boss) => {
       if (player.depth > boss.spawnDepth && random() > 0.99) {
-        let creature = getSeaCreature(boss.value);
+        let creature = Actor.Get(boss.value);
         field.hostile.push(creature);
       }
     });
@@ -74,7 +74,7 @@ class Spawn {
       const indexOfLastWord = target.words.length - 1;
       const randomIndex = Math.round(random(0, indexOfLastWord));
       const word = getNextWord(randomIndex);
-      const creature = getSeaCreature(word);
+      const creature = Actor.Get(word);
       field.hostile.push(creature);
     }
   }
@@ -82,7 +82,7 @@ class Spawn {
     if (player.experience < 150 && random() > 0.99) {
       const indexOfBigWord = 0;
       const word = getNextWord(indexOfBigWord);
-      const creature = getSeaCreature(word);
+      const creature = Actor.Get(word);
       field.hostile.push(creature);
     }
   }
@@ -91,7 +91,7 @@ class Spawn {
       for (let i = 0; i < 2; i++) {
         const indexOfSemiBigWord = Math.round(target.words.length / 3);
         const word = getNextWord(indexOfSemiBigWord);
-        const creature = getSeaCreature(word);
+        const creature = Actor.Get(word);
         field.hostile.push(creature);
       }
     }
@@ -101,7 +101,7 @@ class Spawn {
       for (let i = 0; i < 3; i++) {
         const indexOfMediumWord = Math.round(target.words.length / 5);
         const word = getNextWord(indexOfMediumWord);
-        const creature = getSeaCreature(word);
+        const creature = Actor.Get(word);
         field.hostile.push(creature);
       }
     }

@@ -2,9 +2,9 @@ function preload() {
   target.words = WORDSTRING.split(" ").sort((a, b) => b.length - a.length);
   font = loadFont("./assets/RifficFree-Bold.ttf");
   Load.Animations();
-  getStoredCash();
+  getStored();
 }
-function getStoredCash() {
+function getStored() {
   if (localStorage.getItem("cash")) {
     player.items.cash = +localStorage.getItem("cash");
   }
@@ -13,7 +13,6 @@ function getStoredCash() {
     player.health = player.items.levels.health;
   }
 }
-
 function getHighscores() {
   httpGet(config.kids.api.get, "json", false, function (response) {
     config.kids.api.data = response;
@@ -53,7 +52,6 @@ function windowResized() {
 function draw() {
   clear();
   Draw.Line();
-
   Draw.Gui();
   Draw.Player();
   handleField();
@@ -81,15 +79,7 @@ function resetGame() {
   ui.radio.elt.hidden = false;
   ui.pause.elt.hidden = false;
   focus = null;
-  if (ui.radio.value() == "kids") {
-    game.mode = config.kids;
-  }
-  if (ui.radio.value() == "easy") {
-    game.mode = config.easy;
-  }
-  if (ui.radio.value() == "hard") {
-    game.mode = config.hard;
-  }
+  game.mode = config[ui.radio.value()];
   loop();
 }
 function handleField() {
@@ -111,6 +101,12 @@ function handleField() {
     }
   }
 }
+function updateFields() {
+  updateField("item");
+  updateField("hostile");
+  updateField("neutral");
+  updateField("environment");
+}
 function levelUp() {
   player.totalScore += player.experience + player.depth;
   player.experience = 0;
@@ -126,12 +122,6 @@ function levelUp() {
       field.item.push(new Obsidian());
     }
   }
-}
-function updateFields() {
-  updateField("item");
-  updateField("hostile");
-  updateField("neutral");
-  updateField("environment");
 }
 
 function updateField(fieldType) {
@@ -153,9 +143,8 @@ function updateField(fieldType) {
             player.experience += field[fieldType][i].score;
           }
           if (field[fieldType][i].loot) {
-            field.item.push(getLoot(field[fieldType][i].loot));
+            field.item.push(Actor.Loot(field[fieldType][i].loot));
           }
-
           field[fieldType].splice(i, 1);
           focus = null;
         }
@@ -170,17 +159,6 @@ function actorWasFocused(i, fieldType) {
   );
 }
 
-function getLoot(type) {
-  const loot = {
-    sapphire: new Sapphire(),
-    amethyst: new Amethyst(),
-    diamond: new Diamond(),
-    topaz: new Topaz(),
-    emerald: new Emerald(),
-    prism: new Prism(),
-  };
-  return loot[type];
-}
 function keyPressed() {
   if (!game.paused) {
     if (keyCode == 13 && player.items.zapper === true) {
@@ -213,6 +191,7 @@ function keyPressed() {
       loop();
       game.paused = !game.paused;
     }
+
     if (focus) {
       let hit = focus.erode(keyCode);
       if (hit) {
@@ -251,6 +230,11 @@ function virtuaKeyPressed(keyCodeFromChar) {
       for (let i = 0; i < field.item.length; i++) {
         field.item[i].position.y = 0;
       }
+    } else if (keyCode == 16 && player.items.shield === true) {
+      field.environment = field.environment.filter((x) => x.keyCode != 16);
+      player.items.shield = false;
+      player.invulnerable = true;
+      field.environment.push(new Bubble(player.depth));
     }
   if (game.paused && !game.over) {
     loop();
@@ -274,31 +258,18 @@ function virtuaKeyPressed(keyCodeFromChar) {
 
 function findFocus(code) {
   var char = String.fromCharCode(code).toLowerCase();
-  for (var i = 0; i < field.item.length; i++) {
-    if (field.item[i]) {
-      if (field.item[i].text.startsWith(char)) {
-        field.item[i].focused = true;
-        player.missed.letters.consecutive = 0;
-        return field.item[i];
-      }
-    }
-  }
-  for (var i = 0; i < field.hostile.length; i++) {
-    if (field.hostile[i]) {
-      if (field.hostile[i].text.startsWith(char)) {
-        field.hostile[i].focused = true;
-        player.missed.letters.consecutive = 0;
-        return field.hostile[i];
-      }
-    }
-  }
-
-  for (var i = 0; i < field.neutral.length; i++) {
-    if (field.neutral[i]) {
-      if (field.neutral[i].text.startsWith(char)) {
-        field.neutral[i].focused = true;
-        player.missed.letters.consecutive = 0;
-        return field.neutral[i];
+  for (const type in field) {
+    if (Object.hasOwnProperty.call(field, type)) {
+      for (var i = 0; i < field[type].length; i++) {
+        if (field[type][i]) {
+          if (field[type][i].text) {
+            if (field[type][i].text.startsWith(char)) {
+              field[type][i].focused = true;
+              player.missed.letters.consecutive = 0;
+              return field[type][i];
+            }
+          }
+        }
       }
     }
   }
@@ -335,9 +306,6 @@ function endGame(enemy) {
       Draw.Highscores();
       Draw.Inputfield();
       Draw.Postbutton();
-    } else {
-      text(`Highscores:`, 30, 30);
-      text(`Max 500 requests/day`, 30, 70);
     }
     Draw.Playbutton();
     Draw.Gameover();
@@ -417,6 +385,7 @@ function postRequest() {
 }
 function getNextWord(startIndex) {
   let notAvailableChars = [];
+
   for (let i = 0; i < field.hostile.length; i++) {
     if (field.hostile[i]) {
       if (!notAvailableChars.includes(field.hostile[i].text.charAt(0))) {
@@ -444,76 +413,6 @@ function getNextWord(startIndex) {
     }
   }
   return target.words.pop();
-}
-function getSeaCreature(value) {
-  if (value) {
-    if (value == "lulu" || value == "chtulu" || value == "chtululu") {
-      return new Chtullie(value);
-    }
-    if (value == "chk" || value == "chkrac" || value == "chkracken") {
-      return new Kraken(value);
-    }
-    if (value == "swo" || value == "sworde" || value == "swordeath") {
-      return new Swordeath(value);
-    }
-    if (value == "jor" || value == "jormun" || value == "jormungandr") {
-      return new Jormungandr(value);
-    }
-    if (value == "abe" || value == "abezeth" || value == "abezethibou") {
-      return new Abezethibou(value);
-    }
-    if (value == "hui" || value == "huitzi" || value == "huitzilopochtli") {
-      return new Huitzilopochtli(value);
-    }
-    if (value == "bez" || value == "bezelle" || value == "bezellebobba") {
-      return new Bezzellebobba(value);
-    }
-    if (value.length == 1) {
-      enemies = [
-        new Shotty(value),
-        new Ghosty(value),
-        new Puffer(value),
-        new Inker(value),
-        new Croccy(value),
-        new Spearo(value),
-      ];
-      return random(enemies);
-    }
-    if (value.length == 2) {
-      enemies = [
-        new Jinxy(value),
-        new Puffer(value),
-        new Inker(value),
-        new Inky(value),
-        new Croccy(value),
-        new Ghosty(value),
-      ];
-      return random(enemies);
-    }
-    if (value.length == 3) {
-      enemies = [
-        new Inky(value),
-        new Jinxy(value),
-        new Fish(value),
-        new Teethy(value),
-        new Ghosty(value),
-      ];
-      return random(enemies);
-    }
-    if (value.length == 4) {
-      enemies = [new Fish(value), new Teethy(value), new Inky(value)];
-      return random(enemies);
-    }
-    if (value.length == 5) {
-      return new Qocto(value);
-    }
-    if (value.length == 6) {
-      return new Leona(value);
-    }
-    if (value.length > 6) {
-      return new Whale(value);
-    }
-  }
 }
 
 function upgradeZapper() {

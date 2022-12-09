@@ -146,16 +146,16 @@ function updateField(fieldType) {
         if (field[fieldType][i].text) {
           player.experience += field[fieldType][i].text.length;
           player.catched.fishes++;
+          if (field[fieldType][i].score === 0) {
+            player.catched.fishes--;
+            player.missed.fishes++;
+          } else if (field[fieldType][i].score > 0) {
+            player.experience += field[fieldType][i].score;
+          }
           if (field[fieldType][i].loot) {
             field.item.push(getLoot(field[fieldType][i].loot));
           }
-          if (field[fieldType][i].score) {
-            if (field[fieldType][i].score > 0) {
-              player.catched.fishes++;
-            } else {
-              player.missed.fishes++;
-            }
-          }
+
           field[fieldType].splice(i, 1);
           focus = null;
         }

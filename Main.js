@@ -61,6 +61,9 @@ function draw() {
 }
 function resetGame() {
   game.over = false;
+  if (player.items.levels.health) {
+    player.health = player.items.levels.health;
+  }
   player.depth = 0;
   player.experience = 0;
   player.level = 1;

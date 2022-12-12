@@ -96,7 +96,7 @@ function handleField() {
     Spawn.Items();
     if (field.hostile.length == 0 && field.neutral.length == 0) {
       Spawn.Single();
-      if (!gameStarted) {
+      if (!gameStarted && windowWidth > 1000) {
         togglePause();
       }
     } else {

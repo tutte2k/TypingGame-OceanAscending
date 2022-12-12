@@ -17,11 +17,16 @@ class Actor {
     strokeWeight(3);
     textAlign(CENTER);
     textSize(25);
+    fill(255);
+    if (this.focused) {
+      fill(100, 200, 100);
+    }
     text(
       this.displayText.toUpperCase(),
       this.position.x + this.textPositionOffset.x,
       this.position.y + this.textPositionOffset.y
     );
+    fill(255);
   }
 
   erode(keyCode) {
@@ -32,6 +37,7 @@ class Actor {
       this.text.substring(0, length) === this.completedText + inputChar;
     if (isNextChar) {
       this.completedText += inputChar;
+      this.position.x += 5;
     }
     this.intact = this.completedText !== this.text;
     return isNextChar;

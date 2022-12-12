@@ -66,6 +66,7 @@ class Spawn {
       if (player.depth > boss.spawnDepth && random() > 0.99) {
         let creature = Actor.Get(boss.value);
         field.hostile.push(creature);
+        field.environment.push(new Shake(player.depth));
       }
     });
   }

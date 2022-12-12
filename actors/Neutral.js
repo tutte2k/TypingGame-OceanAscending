@@ -16,9 +16,6 @@ class Neutral extends Actor {
   update() {
     this.position.x -= this.speedFunctionX(player.experience);
     this.position.y -= this.speedFunctionY(player.experience);
-    if (this.focused) {
-      this.position.x++;
-    }
     if (this.position.y < 0) {
       this.score = 0;
       this.intact = false;

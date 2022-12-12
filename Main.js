@@ -1,3 +1,5 @@
+var shake;
+var gameStarted = false;
 function preload() {
   target.words = WORDSTRING.split(" ").sort((a, b) => b.length - a.length);
   font = loadFont("./assets/RifficFree-Bold.ttf");
@@ -39,6 +41,7 @@ function setup() {
   Draw.Radiobuttons();
   Draw.Upgradebuttons();
   game.mode = config.easy;
+  shake = false;
   focus = null;
   textFont(font);
   getHighscores();
@@ -83,15 +86,16 @@ function resetGame() {
   loop();
 }
 function handleField() {
-  try {
-    updateFields();
-  } catch (error) {}
+  updateFields();
 
   if (frameCount % 60 === 0) {
     player.depth++;
     Spawn.Items();
     if (field.hostile.length == 0 && field.neutral.length == 0) {
       Spawn.Single();
+      if (!gameStarted) {
+        togglePause();
+      }
     } else {
       if (player.experience > game.mode.experience) {
         levelUp();
@@ -160,6 +164,11 @@ function actorWasFocused(i, fieldType) {
 }
 
 function keyPressed() {
+  if (keyCode === 32) {
+    gameStarted = true;
+    togglePause();
+    return false;
+  }
   if (!game.paused) {
     if (keyCode == 13 && player.items.zapper === true) {
       clearFields();

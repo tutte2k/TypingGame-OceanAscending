@@ -35,10 +35,14 @@ class Draw {
     ui.pause.mousePressed(togglePause);
   }
   static Gui() {
+    if (shake == true) {
+      translate(random(-5, 5), random(-5, 5));
+    }
     if (player.depth < 3) {
       textSize(30);
-      fill(255, 0, 0);
+      fill(255, 100, 100);
       text("Welcome!", width / 2, height / 3);
+      text("Press [SPACEBAR] to toggle pause!", width / 2, height / 2);
       text("Scroll down for instructions!", width / 2, (height / 3) * 2);
     }
     textAlign(CENTER);
@@ -54,7 +58,7 @@ class Draw {
       30
     );
     text(`Depth: ${player.depth}m`, 100, height / 2 + 145);
-    text(`Catched: ${player.catched.fishes}`, 100, height - 10);
+    text(`Caught: ${player.catched.fishes}`, 100, height - 10);
     text(`$${player.items.cash}k`, width - 150, height - 10);
     text(`Missed: ${player.missed.fishes}`, width / 3, height - 10);
 
@@ -90,9 +94,11 @@ class Draw {
       focus.position.x + focus.textPositionOffset.x,
       focus.position.y + focus.textPositionOffset.y
     );
-    textAlign(CENTER);
-    textSize(100);
-    text(focus.displayText.toUpperCase(), width / 2, height - 50);
+    if (focus.text.length != 1) {
+      textAlign(CENTER);
+      textSize(100);
+      text(focus.displayText.toUpperCase(), width / 2, height - 50);
+    }
   }
   static Inputfield() {
     ui.textInput = createInput("", "text");
@@ -110,6 +116,7 @@ class Draw {
     ui.post.mouseClicked(postRequest);
   }
   static Highscores() {
+    clear();
     fill(255);
     stroke(1);
     strokeWeight(3);

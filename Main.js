@@ -1,4 +1,6 @@
 var shake;
+var shakeDepth;
+
 var gameStarted = false;
 function preload() {
   target.words = WORDSTRING.split(" ").sort((a, b) => b.length - a.length);
@@ -27,12 +29,11 @@ function getHighscores() {
   });
 }
 function togglePause() {
+  game.paused = !game.paused;
   if (game.paused && !game.over) {
-    loop();
-    game.paused = !game.paused;
-  } else {
     noLoop();
-    game.paused = !game.paused;
+  } else if (!game.over) {
+    loop();
   }
 }
 function setup() {
@@ -61,9 +62,9 @@ function draw() {
 }
 function resetGame() {
   game.over = false;
-  if (player.items.levels.health) {
-    player.health = player.items.levels.health;
-  }
+
+  player.health = player.items.levels.health || 0;
+
   player.depth = 0;
   player.experience = 0;
   player.level = 1;
@@ -92,6 +93,9 @@ function handleField() {
   updateFields();
 
   if (frameCount % 60 === 0) {
+    if (player.depth > shakeDepth) {
+      shake = false;
+    }
     player.depth++;
     Spawn.Items();
     if (field.hostile.length == 0 && field.neutral.length == 0) {
@@ -122,7 +126,7 @@ function levelUp() {
     const index = Math.round(
       target.words.length / game.mode.spawn.indexDenominator
     );
-    const word = getNextWord(index);
+    const word = Spawn.getNextWord(index);
     const creature = new Shellie(word);
     field.hostile.push(creature);
     if (random() > 0.99) {
@@ -133,14 +137,14 @@ function levelUp() {
 
 function updateField(fieldType) {
   for (var i = field[fieldType].length - 1; i >= 0; i--) {
-    if (field[fieldType][i]) {
+    if (actorIsPresent(fieldType, i)) {
       field[fieldType][i].update();
       if (actorWasFocused(i, fieldType)) {
         focus = field[fieldType][i];
-      } else if (field[fieldType][i].intact) {
+      } else if (actorIsIntact(fieldType, i)) {
         field[fieldType][i].draw();
       } else {
-        if (field[fieldType][i].text) {
+        if (actorHasText(fieldType, i)) {
           player.experience += field[fieldType][i].text.length;
           player.catched.fishes++;
           if (field[fieldType][i].score === 0) {
@@ -149,15 +153,23 @@ function updateField(fieldType) {
           } else if (field[fieldType][i].score > 0) {
             player.experience += field[fieldType][i].score;
           }
-          if (field[fieldType][i].loot) {
-            field.item.push(Actor.Loot(field[fieldType][i].loot));
-          }
+
+          field[fieldType][i].loot && dropLoot(fieldType, i);
+
           field[fieldType].splice(i, 1);
           focus = null;
         }
       }
     }
   }
+}
+
+function actorIsIntact(fieldType, i) {
+  return field[fieldType][i].intact;
+}
+
+function dropLoot(fieldType, i) {
+  field.item.push(Actor.Loot(field[fieldType][i].loot));
 }
 
 function actorWasFocused(i, fieldType) {
@@ -273,14 +285,14 @@ function findFocus(code) {
   for (const type in field) {
     if (Object.hasOwnProperty.call(field, type)) {
       for (var i = 0; i < field[type].length; i++) {
-        if (field[type][i]) {
-          if (field[type][i].text) {
-            if (field[type][i].text.startsWith(char)) {
-              field[type][i].focused = true;
-              player.missed.letters.consecutive = 0;
-              return field[type][i];
-            }
-          }
+        if (
+          actorIsPresent(type, i) &&
+          actorHasText(type, i) &&
+          actorTextStartsWith(type, i, char)
+        ) {
+          field[type][i].focused = true;
+          player.missed.letters.consecutive = 0;
+          return field[type][i];
         }
       }
     }
@@ -293,25 +305,35 @@ function findFocus(code) {
   }
   return null;
 }
+
+function actorTextStartsWith(type, i, char) {
+  return field[type][i].text.startsWith(char);
+}
+
+function actorHasText(type, i) {
+  return field[type][i].text;
+}
+
+function actorIsPresent(type, i) {
+  return field[type][i];
+}
+
 function endGame(enemy) {
-  if (enemy.name) {
-    if (enemy.name === "LivingDead") {
-      field.environment.push(new Death(player.depth));
-      clearFields();
-    }
-  }
+  enemy.name && enemy.name === "LivingDead" && castLivingDead();
+
   if (player.invulnerable === true) {
-    enemy.intact = false;
-    if (enemy.focused === true) {
-      focus = null;
-    }
-    player.missed.fishes++;
-    player.catched.fishes--;
-  } else if (player.health === 0) {
+    setIntactFalse(enemy);
+  } else {
+    player.health--;
+    tryGameOver(enemy);
+  }
+}
+function tryGameOver(enemy) {
+  if (player.health === -1) {
     ui.pause.elt.hidden = true;
     ui.radio.elt.hidden = true;
-    localStorage.setItem("cash", player.items.cash);
     game.over = true;
+    localStorage.setItem("cash", player.items.cash);
     clearFields();
     noLoop();
     if (game.mode.api.data) {
@@ -322,15 +344,24 @@ function endGame(enemy) {
     Draw.Playbutton();
     Draw.Gameover();
   } else {
-    enemy.intact = false;
-    if (enemy.focused === true) {
-      focus = null;
-    }
-    player.health--;
-    player.missed.fishes++;
-    player.catched.fishes--;
+    setIntactFalse(enemy);
   }
 }
+
+function setIntactFalse(enemy) {
+  enemy.intact = false;
+  if (enemy.focused === true) {
+    focus = null;
+  }
+  player.missed.fishes++;
+  player.catched.fishes--;
+}
+
+function castLivingDead() {
+  field.environment.push(new Death(player.depth));
+  clearFields();
+}
+
 function onInput() {
   userInput.name = this.value();
 }
@@ -393,64 +424,6 @@ function postRequest() {
           .then()
           .then(() => (ui.post.elt.hidden = true));
       });
-  }
-}
-function getNextWord(startIndex) {
-  let notAvailableChars = [];
-  for (let i = 0; i < field.hostile.length; i++) {
-    if (field.hostile[i]) {
-      if (!notAvailableChars.includes(field.hostile[i].text.charAt(0))) {
-        notAvailableChars.push(field.hostile[i].text.charAt(0));
-      }
-    }
-  }
-  for (let i = 0; i < field.neutral.length; i++) {
-    if (field.neutral[i]) {
-      if (!notAvailableChars.includes(field.neutral[i].text.charAt(0))) {
-        notAvailableChars.push(field.neutral[i].text.charAt(0));
-      }
-    }
-  }
-  for (let i = startIndex; i >= 0; i--) {
-    const wordSuggestion = target.words[i];
-    if (wordSuggestion) {
-      const firstLetterInWord = wordSuggestion.charAt(0);
-      if (!notAvailableChars.includes(firstLetterInWord)) {
-        return target.words.splice(i, 1)[0];
-      } else {
-        continue;
-      }
-    }
-  }
-  return target.words.pop();
-}
-function getAvailableValue(value) {
-  let notAvailableChars = [];
-  let chars = target.chars;
-  for (let i = 0; i < field.hostile.length; i++) {
-    if (field.hostile[i]) {
-      if (!notAvailableChars.includes(field.hostile[i].text.charAt(0))) {
-        notAvailableChars.push(field.hostile[i].text.charAt(0));
-      }
-    }
-  }
-  for (let i = 0; i < field.neutral.length; i++) {
-    if (field.neutral[i]) {
-      if (!notAvailableChars.includes(field.neutral[i].text.charAt(0))) {
-        notAvailableChars.push(field.neutral[i].text.charAt(0));
-      }
-    }
-  }
-  if (!notAvailableChars.includes(value.charAt(0))) {
-    return value;
-  }
-  for (let i = 0; i < notAvailableChars.length; i++) {
-    chars.filter((x) => x != notAvailableChars[i]);
-  }
-  if (chars[0]) {
-    return chars[0] + value;
-  } else {
-    return value;
   }
 }
 

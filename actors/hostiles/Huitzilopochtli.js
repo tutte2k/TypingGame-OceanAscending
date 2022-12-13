@@ -10,6 +10,8 @@ class Huitzilopochtli extends Hostile {
       (score) => -2
     );
     this.loot = "emerald";
+    shake = true;
+    shakeDepth = player.depth + 1;
   }
   static loadAnimationFiles() {
     Huitzilopochtli.Animation = loadAnimation(

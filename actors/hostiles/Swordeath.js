@@ -10,6 +10,8 @@ class Swordeath extends Hostile {
       (score) => 7
     );
     this.loot = "topaz";
+    shake = true;
+    shakeDepth = player.depth + 1;
   }
   static loadAnimationFiles() {
     Swordeath.Animation = loadAnimation(

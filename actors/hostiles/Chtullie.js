@@ -8,6 +8,8 @@ class Chtullie extends Hostile {
       createVector(width, height / 2)
     );
     this.loot = "sapphire";
+    shake = true;
+    shakeDepth = player.depth + 1;
   }
   static loadAnimationFiles() {
     Chtullie.Animation = loadAnimation(

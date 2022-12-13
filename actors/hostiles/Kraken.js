@@ -10,6 +10,8 @@ class Kraken extends Hostile {
       (score) => 1.5
     );
     this.loot = "sapphire";
+    shake = true;
+    shakeDepth = player.depth + 1;
   }
   static loadAnimationFiles() {
     Kraken.Animation = loadAnimation("./actors/hostiles/sprites/kraken.webp", {

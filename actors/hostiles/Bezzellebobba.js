@@ -10,6 +10,8 @@ class Bezzellebobba extends Hostile {
       (score) => 10
     );
     this.loot = "prism";
+    shake = true;
+    shakeDepth = player.depth + 1;
   }
   static loadAnimationFiles() {
     Bezzellebobba.Animation = loadAnimation(

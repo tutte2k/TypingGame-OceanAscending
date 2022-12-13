@@ -10,6 +10,8 @@ class Jormungandr extends Hostile {
       (score) => 2.5
     );
     this.loot = "diamond";
+    shake = true;
+    shakeDepth = player.depth + 1;
   }
   static loadAnimationFiles() {
     Jormungandr.Animation = loadAnimation(

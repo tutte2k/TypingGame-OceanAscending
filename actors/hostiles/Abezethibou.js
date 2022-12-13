@@ -8,6 +8,8 @@ class Abezethibou extends Hostile {
       createVector(width, height / 2)
     );
     this.loot = "amethyst";
+    shake = true;
+    shakeDepth = player.depth + 1;
   }
   static loadAnimationFiles() {
     Abezethibou.Animation = loadAnimation(

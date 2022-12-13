@@ -40,7 +40,7 @@ class Draw {
     }
     if (player.depth < 3) {
       textSize(30);
-      fill(255, 100, 100);
+      fill(100, 100, 255);
       text("Welcome!", width / 2, height / 3);
       text("Press [SPACEBAR] to toggle pause!", width / 2, height / 2);
       text("Scroll down for instructions!", width / 2, (height / 3) * 2);

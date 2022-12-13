@@ -1,5 +1,36 @@
 var shake;
 var shakeDepth;
+const floatingMessages = [];
+
+class FloatingMessage {
+  constructor(value, x, y) {
+    this.value = value;
+    this.x = x;
+    this.y = y;
+    this.lifeSpan = 0;
+    this.color = "yellow";
+  }
+  update() {
+    this.y -= 0.3;
+    this.lifeSpan += 1;
+    if (this.opacity > 0.01) this.opacity -= 0.01;
+  }
+  draw() {
+    fill(this.color);
+    text("+" + this.value, this.x, this.y);
+    fill(255);
+  }
+}
+function handleFloatingMessages() {
+  for (let i = 0; i < floatingMessages.length; i++) {
+    floatingMessages[i].update();
+    floatingMessages[i].draw();
+    if (floatingMessages[i].lifeSpan >= 25) {
+      floatingMessages.splice(i, 1);
+      i--;
+    }
+  }
+}
 
 var gameStarted = false;
 function preload() {
@@ -59,6 +90,7 @@ function draw() {
   Draw.Gui();
   Draw.Player();
   handleField();
+  handleFloatingMessages();
 }
 function resetGame() {
   game.over = false;
@@ -145,13 +177,33 @@ function updateField(fieldType) {
         field[fieldType][i].draw();
       } else {
         if (actorHasText(fieldType, i)) {
-          player.experience += field[fieldType][i].text.length;
-          player.catched.fishes++;
           if (field[fieldType][i].score === 0) {
-            player.catched.fishes--;
             player.missed.fishes++;
           } else if (field[fieldType][i].score > 0) {
-            player.experience += field[fieldType][i].score;
+            player.experience +=
+              field[fieldType][i].score + field[fieldType][i].text.length;
+            player.catched.fishes++;
+            floatingMessages.push(
+              new FloatingMessage(
+                field[fieldType][i].score + field[fieldType][i].text.length,
+                field[fieldType][i].position.x +
+                  field[fieldType][i].textPositionOffset.x,
+                field[fieldType][i].position.y +
+                  field[fieldType][i].textPositionOffset.y
+              )
+            );
+          } else {
+            player.experience += field[fieldType][i].text.length;
+            player.catched.fishes++;
+            floatingMessages.push(
+              new FloatingMessage(
+                field[fieldType][i].text.length,
+                field[fieldType][i].position.x +
+                  field[fieldType][i].textPositionOffset.x,
+                field[fieldType][i].position.y +
+                  field[fieldType][i].textPositionOffset.y
+              )
+            );
           }
 
           field[fieldType][i].loot && dropLoot(fieldType, i);
@@ -373,14 +425,32 @@ function clearFields() {
     noLoop();
   } else {
     for (let i = field.hostile.length; i >= 0; i--) {
-      field.hostile.splice(i, 1);
-      player.experience += 3;
-      player.catched.fishes++;
+      if (field.hostile[i]) {
+        floatingMessages.push(
+          new FloatingMessage(
+            3,
+            field.hostile[i].position.x + field.hostile[i].textPositionOffset.x,
+            field.hostile[i].position.y + field.hostile[i].textPositionOffset.y
+          )
+        );
+        field.hostile.splice(i, 1);
+        player.experience += 3;
+        player.catched.fishes++;
+      }
     }
     for (let i = field.neutral.length; i >= 0; i--) {
-      field.neutral.splice(i, 1);
-      player.experience += 3;
-      player.catched.fishes++;
+      if (field.neutral[i]) {
+        floatingMessages.push(
+          new FloatingMessage(
+            3,
+            field.neutral[i].position.x + field.neutral[i].textPositionOffset.x,
+            field.neutral[i].position.y + field.neutral[i].textPositionOffset.y
+          )
+        );
+        field.neutral.splice(i, 1);
+        player.experience += 3;
+        player.catched.fishes++;
+      }
     }
   }
 }

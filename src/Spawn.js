@@ -221,10 +221,11 @@ class Spawn {
       }
       if (value.length == 3) {
         let enemies = [
-          new Inky(value),
           new Jinxy(value),
           new Fish(value),
+          new Inky(value),
           new Teethy(value),
+          new Croccy(value),
           new Ghosty(value),
         ];
         return random(enemies);
